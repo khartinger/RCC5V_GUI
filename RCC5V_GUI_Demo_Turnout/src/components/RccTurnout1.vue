@@ -10,11 +10,12 @@
   <!--write text-------------------------------------------- -->
   <text v-if="(drawLabel>1) && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
   <text v-if="(drawLabel>1) && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
-  <!--draw turnout1------------------------------------------- -->
-  <path :d="drawTurnout1" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
+  <!--draw turnout parts (do not change lines!)------------- -->
+  <path :d="drawTurnout2" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
+  <path :d="drawTurnout1" :fill="colorTurnout1" :stroke="colorTurnout1" stroke-width="1" />
   <!--define click area------------------------------------- -->
-  <rect @click="onClkOn()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
-  <rect @click="onClkOff()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
+  <rect @click="onClkTop()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
+  <rect @click="onClkBottom()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
 </g>
 </template>
 
@@ -43,7 +44,7 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    dir: {
+    type: {
       type: String,
       required: true,
     },
@@ -96,35 +97,35 @@ export default defineComponent({
       // console.log('drawXAxis: xAxis=', this.xAxis + ' ret=' + String(ret))
       return ret
     },
-    // _______draw the full path of the track (attribute dir)___
-    drawTurnout1: function (): string {
-      // -----Break down direction "dir" into digits-------------
-      const aDigits = this.dir.split('').reverse()
-      let z1_ = 0
-      let z2_ = 0
-      if (aDigits.length === 1) z2_ = Number(aDigits[0])
-      if (aDigits.length > 1) {
-        z1_ = Number(aDigits[0])
-        z2_ = Number(aDigits[1])
-      }
-      // -----order digits: z1_ < z2_---------------------------
-      if (z1_ === z2_) z1_ = 0
-      const temp_ = z2_
-      if (z1_ > z2_) { z2_ = z1_; z1_ = temp_ }
-      // -----draw path-----------------------------------------
-      if (z1_ === 0 && z2_ === 0) return '' // nothing to draw
-      const s1 = this.trackPath(z1_ * 10 + z2_)
-      // console.log('drawTurnout1: s1=', s1)
-      return s1
+    // _______draw the active path of the turnout_______________
+    drawTurnout1: function(): string {
+      if (this.iTurnout1State === 0) return this.pathTurnout(true)
+      return this.pathTurnout(false)
     },
-    // _______color of the track________________________________
-    colorTrack: function (): string {
+    // _______draw the inactive path of the turnout_____________
+    drawTurnout2: function(): string {
+      if (this.iTurnout1State !== 0) return this.pathTurnout(true)
+      return this.pathTurnout(false)
+    },
+    // _______color 1 of the track (active path)________________
+    colorTurnout1: function (): string {
       if (this.color !== '-') return this.color
-      if (this.iTurnout1State === 0) return this.geof.colorTrackOff
-      if (this.iTurnout1State === 1) return this.geof.colorTrackOn
-      if (this.iTurnout1State === 2) return this.geof.colorTrackUsed
-      if (this.iTurnout1State === -99) return this.geof.colorTrackUnknown
-      return this.geof.colorTrack
+      // if (this.iTurnout1State === 0) return this.geof.colorTrackOff
+      // if (this.iTurnout1State === 1) return this.geof.colorTrackOn
+      // if (this.iTurnout1State === 2) return this.geof.colorTrackUsed
+      // if (this.iTurnout1State === -99) return this.geof.colorTrackUnknown
+      return this.geof.colorTurnoutClear
+      // return this.geof.colorTrack
+    },
+    // _______color 2 of the track (inactive path)______________
+    colorTurnout2: function (): string {
+      if (this.color !== '-') return this.color
+      
+      // if (this.iTurnout1State === 0) return this.geof.colorTrackOff
+      // if (this.iTurnout1State === 1) return this.geof.colorTrackOn
+      // if (this.iTurnout1State === 2) return this.geof.colorTrackUsed
+      // if (this.iTurnout1State === -99) return this.geof.colorTrackUnknown
+      return this.geof.colorTurnoutBlocked
     },
     // _______text in line 1 and 5______________________________
     lineHeader: function (): string {
@@ -135,8 +136,57 @@ export default defineComponent({
     },
   },
   methods: {
+        // _______draw a path of the turnout________________________
+    pathTurnout: function (curve_: boolean): string {
+    // pathTurnout: function (): string {  
+    // -----Break down direction "dir" into int and char-------
+      if(this.type.length !== 2) return ''
+      let type_ = String(this.type.toUpperCase())
+      if (!['L', 'R'].includes(type_[1])) {
+        if (!['L', 'R'].includes(type_[0])) return ''
+        type_ = String(type_[0] + type_[1])
+      }
+      // const cType = type_[1]
+      // const iType = Number(type_[0])
+      // if (Number.isNaN(iType)) return ''
+      console.log('drawTurnout1 b: iTurnout1State=', this.iTurnout1State + ', curve_=' + curve_)
+      // -----draw path-----------------------------------------
+      if (type_ === '1L') {
+        if (curve_) return this.pathTrack(25) // curve
+        return this.pathTrack(15) // stright
+      }
+      if (type_ === '1R') {
+        if (curve_) return this.pathTrack(58)
+        return this.pathTrack(15)
+      }
+      if (type_ === '2R') {
+        if (curve_) return this.pathTrack(16)
+        return this.pathTrack(26)
+      }
+      if (type_ === '8L') {
+        if (curve_) return this.pathTrack(14)
+        return this.pathTrack(48)
+      }
+      if (type_ === '5R') {
+        if (curve_) return this.pathTrack(14)
+        return this.pathTrack(15)
+      }
+      if (type_ === '5L') {
+        if (curve_) return this.pathTrack(16)
+        return this.pathTrack(15)
+      }
+      if (type_ === '6R') {
+        if (curve_) return this.pathTrack(25)
+        return this.pathTrack(26)
+      }
+      if (type_ === '4L') {
+        if (curve_) return this.pathTrack(58)
+        return this.pathTrack(48)
+      }
+      return ''
+    },
     // _______path command: draw a track________________________
-    trackPath: function (dir1: number): string {
+    pathTrack: function (dir1: number): string {
       // -----(positive) values of line length------------------
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
@@ -159,67 +209,6 @@ export default defineComponent({
 
       let s1 = ' M' + this.x + ',' + this.y
       switch (dir1) {
-        case 1: // ----- x+ direction---------------------------
-          s1 += ' m' + '0,' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + dxo2
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-          break
-        case 2: // ----- / (up) direction-----------------------
-          s1 += ' m' + (-this.geof.tk.value[8].x) + ',' + (-this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (2 * this.geof.tk.value[8].x) + ',' + (2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + tk58x + ',' + (-tk58y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 3: // ----- ! (up) direction-----------------------
-          s1 += ' m' + (-this.geof.tk2) + ',' + (-dyo2) // Tk0
-          s1 += ' v' + dyo2
-          s1 += ' h' + (2 * this.geof.tk2)
-          s1 += ' v' + (-dyo2)
-          s1 += ' z'
-          break
-        case 4: // ----- \ (up) direction-----------------------
-          s1 += ' m' + (this.geof.tk.value[8].x) + ',' + (-this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (-2 * this.geof.tk.value[8].x) + ',' + (2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + (-tk58x) + ',' + (-tk58y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          break
-        case 5: // ----- x- direction---------------------------
-          s1 += ' m' + '0,' + (-tk0y)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (-dxo2)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-          break
-        case 6: // ----- / (down) direction---------------------
-          s1 += ' m' + (this.geof.tk.value[8].x) + ',' + (this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (-2 * this.geof.tk.value[8].x) + ',' + (-2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + (-tk58x) + ',' + (tk58y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          break
-        case 7: // ----- i (down) direction-----------------------
-          s1 += ' m' + (-this.geof.tk2) + ',' + (dyo2) // Tk0
-          s1 += ' v' + (-dyo2)
-          s1 += ' h' + (2 * this.geof.tk2)
-          s1 += ' v' + (dyo2)
-          s1 += ' z'
-          break
-        case 8: // ----- \ (down) direction---------------------
-          s1 += ' m' + (-this.geof.tk.value[8].x) + ',' + (this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (2 * this.geof.tk.value[8].x) + ',' + (-2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + tk58x + ',' + (tk58y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-
         case 12: // ----- Z - symbol (above)--------------------
           s1 += ' m' + (+dxo2) + ',' + (-dyo2)
           s1 += ' v' + (-tkcy)
@@ -357,44 +346,6 @@ export default defineComponent({
           s1 += ' h' + (-tkcx)
           s1 += ' z'
           break
-
-        case 13: // ----- L direction---------------------------
-          s1 += ' m' + (tk2) + ',' + (-tk2)
-          s1 += ' v' + (tk2 - dyo2)
-          s1 += ' h' + (-2 * tk2)
-          s1 += ' v' + (tk2 + dyo2)
-          s1 += ' h' + (tk2 + dxo2)
-          s1 += ' v' + (-2 * tk2)
-          s1 += ' z'
-          break
-        case 17: // ----- r direction---------------------------
-          s1 += ' m' + (tk2) + ',' + (tk2)
-          s1 += ' v' + (-tk2 + dyo2)
-          s1 += ' h' + (-2 * tk2)
-          s1 += ' v' + (-tk2 - dyo2)
-          s1 += ' h' + (tk2 + dxo2)
-          s1 += ' v' + (2 * tk2)
-          s1 += ' z'
-          break
-        case 35: // ----- -! direction--------------------------
-          s1 += ' m' + (-tk2) + ',' + (-tk2)
-          s1 += ' v' + (tk2 - dyo2)
-          s1 += ' h' + (2 * tk2)
-          s1 += ' v' + (tk2 + dyo2)
-          s1 += ' h' + (-tk2 - dxo2)
-          s1 += ' v' + (-2 * tk2)
-          s1 += ' z'
-          break
-        case 57: // ----- -7 direction---------------------------
-          s1 += ' m' + (-tk2) + ',' + (tk2)
-          s1 += ' v' + (-tk2 + dyo2)
-          s1 += ' h' + (2 * tk2)
-          s1 += ' v' + (-tk2 - dyo2)
-          s1 += ' h' + (-tk2 - dxo2)
-          s1 += ' v' + (2 * tk2)
-          s1 += ' z'
-          break
-
         case 159: // ----- || - symbol (right side)--------------
           s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
           s1 += ' v' + (2 * tk0y)
@@ -439,14 +390,17 @@ export default defineComponent({
       return s1
     },
     // _______on click: turn track energy on____________________
-    onClkOn: function (): void {
+    onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
       let payload = 'onClkOn: sid=' + this.sid
       // const topic = 'rcc/error'
       // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
-        payload = rccTurnout1Controller.payloadTrackOn
+        payload = rccTurnout1Controller.payloadTurnoutCurved
+        if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
+          payload = rccTurnout1Controller.payloadTurnoutStright
+        }
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
           if (this.turnout1?.pubTopic) {
@@ -456,14 +410,17 @@ export default defineComponent({
       }
     },
     // _______on click: turn track energy off___________________
-    onClkOff: function (): void {
+    onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Off')
       let payload = 'onClkOff: sid=' + this.sid
       // const topic = 'rcc/error'
       // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
-        payload = rccTurnout1Controller.payloadTrackOff
+        payload = rccTurnout1Controller.payloadTurnoutStright
+        if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
+          payload = rccTurnout1Controller.payloadTurnoutCurved
+        }
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
           rccTurnout1Controller.publishCi(topic, payload)

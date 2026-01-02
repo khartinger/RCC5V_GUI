@@ -12,19 +12,21 @@ export interface Turnout1 extends IBase {
 }
 
 export class RccTurnout1Controller extends CiBaseController {
-  public payloadTrackOn = '1'
-  public payloadTrackOff = '0'
-
+  public payloadTurnoutStright = '1'
+  public payloadTurnoutCurved = '0'
+  public sState0 = 'Abzweig'
+  public sState1 = 'Gerade'
+  
   public tracks1: Array<Turnout1> = reactive(
     [
       {
         // ---test track 1--------------------------------------
-        id: 'tk1',
+        id: 'to1',
         name: 'Turnout1',
-        iTurnout1State: -99,
-        sDCC: '41',
-        subTopic: 'rcc/demo1/ret/41 rcc/demo1/ret/bydcc',
-        pubTopic: 'rcc/demo1/set/41',
+        iTurnout1State: -1,
+        sDCC: '21',
+        subTopic: 'rcc/demo1/ret/21 rcc/demo1/ret/bydcc',
+        pubTopic: 'rcc/demo1/set/21',
         get subTopic1 () {
           return `rcc/demo1/ret/${this.sDCC} rcc/demo1/ret/bydcc`
         },
@@ -42,10 +44,10 @@ export class RccTurnout1Controller extends CiBaseController {
             try {
               const aPayload = JSON.parse(message.payload)
               // const sDCC = String(turnout1.pubTopic.split('/').pop())
-              const sDCC = turnout1.sDCC
-              const sState = aPayload[sDCC]
-              if (sState === 'Aus') turnout1.iTurnout1State = 0
-              if (sState === 'Ein') turnout1.iTurnout1State = 1
+              const sDCC_ = turnout1.sDCC
+              const sState_ = aPayload[sDCC_]
+              if (sState_ === this.sState0) turnout1.iTurnout1State = 0
+              if (sState_ === this.sState1) turnout1.iTurnout1State = 1
               // console.log('onMessage: sState=', sState)
             } catch (error) {
               turnout1.iTurnout1State = -99

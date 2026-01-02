@@ -75,12 +75,14 @@ export class Geo {
   public colorClose = '#FF6666' //     light red
   public colorLock = '#C00000' //      red
 
-  public colorTrack = '#000000' //     dark grey
+  public colorTrack = '#303030' //     dark grey
   public colorTrackOff = '#B00000' //  light red
   public colorTrackOn = '#00B000' //   light green
   public colorTrackUsed = '#C0C800' // yellow-green
   public colorTrackInfo = '#A0A0F0' // blue
   public colorTrackUnknown = '#404040' // black
+  public colorTurnoutClear = '#FFD700' // gold
+  public colorTurnoutBlocked = '#603030' // red - grey
   public noDate = '--.--.----'
   public noTime = '--:--:--'
   public batteryMin = 15
