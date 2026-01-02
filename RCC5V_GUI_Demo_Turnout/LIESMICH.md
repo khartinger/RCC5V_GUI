@@ -6,20 +6,20 @@ Letzte &Auml;nderung: 2.1.2026 <a name="up"></a><br>
 
 # Einleitung
 ## Voraussetzung
-Diese VUE-Anwendung zeigt, welche Symbole es zum Zeichnen von Gleisen gibt und wie diese angewendet werden. Da die Symbole auch das Ein- und Ausschalten der Gleisstromversorgung ermöglichen, ist folgende Hardware erforderlich:   
-* Ein Gleis, dessen Stromzuführung abgeschaltet werden kann.   
+Diese VUE-Anwendung zeigt, welche Symbole es zum Zeichnen von Weichen gibt und wie diese angewendet werden. Da die Steuerung über MQTT-Befehle erfolgt, ist folgende Hardware erforderlich:   
+* (Mindestens) eine Weiche mit Ansteuerung über einen RCC-Mikrocontroller und RCC-Block
   Beispiel: Verwendung des RCC-Blocktesters, der auf [https://github.com/khartinger/RCC5V/tree/main/examples/blocktester](https://github.com/khartinger/RCC5V/tree/main/examples/blocktester) beschrieben wird   
 * Ein laufender MQTT-Server (zB `mosquitto`), der über die IP `10.1.1.1` erreichbar ist   
 * Ein PC, Laptop oder Tablet, das mit dem MQTT-Server verbunden ist (zB über WLAN)   
 
 ## Verfügbare Symbole
-![Gleissymbole](./images/300_symbol_turnout1.png "Gleissymbole")   
-_Bild 1: Gleissymbole_   
+![Weichensymbole](./images/300_symbol_turnout1.png "Weichensymbole")   
+_Bild 1: Weichensymbole_   
 
 ## Anzeige und Test der Symbole
 
 # ...ToDo...
-Visual Studio Code (VSC) starten, Projekt `RCC5V_GUI_Demo_Track` laden, Terminalfenster `npm run serve` eingeben
+Visual Studio Code (VSC) starten, Projekt `RCC5V_GUI_Demo_Turnout` laden, Terminalfenster `npm run serve` eingeben
 PC mit WLAN verbinden (zB `Raspi11`)
 
 
@@ -31,23 +31,19 @@ Voraussetzungen: IP `10.1.1.1`, Basis-Topic `rcc/demo1`
 
 # Aufruf eines Symbols
 ## Syntax   
-Gleissymbole werden mit dem Tag `<RccTrack ...>` aufgerufen, wobei folgende Parameter erforderlich bzw. möglich sind:   
+Gleissymbole werden mit dem Tag `<RccTurnout ...>` aufgerufen, wobei folgende Parameter erforderlich bzw. möglich sind:   
 * `x` (erforderlich): x-Koordinate des Zentrums des Symbols   
 * `y` (erforderlich): y-Koordinate des Zentrums des Symbols   
-* `dir` (erforderlich): Art (und damit Richtung) des Gleissymbols   
-* `sid` (optional): ID des Symbols, mit dem Gleise gruppiert und über MQTT angesprochen werden.   
-* `border` (optional): Gibt an, ob ein Rahmen um ein Gleissymbol gezeichnet werden soll   
-* `label` (optional): Gibt an, ob und welche Beschriftung eines Gleissymbols angezeigt werden soll   
-* `color` (optional): Setzen einer Farbe für das Gleissymbol    
+* `dir` (erforderlich): Art (und damit Richtung) des Weichensymbols   
+* `sid` (optional): ID des Symbols, mit dem die Weiche über MQTT angesprochen werden.   
+* `border` (optional): Gibt an, ob ein Rahmen um ein Weichensymbol gezeichnet werden soll   
+* `label` (optional): Gibt an, ob und welche Beschriftung des Weichensymbols angezeigt werden soll   
+* `color` (optional): Setzen einer Farbe für das Weichensymbol    
 
 ## Beispiele
 
 # ...ToDo...
 
-# Weitere Symbole
-## Gleistrennsymbol
-
-## Schräge Verbindungselemente
 
 
 [Zum Seitenanfang](#up)
