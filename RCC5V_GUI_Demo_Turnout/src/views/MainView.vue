@@ -1,8 +1,8 @@
 <!-- ----MainView.vue------------------------khartinger----- -->
 <!-- 2025-12-27: New                                         -->
 <template>
-  <svg width="100%" viewBox="-45 -46 650 810">
-    <rect class="ciBackground" x="-45" y="-46" width="650" height="810" />
+  <svg width="100%" viewBox="-45 -46 650 100">
+    <rect class="ciBackground" x="-45" y="-46" width="650" height="100" />
     <RccTurnout1 :x="0*dx"  :y="0*dy" sid="to1" type="1L" :border="1"></RccTurnout1>
     <RccTurnout1 :x="1*dx"  :y="0*dy" sid="to1" type="1R" :border="1"></RccTurnout1>
     <RccTurnout1 :x="2*dx"  :y="0*dy" sid="to1" type="2R" :border="1"></RccTurnout1>

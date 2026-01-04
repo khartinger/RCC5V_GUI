@@ -72,7 +72,7 @@ export default defineComponent({
     // =======standard methods==================================
     // _______find turnout1 object to given sid___________________
     turnout1: function (): Turnout1 | undefined {
-      return rccTurnout1Controller.tracks1.find(turnout1 => turnout1.id === this.sid)
+      return rccTurnout1Controller.turnouts1.find(turnout1 => turnout1.id === this.sid)
     },
     // _______get iTurnout1State__________________________________
     iTurnout1State: function (): number {
