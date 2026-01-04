@@ -1,0 +1,77 @@
+// ______RccTo3way1Controller.ts____________khartinger_____
+// 2026-01-04: new
+import { reactive } from 'vue'
+import { Message } from '@/services/CiMqttClient'
+import { CiBaseController, IBase } from './CiBaseController'
+
+export interface To3way1 extends IBase {
+  iLState: number;
+  iRState: number;
+  sDCCL: string,
+  sDCCR: string,
+  pubTopicR: string,
+  textCenter?: string;
+  textFooter?: string;
+}
+
+export class RccTo3way1Controller extends CiBaseController {
+  public payloadTurnoutStright = '1'
+  public payloadTurnoutCurved = '0'
+  public sState0 = '0'
+  public sState1 = '1'
+  
+  public to3ways1: Array<To3way1> = reactive(
+    [
+      {
+        // ---test track 1--------------------------------------
+        id: 't3w1',
+        name: 'To3way1',
+        iLState: -10,
+        iRState: -10,
+        sDCCL: '31',
+        sDCCR: '32',
+        subTopic: 'rcc/demo1/ret/31 rcc/demo1/ret/32 rcc/demo1/ret/status',
+        pubTopic: 'rcc/demo1/set/31',
+        pubTopicR: 'rcc/demo1/set/32',
+      },
+    ],
+  )
+
+  public onMessage (message: Message): void {
+    this.to3ways1.forEach(to3way1 => {
+      const aSubTopic = to3way1.subTopic.split(' ')
+      if (aSubTopic.includes(message.topic)) {
+        // ---to3way1 topic found ---------------------------
+        if (message.payload.length > 0) {
+          try {
+            const aPayload = JSON.parse(message.payload)
+            // const sDCC = String(to3way1.pubTopic.split('/').pop())
+            let sDCC_ = to3way1.sDCCL
+            let sState_ = aPayload[sDCC_]
+            if (sState_ === this.sState0) to3way1.iLState = 0
+            if (sState_ === this.sState1) to3way1.iLState = 1
+            sDCC_ = to3way1.sDCCR
+            sState_ = aPayload[sDCC_]
+            if (sState_ === this.sState0) to3way1.iRState = 0
+            if (sState_ === this.sState1) to3way1.iRState = 1
+            // console.log('onMessage: sState=', sState)
+          } catch (error) {
+            to3way1.iLState = -9
+            to3way1.iRState = -9
+          }
+        }
+        // console.log('onMessage: message.topic=', message.topic + ', payload=' + message.payload)
+        // console.log('onMessage: message.payload=', message.payload)
+        console.log('onMessage: iLState=', to3way1.iLState + ', iRState=' + to3way1.iLState)
+        // ---END: to3way1 topic found --------------------
+      }
+    })
+  }
+
+  public publishCi (topic: string, payload: string): void {
+    // console.log('CiTo3way1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
+    this.publish(topic, payload, false, 0).catch((e) => { console.error('CiTo3way1Controller: ERROR:', e) })
+  }
+}
+
+export const rccTo3way1Controller = new RccTo3way1Controller()
