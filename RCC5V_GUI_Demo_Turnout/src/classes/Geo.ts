@@ -83,6 +83,8 @@ export class Geo {
   public colorTrackUnknown = '#404040' // black
   public colorTurnoutClear = '#FFD700' // gold
   public colorTurnoutBlocked = '#603030' // red - grey
+  public colorUncouplerOn = '#90ee90' //  light green
+  public colorUncouplerOff = '#A07070' // red-grey
   public noDate = '--.--.----'
   public noTime = '--:--:--'
   public batteryMin = 15
@@ -90,8 +92,8 @@ export class Geo {
   public textOpen = 'AUF' // 'AUF' //    OPEN
   public textClose = 'ZU' // 'ZU' //    CLOSE
   public textLock = 'SPERRE' // 'SPERRE' // LOCK
-  public textTrackOn = '[STROM EIN]' // [ON]
-  public textTrackOff = '[STROM AUS]' // [OFF]
+  public textTrackOn = '[EIN]' // [ON]
+  public textTrackOff = '[AUS]' // [OFF]
 
   // =========relative geometric values=========================
   // ---------font data-----------------------------------------

@@ -1,21 +1,21 @@
-<!-- RccTurnout1.vue --------------------------khartinger----- -->
-<!-- 2026-01-01: new                                         -->
+<!-- RccTurnout1.vue ------------------------khartinger----- -->
+<!-- 2026-01-06: new                                         -->
 
 <template>
   <g>
   <!--draw border------------------------------------------- -->
   <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
   <!--draw a horizontal line-------------------------------- -->
-  <line v-if="drawLabel==1 || drawLabel==3" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
+  <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
-  <text v-if="(drawLabel>1) && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
-  <text v-if="(drawLabel>1) && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
+  <text v-if="(drawLabel & 1) > 0 && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
+  <text v-if="(drawLabel &16) > 0 && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
   <!--draw turnout parts (do not change lines!)------------- -->
   <path :d="drawTurnout2" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
   <path :d="drawTurnout1" :fill="colorTurnout1" :stroke="colorTurnout1" stroke-width="1" />
   <!--define click area------------------------------------- -->
-  <rect @click="onClkTop()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
-  <rect @click="onClkBottom()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
+  <path :d="pathTop" @click="onClkTop()" class="ciClick" />
+  <path :d="pathBottom" @click="onClkBottom()" class="ciClick" />
 </g>
 </template>
 
@@ -67,6 +67,16 @@ export default defineComponent({
       required: false,
       default: '-',
     },
+    header: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    footer: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   computed: {
     // =======standard methods==================================
@@ -91,11 +101,31 @@ export default defineComponent({
     drawLabel: function (): number {
       const label_ = '' + this.label
       let ret = 0 // 0 = label off
-      if (label_ === '1' || label_ === 'on') ret = 1 // x-axis
-      if (label_ === '2' || label_ === 'text') ret = 2 // header, footer
-      if (label_ === '3' || label_ === 'on2') ret = 3 // x-axis + header, footer
+      if (label_ === '1' || label_ === 'on') ret |= 4 // x-axis
+      if (label_ === '2' || label_ === 'text') { // header, footer
+        ret |= 1
+        ret |= 16
+      }
+      if (label_ === '3' || label_ === 'on2') { // x-axis + header, footer
+        ret |= 1
+        ret |= 4
+        ret |= 16
+      }
+      if(this.header.length > 0) ret |= 1
+      if(this.footer.length > 0) ret |= 16
       // console.log('drawXAxis: xAxis=', this.xAxis + ' ret=' + String(ret))
       return ret
+    },
+    // _______type as string #C_________________________________
+    sType: function(): string {
+      // -----Break down direction "dir" into int and char-------
+      if(this.type.length !== 2) return ''
+      let sType_ = String(this.type.toUpperCase())
+      if (!['L', 'R'].includes(sType_[1])) {
+        if (!['L', 'R'].includes(sType_[0])) return ''
+        sType_ = String(sType_[0] + sType_[1])
+      }
+      return sType_
     },
     // _______draw the active path of the turnout_______________
     drawTurnout1: function(): string {
@@ -110,46 +140,101 @@ export default defineComponent({
     // _______color 1 of the track (active path)________________
     colorTurnout1: function (): string {
       if (this.color !== '-') return this.color
-      // if (this.iTurnout1State === 0) return this.geof.colorTrackOff
-      // if (this.iTurnout1State === 1) return this.geof.colorTrackOn
-      // if (this.iTurnout1State === 2) return this.geof.colorTrackUsed
-      // if (this.iTurnout1State === -99) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutClear
-      // return this.geof.colorTrack
     },
     // _______color 2 of the track (inactive path)______________
     colorTurnout2: function (): string {
-      if (this.color !== '-') return this.color
-      
-      // if (this.iTurnout1State === 0) return this.geof.colorTrackOff
-      // if (this.iTurnout1State === 1) return this.geof.colorTrackOn
-      // if (this.iTurnout1State === 2) return this.geof.colorTrackUsed
-      // if (this.iTurnout1State === -99) return this.geof.colorTrackUnknown
+      // if (this.color !== '-') return this.color
       return this.geof.colorTurnoutBlocked
     },
     // _______text in line 1 and 5______________________________
     lineHeader: function (): string {
-      return this.geof.center2(this.geof.textTrackOn)
+      if (this.header.length > 0) { return this.header }
+        return this.geof.center2(this.geof.textTrackOn)
     },
     lineFooter: function (): string {
+      if (this.footer.length > 0) return this.footer
       return this.geof.center2(this.geof.textTrackOff)
+    },
+    // _______click area "top"__________________________________
+    pathTop: function(): string {
+      const dxo = this.geof.dxo()
+      const dyo = this.geof.dyo()
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      let s1 = ''
+      if (this.sType === '1R' || this.sType === '1L' ||
+          this.sType === '5R' || this.sType === '5L') 
+      { // --------rectangle as top click area------------------
+        s1 += ' M' + this.x + ',' + this.y
+        s1 += ' m' + (-dxo2) + ',' + (-dyo2)
+        s1 += ' v' + dyo2
+        s1 += ' h' + dxo
+        s1 += ' v' + (-dyo2)
+        s1 += ' z'
+      } 
+      else // -----triangle as top click area-------------------
+      {
+        if (this.sType === '2R' || this.sType === '6R') {
+          // ......top left triangle............................
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (dxo2) + ',' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo)
+          s1 += ' z'
+        } else {
+          // ......top right triangle...........................
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-dxo2) + ',' + (-dyo2)
+          s1 += ' h' + (dxo)
+          s1 += ' v' + (dyo)
+          s1 += ' z'
+        }
+      }
+      return s1
+    },
+    // _______click area "bottom"_______________________________
+    pathBottom: function(): string {
+      const dxo = this.geof.dxo()
+      const dyo = this.geof.dyo()
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      let s1 = ''
+      if (this.sType === '1R' || this.sType === '1L' ||
+          this.sType === '5R' || this.sType === '5L') 
+      { // --------rectangle as bottom click area---------------
+        s1 += ' M' + this.x + ',' + this.y
+        s1 += ' m' + (-dxo2) + ',' + (dyo2)
+        s1 += ' h' + dxo
+        s1 += ' v' + (-dyo2)
+        s1 += ' h' + (-dxo)
+        s1 += ' z'
+      } 
+      else // -----triangle as bottom click area----------------
+      {
+        if (this.sType === '2R' || this.sType === '6R') {
+          // ......bottom right triangle.........................
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-dxo2) + ',' + (dyo2)
+          s1 += ' h' + (dxo)
+          s1 += ' v' + (-dyo)
+          s1 += ' z'
+        } else {
+          // ......bottom left triangle........................
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-dxo2) + ',' + (-dyo2)
+          s1 += ' v' + (dyo)
+          s1 += ' h' + (dxo)
+          s1 += ' z'
+        }
+      }
+      return s1
     },
   },
   methods: {
         // _______draw a path of the turnout________________________
     pathTurnout: function (curve_: boolean): string {
-    // pathTurnout: function (): string {  
-    // -----Break down direction "dir" into int and char-------
-      if(this.type.length !== 2) return ''
-      let type_ = String(this.type.toUpperCase())
-      if (!['L', 'R'].includes(type_[1])) {
-        if (!['L', 'R'].includes(type_[0])) return ''
-        type_ = String(type_[0] + type_[1])
-      }
-      // const cType = type_[1]
-      // const iType = Number(type_[0])
-      // if (Number.isNaN(iType)) return ''
-      console.log('drawTurnout1 b: iTurnout1State=', this.iTurnout1State + ', curve_=' + curve_)
+      const type_ = this.sType
       // -----draw path-----------------------------------------
       if (type_ === '1L') {
         if (curve_) return this.pathTrack(25) // curve
@@ -197,16 +282,11 @@ export default defineComponent({
       const tkbx = dxo2 + tk0x
       const tkcx = dxo2 - this.geof.tk.value[4].x
       const tkcy = dyo2 + this.geof.tk.value[5].y
-      const tk58x = dxo2 - this.geof.tk.value[8].x
-      const tk58y = dyo2 - tkcy + this.geof.tk.value[8].y
       const tk59x = this.geof.dxo() - tkbx
       const tk59y = dyo2 - tkcy + tk0y
       const tkdy = tk0x + tk0y
       // -----symbol "Section insulator" || --------------------
       const tks = tk2 / 2
-      // const tksx = dxo2 * tks / Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
-      // const tksy = dyo2 * tks / Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
-
       let s1 = ' M' + this.x + ',' + this.y
       switch (dir1) {
         case 12: // ----- Z - symbol (above)--------------------
