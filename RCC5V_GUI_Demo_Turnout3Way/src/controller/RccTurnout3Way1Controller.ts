@@ -62,7 +62,7 @@ export class RccTo3way1Controller extends CiBaseController {
         }
         // console.log('onMessage: message.topic=', message.topic + ', payload=' + message.payload)
         // console.log('onMessage: message.payload=', message.payload)
-        console.log('onMessage: iLState=', to3way1.iLState + ', iRState=' + to3way1.iLState)
+        console.log('onMessage: iLState=', to3way1.iLState + ', iRState=' + to3way1.iRState)
         // ---END: to3way1 topic found --------------------
       }
     })

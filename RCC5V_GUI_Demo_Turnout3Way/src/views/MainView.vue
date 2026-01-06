@@ -3,8 +3,8 @@
 <template>
   <svg width="100%" viewBox="-45 -46 250 100">
     <rect class="ciBackground" x="-45" y="-46" width="250" height="100" />
-    <RccTurnout3Way1 :x="0*dx"  :y="0*dy" sid="t3w1" type="1" :border="1"></RccTurnout3Way1>
-    <RccTurnout3Way1 :x="2*dx"  :y="0*dy" sid="t3w1" type="4" :border="1"></RccTurnout3Way1>
+    <RccTurnout3Way1 :x="0*dx"  :y="0*dy" sid="t3w1" dir="1" :border="1"></RccTurnout3Way1>
+    <RccTurnout3Way1 :x="2*dx"  :y="0*dy" sid="t3w1" dir="4" :border="1"></RccTurnout3Way1>
   </svg>
 </template>
 

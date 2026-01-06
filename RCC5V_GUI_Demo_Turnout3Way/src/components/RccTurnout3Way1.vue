@@ -46,7 +46,7 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    type: {
+    dir: {
       type: String,
       required: true,
     },
@@ -138,21 +138,21 @@ export default defineComponent({
     },
     // _______click area "top"__________________________________
     pathTop: function(): string {
-      const type_ = Number(this.type) // turnout 1 -< or 4 >-
-      if(Number.isNaN(type_)) return ''
+      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ' M' + this.x + ',' + this.y
-      if (type_ === 1) 
+      if (dir_ === 1) 
       { //----------turnout to the right -< --------------------
         s1 += ' l' + dxo2 + ',' + (-dyo2)
         s1 += ' h' + (-dxo)
         s1 += ' v' + dyo
         s1 += ' z'
       }
-      if (type_ === 4) 
+      if (dir_ === 4) 
       { //----------turnout to the left >- ---------------------
         s1 += ' h' + dxo2
         s1 += ' v' + (-dyo2)
@@ -164,19 +164,19 @@ export default defineComponent({
 
     // _______click area "middle" (stright)_____________________
     pathMid: function(): string {
-      const type_ = Number(this.type) // turnout 1 -< or 4 >-
-      if(Number.isNaN(type_)) return ''
+      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      if(Number.isNaN(dir_)) return ''
       const dyo = this.geof.dyo()
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ' M' + this.x + ',' + this.y
-      if (type_ === 1) 
+      if (dir_ === 1) 
       { //----turnout to the right -< ----------------------
         s1 += ' l' + dxo2 + ',' + dyo2
         s1 += ' v' + (-dyo)
         s1 += ' z'
       }
-      if (type_ === 4) 
+      if (dir_ === 4) 
       { //----turnout to the left >- ------------------------
         s1 += ' l' + (-dxo2) + ',' + (-dyo2)
         s1 += ' v' + dyo
@@ -186,21 +186,21 @@ export default defineComponent({
     },
     // _______click area "bottom"_______________________________
     pathBottom: function(): string {
-      const type_ = Number(this.type) // turnout 1 -< or 4 >-
-      if(Number.isNaN(type_)) return ''
+      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ' M' + this.x + ',' + this.y
-      if (type_ === 1) 
+      if (dir_ === 1) 
       { //----------turnout to the right -< ----------------
         s1 += ' l' + dxo2 + ',' + dyo2
         s1 += ' h' + (-dxo)
         s1 += ' v' + (-dyo)
         s1 += ' z'
       }
-      if (type_ === 4) 
+      if (dir_ === 4) 
       { //----------turnout to the left >- -----------------
         s1 += ' h' + dxo2
         s1 += ' v' + dyo2
@@ -212,22 +212,46 @@ export default defineComponent({
   },
 
   methods: {
+
+    // _______draw a path of the turnout________________________
+    pathTurnout: function (pathNr_: number): string {
+      // =====prepare input=====================================
+      // pathNr_: track number to draw (1 | 2 | 3)
+      let ret_=''
+      let state_ = this.iTo3way1State // 1=right, 2=left, 3=stright
+      if(state_ < 0) state_ = 1
+      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      if(Number.isNaN(dir_)) return ret_
+      if(dir_!==1 && dir_!==4) return ret_
+      // .....number of used path tracks........................
+      let aTrack = Array(25, 15, 58, 25, 15)
+      if (dir_ === 4) aTrack = Array(16, 15, 14, 16, 15)
+      // =====select path track number to draw==================
+      const i_ = Number(pathNr_ + state_ - 2)
+      if (i_ < 0  || i_ > 4) return ret_
+      const dirTrack_=aTrack[i_]
+      // =====return path of track to draw======================
+      ret_ = this.pathTrack(dirTrack_)
+      // console.log('pathTurnout: pathNr_', pathNr_ + ', state_=' + state_ + ', iTrack_=' + iTrack_+ ', ret_=' + ret_)
+      return ret_
+    },
+/*
     // _______draw a path of the turnout________________________
     pathTurnout: function (pathNr_: number): string {
      // ======prepare input=====================================
      let ret_=''
      const state_ = this.iTo3way1State // 1=right, 2=left, 3=stright
-     const type_ = Number(this.type) // turnout 1 -< or 4 >-
-     if(Number.isNaN(type_)) return ret_
+     const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+     if(Number.isNaN(dir_)) return ret_
      // ======active turnout way================================
      if(pathNr_ === 3) {
-       if (type_ === 1) 
+       if (dir_ === 1) 
        { // ...active way of 3-way-turnout to the right -< ......
          if(state_ === 1) return this.pathTrack(58); // -\  right
          if(state_ === 2) return this.pathTrack(25); // -/  left
          return this.pathTrack(15); // --  stright
        }
-       if (type_ === 4) 
+       if (dir_ === 4) 
        { // ...active way of 3-way-turnout to the left >- ......
          if(state_ === 1) return this.pathTrack(14); // \-  right
          if(state_ === 2) return this.pathTrack(16); // /-  left
@@ -236,7 +260,7 @@ export default defineComponent({
        return ret_
      } else 
      { // ----inactive turnout ways (pathNr_ 1 | 2)-------------
-       if(type_ === 1)
+       if(dir_ === 1)
        { // ...inactive ways of 3-way-turnout to the right -< ...
          if (state_ == 1) {
            if (pathNr_ == 1) return this.pathTrack(25); // -/  left
@@ -249,7 +273,7 @@ export default defineComponent({
          if (pathNr_ == 1) return this.pathTrack(25); // -/  left
          else return this.pathTrack(58); // -\  right
        }
-       if(type_ === 4)
+       if(dir_ === 4)
        { // ...inactive ways of 3-way-turnout to the left >- ...
          if (state_ == 1) {
            if (pathNr_ == 1) return this.pathTrack(16); // /-  left
@@ -265,8 +289,9 @@ export default defineComponent({
      }
      return ret_
     },
+*/
     // _______path command: draw a track________________________
-    pathTrack: function (dir1: number): string {
+    pathTrack: function (dirTrack_: number): string {
       // -----(positive) values of line length------------------
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
@@ -282,7 +307,7 @@ export default defineComponent({
       // -----symbol "Section insulator" || --------------------
       const tks = tk2 / 2
       let s1 = ' M' + this.x + ',' + this.y
-      switch (dir1) {
+      switch (dirTrack_) {
         case 14: // ----- \_ direction--------------------------
           s1 += ' m' + (tk0x) + ',' + (-tk0y) // Tk0
           s1 += ' h' + (tkax)
@@ -342,7 +367,7 @@ export default defineComponent({
       let payload = 'onClkTop: sid=' + this.sid
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.type === '4') { // turnout 1 -< or 4 >-)
+        if(this.dir === '4') { // turnout 1 -< or 4 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
@@ -377,7 +402,7 @@ export default defineComponent({
       let payload = 'onClkBottom: sid=' + this.sid
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.type === '1') { // turnout 1 -< or 4 >-)
+        if(this.dir === '1') { // turnout 1 -< or 4 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
