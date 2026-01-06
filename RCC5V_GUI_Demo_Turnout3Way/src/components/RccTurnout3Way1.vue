@@ -1,15 +1,15 @@
 <!-- RccTo3way1.vue -------------------------khartinger----- -->
-<!-- 2026-01-04: new                                         -->
+<!-- 2026-01-06: new                                         -->
 
 <template>
   <g>
   <!--draw border------------------------------------------- -->
   <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
   <!--draw a horizontal line-------------------------------- -->
-  <line v-if="drawLabel==1 || drawLabel==3" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
+  <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
-  <text v-if="(drawLabel>1) && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
-  <text v-if="(drawLabel>1) && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
+  <text v-if="(drawLabel & 1) > 0 && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
+  <text v-if="(drawLabel &16) > 0 && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
   <!--draw turnout parts (do not change lines!)------------- -->
   <path :d="drawTurnout1" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
   <path :d="drawTurnout2" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
@@ -69,6 +69,16 @@ export default defineComponent({
       required: false,
       default: '-',
     },
+        header: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    footer: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   computed: {
     // =======standard methods==================================
@@ -92,13 +102,23 @@ export default defineComponent({
     iLines: function (): number {
       return this.geof.linesmax()
     },
-    // _______draw a horizontal middle line or not______________
+        // _______draw a horizontal middle line, texts or not_______
     drawLabel: function (): number {
       const label_ = '' + this.label
       let ret = 0 // 0 = label off
-      if (label_ === '1' || label_ === 'on') ret = 1 // x-axis
-      if (label_ === '2' || label_ === 'text') ret = 2 // header, footer
-      if (label_ === '3' || label_ === 'on2') ret = 3 // x-axis + header, footer
+      if (label_ === '1' || label_ === 'on') ret |= 4 // x-axis
+      if (label_ === '2' || label_ === 'text') { // header, footer
+        ret |= 1
+        ret |= 16
+      }
+      if (label_ === '3' || label_ === 'on2') { // x-axis + header, footer
+        ret |= 1
+        ret |= 4
+        ret |= 16
+      }
+      if(this.header.length > 0) ret |= 1
+      if(this.footer.length > 0) ret |= 16
+      // console.log('drawXAxis: xAxis=', this.xAxis + ' ret=' + String(ret))
       return ret
     },
     // _______draw the active path of the turnout_______________
@@ -131,9 +151,11 @@ export default defineComponent({
     },
     // _______text in line 1 and 5______________________________
     lineHeader: function (): string {
-      return this.geof.center2(this.geof.textTrackOn)
+      if (this.header.length > 0) { return this.header }
+        return this.geof.center2(this.geof.textTrackOn)
     },
     lineFooter: function (): string {
+      if (this.footer.length > 0) return this.footer
       return this.geof.center2(this.geof.textTrackOff)
     },
     // _______click area "top"__________________________________
