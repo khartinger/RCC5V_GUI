@@ -1,5 +1,5 @@
 // ______RccTurnout3Way1Controller.ts____________khartinger_____
-// 2026-01-04: new
+// 2026-01-08: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'

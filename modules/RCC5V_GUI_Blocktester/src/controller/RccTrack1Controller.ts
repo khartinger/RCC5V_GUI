@@ -1,5 +1,5 @@
 // ______RccTrack1Controller.ts___________________khartinger_____
-// 2026-01-01: new
+// 2026-01-08: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'

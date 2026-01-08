@@ -1,5 +1,6 @@
 // ______Geo.ts__________________________________khartinger_____
 // 2025-12-27: new
+// 2026-01-08: added tk_, track, turnout uncoupler
 
 import { ref } from 'vue'
 

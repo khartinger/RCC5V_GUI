@@ -1,5 +1,5 @@
 // ______RccUncoupler1Controller.ts______________khartinger_____
-// 2026-01-06: new
+// 2026-01-08: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
@@ -48,8 +48,7 @@ export class RccUncoupler1Controller extends CiBaseController {
             uncoupler1.iUncoupler1State = -99
           }
         }
-        // console.log('onMessage: message.topic=', message.topic + ', payload=' + message.payload)
-        // console.log('onMessage: message.payload=', message.payload)
+        // console.log('onMessage: topic=', message.topic + ', payload=' + message.payload)
         // console.log('onMessage: uncoupler1.iUncoupler1State=', uncoupler1.iUncoupler1State)
         // ---END: uncoupler1 topic found --------------------------
       }

@@ -1,5 +1,5 @@
 // ______RccTurnout1Controller.ts___________________khartinger_____
-// 2026-01-06: new
+// 2026-01-08: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
@@ -48,8 +48,7 @@ export class RccTurnout1Controller extends CiBaseController {
             turnout1.iTurnout1State = -99
           }
         }
-        // console.log('onMessage: message.topic=', message.topic + ', payload=' + message.payload)
-        // console.log('onMessage: message.payload=', message.payload)
+        // console.log('onMessage: topic=', message.topic + ', payload=' + message.payload)
         // console.log('onMessage: turnout1.iTurnout1State=', turnout1.iTurnout1State)
         // ---END: turnout1 topic found --------------------------
       }

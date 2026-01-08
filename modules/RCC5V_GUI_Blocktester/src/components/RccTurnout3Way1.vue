@@ -1,5 +1,5 @@
-<!-- RccTo3way1.vue -------------------------khartinger----- -->
-<!-- 2026-01-06: new                                         -->
+<!-- RccTurnout3Wway1.vue -------------------khartinger----- -->
+<!-- 2026-01-08: new                                         -->
 
 <template>
   <g>
@@ -284,8 +284,6 @@ export default defineComponent({
           s1 += ' v' + (-tkcy)
           s1 += ' h' + (tkcx)
           s1 += ' z'
-          // s1 += ' M' + this.x + ',' + (this.y - dyo2)
-          // s1 += ' v' + (2 * dyo2)
           break
         case 15: // ----- -- direction--------------------------
           s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0

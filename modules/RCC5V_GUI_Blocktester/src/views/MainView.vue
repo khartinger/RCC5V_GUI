@@ -1,5 +1,5 @@
 <!-- ----MainView.vue------------------------khartinger----- -->
-<!-- 2026-01-06: New                                         -->
+<!-- 2026-01-08: New                                         -->
 <template>
   <svg width="100%" :viewBox="viewbox">
     <rect class="ciBackground" :x="x1" :y="y1" :width="w1" :height="h1" />

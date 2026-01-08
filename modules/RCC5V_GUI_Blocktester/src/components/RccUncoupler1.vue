@@ -1,5 +1,5 @@
 <!-- RccUncoupler1.vue ----------------------khartinger----- -->
-<!-- 2026-01-06: new                                         -->
+<!-- 2026-01-08: new                                         -->
 
 <template>
   <g>
@@ -16,10 +16,6 @@
   <!--define click area------------------------------------- -->
   <path :d="pathTop" @click="onClkTop()" class="ciClick" />
   <path :d="pathBottom" @click="onClkBottom()" class="ciClick" />
-  <!--
-  <rect @click="onClkTop()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
-  <rect @click="onClkBottom()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
-  -->
 </g>
 </template>
 
