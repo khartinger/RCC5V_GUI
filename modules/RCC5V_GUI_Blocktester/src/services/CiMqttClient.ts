@@ -72,7 +72,6 @@ export class CiMqttClient {
   public mqttState = readonly(this.privateMqttState)
 
   private privateMqttConnection: MqttConnection = reactive<MqttConnection>({
-    // host: '192.168.0.7',
     host: '10.1.1.1',
     port: 1884,
     endpoint: '',
