@@ -1,5 +1,6 @@
 // ______Geo.ts__________________________________khartinger_____
 // 2025-12-27: new
+// 2026-01-08: added tk_, track, turnout uncoupler
 
 import { ref } from 'vue'
 
@@ -75,16 +76,16 @@ export class Geo {
   public colorClose = '#FF6666' //     light red
   public colorLock = '#C00000' //      red
 
-  public colorTrack = '#000000' //     dark grey
-  public colorTrackOff = '#B00000' //  light red
+  public colorTrack = '#303030' //     dark grey
+  public colorTrackOff = '#F00000' //  red
   public colorTrackOn = '#00B000' //   light green
   public colorTrackUsed = '#C0C800' // yellow-green
   public colorTrackInfo = '#A0A0F0' // blue
-  public colorTrackUnknown = '#404040' // black
+  public colorTrackUnknown = '#805050' // red/grey
   public colorTurnoutClear = '#FFD700' // gold
-  public colorTurnoutBlocked = '#603030' // red - grey
-  public colorUncouplerOn = '#90ee90' //  light green
-  public colorUncouplerOff = '#A07070' // red-grey
+  public colorTurnoutBlocked = '#703030' // red/grey
+  public colorUncouplerOn = '#90ee90' // light green
+  public colorUncouplerOff = '#808080' // grey
   public noDate = '--.--.----'
   public noTime = '--:--:--'
   public batteryMin = 15
