@@ -9,12 +9,15 @@ const routes: Array<RouteRecordRaw> = [
     name: 'MainView',
     component: MainView,
     meta: {
-      title: 'RCC5V_GUI MainView',
+      title: 'RCC5V_GUI_Blocktester MainView',
     },
   },
   {
     path: '/about',
     name: 'About',
+    meta: {
+      title: 'RCC5V_GUI_Blocktester About',
+    },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -28,7 +31,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = <string> to.meta.title
+  document.title = (to.meta.title as string) ?? 'RCC5V_GUI_Blocktester'
+  // document.title = <string> to.meta.title
   next()
 })
 
