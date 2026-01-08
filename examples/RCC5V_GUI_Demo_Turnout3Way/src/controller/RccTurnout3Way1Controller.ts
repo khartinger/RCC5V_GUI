@@ -1,5 +1,5 @@
-// ______RccTo3way1Controller.ts____________khartinger_____
-// 2026-01-04: new
+// ______RccTurnout3Way1Controller.ts____________khartinger_____
+// 2026-01-08: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
@@ -14,7 +14,7 @@ export interface To3way1 extends IBase {
   textFooter?: string;
 }
 
-export class RccTo3way1Controller extends CiBaseController {
+export class RccTurnout3Way1Controller extends CiBaseController {
   public payloadTurnoutStright = '1'
   public payloadTurnoutCurved = '0'
   public sState0 = '0'
@@ -60,18 +60,17 @@ export class RccTo3way1Controller extends CiBaseController {
             to3way1.iRState = -9
           }
         }
-        // console.log('onMessage: message.topic=', message.topic + ', payload=' + message.payload)
-        // console.log('onMessage: message.payload=', message.payload)
-        console.log('onMessage: iLState=', to3way1.iLState + ', iRState=' + to3way1.iRState)
+        // console.log('onMessage: topic=', message.topic + ', payload=' + message.payload)
+        //console.log('onMessage: iLState=', to3way1.iLState + ', iRState=' + to3way1.iRState)
         // ---END: to3way1 topic found --------------------
       }
     })
   }
 
   public publishCi (topic: string, payload: string): void {
-    // console.log('CiTo3way1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
-    this.publish(topic, payload, false, 0).catch((e) => { console.error('CiTo3way1Controller: ERROR:', e) })
+    // console.log('RccTurnout3Way1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
+    this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTurnout3Way1Controller: ERROR:', e) })
   }
 }
 
-export const rccTo3way1Controller = new RccTo3way1Controller()
+export const rccTurnout3Way1Controller = new RccTurnout3Way1Controller()

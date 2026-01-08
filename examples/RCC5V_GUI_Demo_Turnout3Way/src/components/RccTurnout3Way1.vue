@@ -1,5 +1,5 @@
-<!-- RccTo3way1.vue -------------------------khartinger----- -->
-<!-- 2026-01-06: new                                         -->
+<!-- RccTurnout3Wway1.vue -------------------khartinger----- -->
+<!-- 2026-01-08: new                                         -->
 
 <template>
   <g>
@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { To3way1, rccTo3way1Controller } from '../controller/RccTurnout3Way1Controller'
+import { To3way1, rccTurnout3Way1Controller } from '../controller/RccTurnout3Way1Controller'
 import CiBase from './CiBase.vue'
 import { Geof } from '../classes/Geo'
 
@@ -84,7 +84,7 @@ export default defineComponent({
     // =======standard methods==================================
     // _______find turnout1 object to given sid___________________
     to3way1: function (): To3way1 | undefined {
-      return rccTo3way1Controller.to3ways1.find(to3way1 => to3way1.id === this.sid)
+      return rccTurnout3Way1Controller.to3ways1.find(to3way1 => to3way1.id === this.sid)
     },
     // _______get iTo3way1State__________________________________
     iTo3way1State: function (): number {
@@ -257,61 +257,6 @@ export default defineComponent({
       // console.log('pathTurnout: pathNr_', pathNr_ + ', state_=' + state_ + ', iTrack_=' + iTrack_+ ', ret_=' + ret_)
       return ret_
     },
-/*
-    // _______draw a path of the turnout________________________
-    pathTurnout: function (pathNr_: number): string {
-     // ======prepare input=====================================
-     let ret_=''
-     const state_ = this.iTo3way1State // 1=right, 2=left, 3=stright
-     const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
-     if(Number.isNaN(dir_)) return ret_
-     // ======active turnout way================================
-     if(pathNr_ === 3) {
-       if (dir_ === 1) 
-       { // ...active way of 3-way-turnout to the right -< ......
-         if(state_ === 1) return this.pathTrack(58); // -\  right
-         if(state_ === 2) return this.pathTrack(25); // -/  left
-         return this.pathTrack(15); // --  stright
-       }
-       if (dir_ === 4) 
-       { // ...active way of 3-way-turnout to the left >- ......
-         if(state_ === 1) return this.pathTrack(14); // \-  right
-         if(state_ === 2) return this.pathTrack(16); // /-  left
-         return this.pathTrack(15); // --  stright
-       }
-       return ret_
-     } else 
-     { // ----inactive turnout ways (pathNr_ 1 | 2)-------------
-       if(dir_ === 1)
-       { // ...inactive ways of 3-way-turnout to the right -< ...
-         if (state_ == 1) {
-           if (pathNr_ == 1) return this.pathTrack(25); // -/  left
-           else return this.pathTrack(15); // --  stright
-         }
-         if (state_ == 2) {
-           if (pathNr_ == 1) return this.pathTrack(15); // --  stright
-           else return this.pathTrack(58); // -\  right
-         }
-         if (pathNr_ == 1) return this.pathTrack(25); // -/  left
-         else return this.pathTrack(58); // -\  right
-       }
-       if(dir_ === 4)
-       { // ...inactive ways of 3-way-turnout to the left >- ...
-         if (state_ == 1) {
-           if (pathNr_ == 1) return this.pathTrack(16); // /-  left
-           else return this.pathTrack(15); // --  stright
-         }
-         if (state_ == 2) {
-           if (pathNr_ == 1) return this.pathTrack(15); // --  stright
-           else return this.pathTrack(14); // \- right
-         }
-         if (pathNr_ == 1) return this.pathTrack(14); // \-  right
-         else return this.pathTrack(16); // /-  left
-      }
-     }
-     return ret_
-    },
-*/
     // _______path command: draw a track________________________
     pathTrack: function (dirTrack_: number): string {
       // -----(positive) values of line length------------------
@@ -339,8 +284,6 @@ export default defineComponent({
           s1 += ' v' + (-tkcy)
           s1 += ' h' + (tkcx)
           s1 += ' z'
-          // s1 += ' M' + this.x + ',' + (this.y - dyo2)
-          // s1 += ' v' + (2 * dyo2)
           break
         case 15: // ----- -- direction--------------------------
           s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
@@ -394,10 +337,10 @@ export default defineComponent({
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
         }
-        payload = rccTo3way1Controller.payloadTurnoutCurved
+        payload = rccTurnout3Way1Controller.payloadTurnoutCurved
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
-            rccTo3way1Controller.publishCi(topic, payload)
+            rccTurnout3Way1Controller.publishCi(topic, payload)
           }
         })
       }
@@ -410,10 +353,10 @@ export default defineComponent({
       // if (!this.to3way1) rccTo3way1Controller.publishCi(topic, payload)
       if (this.to3way1?.pubTopic) {
         const aPubTopic = this.to3way1.pubTopic.split(' ')
-        payload = rccTo3way1Controller.payloadTurnoutStright
+        payload = rccTurnout3Way1Controller.payloadTurnoutStright
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
-            rccTo3way1Controller.publishCi(topic, payload)
+            rccTurnout3Way1Controller.publishCi(topic, payload)
           }
         })
       }
@@ -429,10 +372,10 @@ export default defineComponent({
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
         }
-        payload = rccTo3way1Controller.payloadTurnoutCurved
+        payload = rccTurnout3Way1Controller.payloadTurnoutCurved
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
-            rccTo3way1Controller.publishCi(topic, payload)
+            rccTurnout3Way1Controller.publishCi(topic, payload)
           }
         })
       }
