@@ -1,5 +1,5 @@
 // ______RccTurnout1Controller.ts___________________khartinger_____
-// 2026-01-06: new
+// 2026-01-08: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
@@ -27,9 +27,6 @@ export class RccTurnout1Controller extends CiBaseController {
         sDCC: '21',
         subTopic: 'rcc/demo1/ret/21 rcc/demo1/ret/status',
         pubTopic: 'rcc/demo1/set/21',
-        // get subTopic1 () {
-        //  return `rcc/demo1/ret/${this.sDCC} rcc/demo1/ret/status`
-        // },
       },
     ],
   )
@@ -42,7 +39,6 @@ export class RccTurnout1Controller extends CiBaseController {
         if (message.payload.length > 0) {
           try {
             const aPayload = JSON.parse(message.payload)
-            // const sDCC = String(turnout1.pubTopic.split('/').pop())
             const sDCC_ = turnout1.sDCC
             const sState_ = aPayload[sDCC_]
             if (sState_ === this.sState0) turnout1.iTurnout1State = 0
@@ -52,8 +48,7 @@ export class RccTurnout1Controller extends CiBaseController {
             turnout1.iTurnout1State = -99
           }
         }
-        // console.log('onMessage: message.topic=', message.topic + ', payload=' + message.payload)
-        // console.log('onMessage: message.payload=', message.payload)
+        // console.log('onMessage: topic=', message.topic + ', payload=' + message.payload)
         // console.log('onMessage: turnout1.iTurnout1State=', turnout1.iTurnout1State)
         // ---END: turnout1 topic found --------------------------
       }
@@ -62,7 +57,7 @@ export class RccTurnout1Controller extends CiBaseController {
 
   public publishCi (topic: string, payload: string): void {
     // console.log('CiTurnout1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
-    this.publish(topic, payload, false, 0).catch((e) => { console.error('CiTurnout1Controller: ERROR:', e) })
+    this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTurnout1Controller: ERROR:', e) })
   }
 }
 

@@ -1,5 +1,5 @@
 <!-- RccTurnout1.vue ------------------------khartinger----- -->
-<!-- 2026-01-06: new                                         -->
+<!-- 2026-01-08: new                                         -->
 
 <template>
   <g>
@@ -140,11 +140,13 @@ export default defineComponent({
     // _______color 1 of the track (active path)________________
     colorTurnout1: function (): string {
       if (this.color !== '-') return this.color
+      if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutClear
     },
     // _______color 2 of the track (inactive path)______________
     colorTurnout2: function (): string {
       // if (this.color !== '-') return this.color
+      if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutBlocked
     },
     // _______text in line 1 and 5______________________________
