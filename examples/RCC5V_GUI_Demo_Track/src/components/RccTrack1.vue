@@ -1,5 +1,5 @@
 <!-- RccTrack1.vue --------------------------khartinger----- -->
-<!-- 2026-01-08: new                                         -->
+<!-- 2026-01-09: new                                         -->
 
 <template>
   <g>
@@ -13,6 +13,10 @@
   <!--draw track1------------------------------------------- -->
   <path :d="drawTrack1" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
   <!--define click area------------------------------------- -->
+  <!--
+  <path :d="pathTop" @click="onClkTop()" class="ciClick" />
+  <path :d="pathBottom" @click="onClkBottom()" class="ciClick" />
+  -->
   <rect @click="onClkOn()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
   <rect @click="onClkOff()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
 </g>
@@ -75,6 +79,16 @@ export default defineComponent({
       type: String,
       required: false,
       default: '',
+    },
+    headeralign: {
+      type: String,
+      required: false,
+      default: 'L',
+    },
+    footeralign: {
+      type: String,
+      required: false,
+      default: 'L',
     },
   },
   computed: {
@@ -147,12 +161,22 @@ export default defineComponent({
     },
     // _______text in line 1 and 5______________________________
     lineHeader: function (): string {
-      if (this.header.length > 0) { return this.header }
-      return this.geof.center2(this.geof.textTrackOn)
+      if (this.header.length > 0) {
+        const a1 = String(this.headeralign).toUpperCase().charAt(0)
+        if (a1 === 'C' || a1 === 'M') return this.geof.center(this.header)
+        if (a1 === 'R') return this.geof.right(this.header)
+        return this.header
+      }
+      return this.geof.center(this.geof.textTrackOn)
     },
     lineFooter: function (): string {
-      if (this.footer.length > 0) return this.footer
-      return this.geof.center2(this.geof.textTrackOff)
+      if (this.footer.length > 0) {
+        const a1 = String(this.footeralign).toUpperCase().charAt(0)
+        if (a1 === 'C' || a1 === 'M') return this.geof.center(this.footer)
+        if (a1 === 'R') return this.geof.right(this.footer)
+        return this.footer
+      }
+      return this.geof.center(this.geof.textTrackOff)
     },
   },
   methods: {
@@ -173,10 +197,11 @@ export default defineComponent({
       const tk59x = this.geof.dxo() - tkbx
       const tk59y = dyo2 - tkcy + tk0y
       const tkdy = tk0x + tk0y
-      // -----symbol "Section insulator" || --------------------
+      // -----used by symbol "end of track"---------------------
       const tks = tk2 / 2
-      // const tksx = dxo2 * tks / Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
-      // const tksy = dyo2 * tks / Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
+      const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
+      const tks4 = dxo2 * tks / w
+      const tks3 = dyo2 * tks / w
 
       let s1 = ' M' + this.x + ',' + this.y
       switch (dir1) {
@@ -211,9 +236,9 @@ export default defineComponent({
           s1 += ' z'
           break
         case 5: // ----- x- direction---------------------------
-          s1 += ' m' + '0,' + (-tk0y)
+          s1 += ' m' + (-dxo2) + ',' + (-tk0y)
           s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (-dxo2)
+          s1 += ' h' + (dxo2)
           s1 += ' v' + (-2 * tk0y)
           s1 += ' z'
           break
@@ -226,10 +251,10 @@ export default defineComponent({
           s1 += ' z'
           break
         case 7: // ----- i (down) direction-----------------------
-          s1 += ' m' + (-this.geof.tk2) + ',' + (dyo2) // Tk0
+          s1 += ' m' + (-tk2) + ',' + (dyo2) // Tk0
+          s1 += ' h' + (2 * tk2)
           s1 += ' v' + (-dyo2)
-          s1 += ' h' + (2 * this.geof.tk2)
-          s1 += ' v' + (dyo2)
+          s1 += ' h' + (-2 * tk2)
           s1 += ' z'
           break
         case 8: // ----- \ (down) direction---------------------
@@ -457,6 +482,44 @@ export default defineComponent({
           break
         default:
       }
+      // -----add symbol "end of track"---------------------------
+      if (dir1 < 10) {
+        switch (dir1) {
+          case 1: case 5:
+            s1 += ' M' + this.x + ',' + this.y
+            s1 += ' m' + (-tks) + ',' + (-3 * tks)
+            s1 += ' v' + (6 * tks)
+            s1 += ' h' + (2 * tks)
+            s1 += ' v' + (-6 * tks)
+            s1 += ' z'
+            break
+          case 2: case 6:
+            s1 += ' M' + this.x + ',' + this.y
+            s1 += ' m' + (-3 * tks3 - tks4) + ',' + (-3 * tks4 + tks3)
+            s1 += ' l' + (6 * tks3) + ',' + (6 * tks4)
+            s1 += ' l' + (2 * tks4) + ',' + (-2 * tks3)
+            s1 += ' l' + (-6 * tks3) + ',' + (-6 * tks4)
+            s1 += ' z'
+            break
+          case 3: case 7:
+            s1 += ' M' + this.x + ',' + this.y
+            s1 += ' m' + (-3 * tks) + ',' + (-tks)
+            s1 += ' v' + (2 * tks)
+            s1 += ' h' + (6 * tks)
+            s1 += ' v' + (-2 * tks)
+            s1 += ' z'
+            break
+          case 4: case 8:
+            s1 += ' M' + this.x + ',' + this.y
+            s1 += ' m' + (3 * tks3 + tks4) + ',' + (-3 * tks4 + tks3)
+            s1 += ' l' + (-6 * tks3) + ',' + (6 * tks4)
+            s1 += ' l' + (-2 * tks4) + ',' + (-2 * tks3)
+            s1 += ' l' + (6 * tks3) + ',' + (-6 * tks4)
+            s1 += ' z'
+            break
+          default:
+        }
+      }
       return s1
     },
     // _______on click: turn track energy on____________________
@@ -467,7 +530,10 @@ export default defineComponent({
       // if (!this.track1) rccTrack1Controller.publishCi(topic, payload)
       if (this.track1?.pubTopic) {
         const aPubTopic = this.track1.pubTopic.split(' ')
-        payload = rccTrack1Controller.payloadTrackOn
+        let trackon1 = rccTrack1Controller.payloadTrackOn
+        if (this.track1.payloadInvert) trackon1 = rccTrack1Controller.payloadTrackOff
+        // payload = rccTrack1Controller.payloadTrackOn
+        payload = trackon1
         aPubTopic.forEach(topic => {
           // if (this.track1?.pubPayload) payload = this.track1.pubPayload
           if (this.track1?.pubTopic) {
@@ -484,7 +550,10 @@ export default defineComponent({
       // if (!this.track1) rccTrack1Controller.publishCi(topic, payload)
       if (this.track1?.pubTopic) {
         const aPubTopic = this.track1.pubTopic.split(' ')
-        payload = rccTrack1Controller.payloadTrackOff
+        let trackoff1 = rccTrack1Controller.payloadTrackOff
+        if (this.track1.payloadInvert) trackoff1 = rccTrack1Controller.payloadTrackOn
+        // payload = rccTrack1Controller.payloadTrackOff
+        payload = trackoff1
         aPubTopic.forEach(topic => {
           // if (this.track1?.pubPayload) payload = this.track1.pubPayload
           rccTrack1Controller.publishCi(topic, payload)
