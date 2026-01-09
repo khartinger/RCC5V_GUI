@@ -1,17 +1,17 @@
 // ______Geo.ts__________________________________khartinger_____
 // 2025-12-27: new
-// 2026-01-08: added tk_, track, turnout uncoupler
+// 2026-01-09: add tk_, right(), colors track,...
 
 import { ref } from 'vue'
 
 // -----------font data-----------------------------------------
-// examples: fh_=11, tmax_=10 or 16/13, ...
-const fh_ = 6 //          font height [pixel]
+// examples: fh_=11 or 8 or 6, tmax_=10 or 16/13, ...
+const fh_ = 8 //          font height [pixel]
 const fw_ = fh_ * 0.6 //  font width [pixel] approximately
-// const tmax_ = 10 //        max number character per line
 const linesmax_ = 5 //     lines per cell (5)
 // -----------y direction---------------------------------------
-const dyl_ = Math.round(0.5 + 22 * fh_ / 14) //  line hight
+// const dyl_ = Math.round(0.5 + 22 * fh_ / 14) //  line hight
+const dyl_ = Math.trunc(20 * fh_ / 14) //        line hight
 const dyi_ = linesmax_ * dyl_ //                 inner hight
 const dyi2_ = Math.round(dyi_ / 2) //            half dyi_
 const dyo_ = 10 * Math.round(0.5 + dyi_ / 10) // outer hight
@@ -69,7 +69,6 @@ export class Geo {
   public colorOn2 = '#FFD700' //       gold
   public colorOff = '#D0D0D0' //       light grey
   public colorOff2 = '#505050' //      dark grey
-  // public colorUnknown = '#add8e6' //   light blue
   public colorUnknown = '#90bbff' //   middle blue
   public colorBackground = '#DDFFDD' // very light green
   public colorOpen = '#90ee90' //      light green
@@ -80,7 +79,7 @@ export class Geo {
   public colorTrackOff = '#F00000' //  red
   public colorTrackOn = '#00B000' //   light green
   public colorTrackUsed = '#C0C800' // yellow-green
-  public colorTrackInfo = '#A0A0F0' // blue
+  public colorTrackInfo = '#0000FF' // blue
   public colorTrackUnknown = '#805050' // red/grey
   public colorTurnoutClear = '#FFD700' // gold
   public colorTurnoutBlocked = '#703030' // red/grey
@@ -221,21 +220,20 @@ export class Geo {
   }
 
   // ---------center text (or trim text to line length)---------
-  public center2 (text: string, fx_ = 1): string {
+  public right (text: string, fx_ = 1): string {
     const len = text.length
     if (len < 1) return ''
-    // const tmax_ = this.calctmax(fx_)
-    const tmax_ = this.tmax * fx_
+    const tmax_ = this.calctmax(fx_)
+    // console.log('right: len=', len + ', tmax=' + tmax_)
     if (len >= tmax_) return text.substring(0, tmax_)
-    const numBlank = Math.round((tmax_ - len - 1) / 2)
-    // console.log('center: text=', '|' + text + '| numBlank=' + numBlank)
-    const s1 = text.padStart(numBlank + len, ' ')
+    const s1 = text.padStart(tmax_, ' ')
     return s1
   }
 
   // ---------calculate chars per line depending on fx----------
   public calctmax (fx_: number): number {
-    return Math.trunc(11.9 * fx_ - 1.7)
+    return this.tmax * fx_
+    // return Math.trunc(11.9 * fx_ - 1.7)
   }
 
   // ---------calculate number of lines depending on fy---------
@@ -335,7 +333,7 @@ export class Geof extends Geo {
   public center (text: string): string { return super.center(text, this.fx) }
 
   // ---------center text (or trim text to line length)---------
-  public center2 (text: string): string { return super.center2(text, this.fx) }
+  public right (text: string): string { return super.right(text, this.fx) }
 
   // ---------calculate chars per line depending on fx----------
   public calctmax (): number { return super.calctmax(this.fx) }
