@@ -1,5 +1,5 @@
 <!-- RccTurnout1.vue ------------------------khartinger----- -->
-<!-- 2026-01-08: new                                         -->
+<!-- 2026-01-09: new                                         -->
 
 <template>
   <g>
@@ -77,6 +77,16 @@ export default defineComponent({
       required: false,
       default: '',
     },
+    headeralign: {
+      type: String,
+      required: false,
+      default: 'L',
+    },
+    footeralign: {
+      type: String,
+      required: false,
+      default: 'L',
+    },
   },
   computed: {
     // =======standard methods==================================
@@ -151,12 +161,22 @@ export default defineComponent({
     },
     // _______text in line 1 and 5______________________________
     lineHeader: function (): string {
-      if (this.header.length > 0) { return this.header }
-        return this.geof.center2(this.geof.textTrackOn)
+      if (this.header.length > 0) { 
+        const a1=String(this.headeralign).toUpperCase().charAt(0)
+        if(a1 === 'C' || a1 === 'M') return this.geof.center(this.header)
+        if(a1 === 'R') return this.geof.right(this.header)
+        return this.header
+      }
+      return this.geof.center(this.geof.textTrackOn)
     },
     lineFooter: function (): string {
-      if (this.footer.length > 0) return this.footer
-      return this.geof.center2(this.geof.textTrackOff)
+      if (this.footer.length > 0) {
+        const a1=String(this.footeralign).toUpperCase().charAt(0)
+        if(a1 === 'C' || a1 === 'M') return this.geof.center(this.footer)
+        if(a1 === 'R') return this.geof.right(this.footer)
+        return this.footer
+      }
+      return this.geof.center(this.geof.textTrackOff)
     },
     // _______click area "top"__________________________________
     pathTop: function(): string {
@@ -479,9 +499,17 @@ export default defineComponent({
       // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
-        payload = rccTurnout1Controller.payloadTurnoutCurved
+        let curved1 = rccTurnout1Controller.payloadTurnoutCurved
+        let stright1 = rccTurnout1Controller.payloadTurnoutStright
+        if (this.turnout1.payloadInvert) {
+          curved1 = rccTurnout1Controller.payloadTurnoutStright
+          stright1 = rccTurnout1Controller.payloadTurnoutCurved
+        }
+        // payload = rccTurnout1Controller.payloadTurnoutCurved
+        payload = curved1
         if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
-          payload = rccTurnout1Controller.payloadTurnoutStright
+          // payload = rccTurnout1Controller.payloadTurnoutStright
+          payload = stright1
         }
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
@@ -499,9 +527,17 @@ export default defineComponent({
       // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
-        payload = rccTurnout1Controller.payloadTurnoutStright
+        let curved1 = rccTurnout1Controller.payloadTurnoutCurved
+        let stright1 = rccTurnout1Controller.payloadTurnoutStright
+        if (this.turnout1.payloadInvert) {
+          curved1 = rccTurnout1Controller.payloadTurnoutStright
+          stright1 = rccTurnout1Controller.payloadTurnoutCurved
+        }
+        // payload = rccTurnout1Controller.payloadTurnoutStright
+        payload = stright1
         if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
-          payload = rccTurnout1Controller.payloadTurnoutCurved
+          // payload = rccTurnout1Controller.payloadTurnoutCurved
+          payload = curved1
         }
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload

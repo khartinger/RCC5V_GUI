@@ -9,6 +9,7 @@ export interface Turnout1 extends IBase {
   sDCC: string,
   textCenter?: string;
   textFooter?: string;
+  payloadInvert: boolean;
 }
 
 export class RccTurnout1Controller extends CiBaseController {
@@ -20,13 +21,14 @@ export class RccTurnout1Controller extends CiBaseController {
   public turnouts1: Array<Turnout1> = reactive(
     [
       {
-        // ---test track 1--------------------------------------
+        // ---turnout 1-----------------------------------------
         id: 'to1',
         name: 'Turnout1',
         iTurnout1State: -1,
         sDCC: '21',
         subTopic: 'rcc/demo1/ret/21 rcc/demo1/ret/status',
         pubTopic: 'rcc/demo1/set/21',
+        payloadInvert: false,
       },
     ],
   )
@@ -41,8 +43,14 @@ export class RccTurnout1Controller extends CiBaseController {
             const aPayload = JSON.parse(message.payload)
             const sDCC_ = turnout1.sDCC
             const sState_ = aPayload[sDCC_]
-            if (sState_ === this.sState0) turnout1.iTurnout1State = 0
-            if (sState_ === this.sState1) turnout1.iTurnout1State = 1
+            if (sState_ === this.sState0) {
+              turnout1.iTurnout1State = 0
+              if(turnout1.payloadInvert) turnout1.iTurnout1State = 1
+            }
+            if (sState_ === this.sState1) {
+              turnout1.iTurnout1State = 1
+              if(turnout1.payloadInvert) turnout1.iTurnout1State = 0
+            }
             // console.log('onMessage: sState=', sState)
           } catch (error) {
             turnout1.iTurnout1State = -99
