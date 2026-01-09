@@ -9,6 +9,7 @@ export interface Track1 extends IBase {
   sDCC: string,
   textCenter?: string;
   textFooter?: string;
+  payloadInvert: boolean;
 }
 
 export class RccTrack1Controller extends CiBaseController {
@@ -27,6 +28,7 @@ export class RccTrack1Controller extends CiBaseController {
         sDCC: '41',
         subTopic: 'rcc/demo1/ret/41 rcc/demo1/ret/status',
         pubTopic: 'rcc/demo1/set/41',
+        payloadInvert: false,
       },
     ],
   )
@@ -41,8 +43,14 @@ export class RccTrack1Controller extends CiBaseController {
             const aPayload = JSON.parse(message.payload)
             const sDCC_ = track1.sDCC
             const sState_ = aPayload[sDCC_]
-            if (sState_ === this.sState0) track1.iTrack1State = 0
-            if (sState_ === this.sState1) track1.iTrack1State = 1
+            if (sState_ === this.sState0) {
+              track1.iTrack1State = 0
+              if (track1.payloadInvert) track1.iTrack1State = 1
+            }
+            if (sState_ === this.sState1) {
+              track1.iTrack1State = 1
+              if (track1.payloadInvert) track1.iTrack1State = 0
+            }
             // console.log('onMessage: sState=', sState)
           } catch (error) {
             track1.iTrack1State = -99

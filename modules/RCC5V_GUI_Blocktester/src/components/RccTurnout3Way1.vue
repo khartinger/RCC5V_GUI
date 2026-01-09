@@ -1,5 +1,5 @@
 <!-- RccTurnout3Wway1.vue -------------------khartinger----- -->
-<!-- 2026-01-08: new                                         -->
+<!-- 2026-01-09: new                                         -->
 
 <template>
   <g>
@@ -9,7 +9,7 @@
   <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
   <text v-if="(drawLabel & 1) > 0 && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
-  <text v-if="(drawLabel &16) > 0 && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
+  <text v-if="(drawLabel & 16) > 0 && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
   <!--draw turnout parts (do not change lines!)------------- -->
   <path :d="drawTurnout1" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
   <path :d="drawTurnout2" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
@@ -69,7 +69,7 @@ export default defineComponent({
       required: false,
       default: '-',
     },
-        header: {
+    header: {
       type: String,
       required: false,
       default: '',
@@ -78,6 +78,16 @@ export default defineComponent({
       type: String,
       required: false,
       default: '',
+    },
+    headeralign: {
+      type: String,
+      required: false,
+      default: 'L',
+    },
+    footeralign: {
+      type: String,
+      required: false,
+      default: 'L',
     },
   },
   computed: {
@@ -118,7 +128,7 @@ export default defineComponent({
       }
       if(this.header.length > 0) ret |= 1
       if(this.footer.length > 0) ret |= 16
-      // console.log('drawXAxis: xAxis=', this.xAxis + ' ret=' + String(ret))
+      // console.log('drawLabel: ret=', ret)
       return ret
     },
     // _______draw the active path of the turnout_______________
@@ -151,12 +161,22 @@ export default defineComponent({
     },
     // _______text in line 1 and 5______________________________
     lineHeader: function (): string {
-      if (this.header.length > 0) { return this.header }
-        return this.geof.center2(this.geof.textTrackOn)
+      if (this.header.length > 0) { 
+        const a1=String(this.headeralign).toUpperCase().charAt(0)
+        if(a1 === 'C' || a1 === 'M') return this.geof.center(this.header)
+        if(a1 === 'R') return this.geof.right(this.header)
+        return this.header
+      }
+      return this.geof.center(this.geof.textTrackOn)
     },
     lineFooter: function (): string {
-      if (this.footer.length > 0) return this.footer
-      return this.geof.center2(this.geof.textTrackOff)
+      if (this.footer.length > 0) {
+        const a1=String(this.footeralign).toUpperCase().charAt(0)
+        if(a1 === 'C' || a1 === 'M') return this.geof.center(this.footer)
+        if(a1 === 'R') return this.geof.right(this.footer)
+        return this.footer
+      }
+      return this.geof.center(this.geof.textTrackOff)
     },
     // _______click area "top"__________________________________
     pathTop: function(): string {
