@@ -10,9 +10,9 @@
   <RccTrack1       :x="x0+1*dx" :y="y0+1*dy" sid="tk0" dir="15" :border="border"></RccTrack1>
   <RccTurnout3Way1 :x="x0+2*dx" :y="y0+1*dy" sid="t3w1" dir="4" header="        DCC 32" footer="        DCC 31" :border="border"></RccTurnout3Way1>
   
-  <RccTrack1    :x="x0+0*dx" :y="y0+2*dy" sid="tk0" dir="15" :border="1"></RccTrack1>
-  <RccTurnout1  :x="x0+1*dx" :y="y0+2*dy" sid="to1" type="1L" footer="DCC 21" :border="1"></RccTurnout1>  
-  <RccTrack1    :x="x0+2*dx" :y="y0+2*dy" sid="tk1" dir="15" footer="DCC 41" label="3" :border="1"></RccTrack1>
+  <RccTrack1    :x="x0+0*dx" :y="y0+2*dy" sid="tk0" dir="15" :border="border"></RccTrack1>
+  <RccTurnout1  :x="x0+1*dx" :y="y0+2*dy" sid="to1" type="1L" footer="DCC 21" :border="border"></RccTurnout1>  
+  <RccTrack1    :x="x0+2*dx" :y="y0+2*dy" sid="tk1" dir="15" footer="DCC 41" label="3" :border="border"></RccTrack1>
 
   <RccTrackCon1 :x="x0+1.5*dx" :y="y0+0.5*dy" sid="con0" dir="8"></RccTrackCon1>
   <RccTrackCon1 :x="x0+1.5*dx" :y="y0+1.5*dy" sid="con0" dir="2"></RccTrackCon1>
