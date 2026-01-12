@@ -4,8 +4,6 @@
   <svg width="100%" :viewBox="viewbox">
     <rect class="ciBackground" :x="x1" :y="y1" :width="w1" :height="h1" />
     <RccBlocktester1 :x0="xB" :y0="yB" sid="bt1" :border="border" />
-    <!-- Frame around the blocktester ---------------------- -->
-    <rect :x="x1" :y="y1" :width="w1" :height="h1" stroke="blue" stroke-width="4" fill="none" />
   </svg>
 </template>
 
@@ -13,7 +11,7 @@
   import { computed, watchEffect } from 'vue'
   import { Geof } from '../classes/Geo'
   import { ciMqttClientInstance } from '@/services/CiMqttClientInstance'
-  import RccBlocktester1 from '@/components/RccBlocktester1.vue'
+  import RccBlocktester1, { bt1 } from '@/components/RccBlocktester1.vue'
   const border = 1
 
   // ---------waiting for MQTT connection, then get status------
@@ -29,8 +27,8 @@
   const geof = new Geof(0, 0, 1, 1)
   const dx = computed(() => geof.dxo()) // x width of a symbol in pixel (80)
   const dy = computed(() => geof.dyo()) // y heighth of a symbol in pixel (60)
-  const nx = 3            // 3 symbols in x direction
-  const ny = 3            // 3 symbols in x direction
+  const nx = bt1.nx // symbols in x direction
+  const ny = bt1.ny // 3 symbols in x direction
   const x1 = computed(() => (-dx.value/2 - 2))  // x coordinates top left corner
   const y1 = computed(() => (-dy.value/2 - 2))  // y coordinates top left corner
   const w1 = computed(() => (nx * dx.value + 4))  // viewbox width in pixel
