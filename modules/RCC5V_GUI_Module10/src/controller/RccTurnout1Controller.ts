@@ -22,12 +22,12 @@ export class RccTurnout1Controller extends CiBaseController {
     [
       {
         // ---turnout platform 1--------------------------------
-        id: 'to1',
-        name: 'Turnout1',
+        id: 'to105',
+        name: 'Turnout105',
         iTurnout1State: -1,
         sDCC: '105',
-        subTopic: 'rcc/demo1/ret/105 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/105',
+        subTopic: 'rcc/module10/ret/105 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/105',
         payloadInvert: false,
       },
     ],

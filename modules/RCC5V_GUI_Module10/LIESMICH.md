@@ -27,7 +27,7 @@ PC mit WLAN verbinden (zB `Raspi11`)
 MQTT Server starten,
 Voraussetzungen: IP `10.1.1.1`, Basis-Topic `rcc/demo1`
 1. Terminalfenster: `mosquitto_sub -h 10.1.1.1 -t rcc/# -v`   
-2. Terminalfenster: `mosquitto_pub -h 10.1.1.1 -t rcc/demo1/get -m bydcc`   
+2. Terminalfenster: `mosquitto_pub -h 10.1.1.1 -t rcc/module10/get -m bydcc`   
 
 
 # Aufruf eines Symbols

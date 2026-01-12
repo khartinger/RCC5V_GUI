@@ -19,7 +19,7 @@
   // ---------waiting for MQTT connection, then get status------
   watchEffect(() => {
     if (ciMqttClientInstance.mqttState.connected) {
-      ciMqttClientInstance.publish('rcc/demo1/get', 'status', false, 0).catch((e) => { console.error('RccModule10: ERROR:', e) })
+      ciMqttClientInstance.publish('rcc/module10/get', 'status', false, 0).catch((e) => { console.error('RccModule10: ERROR:', e) })
     }
   })
 

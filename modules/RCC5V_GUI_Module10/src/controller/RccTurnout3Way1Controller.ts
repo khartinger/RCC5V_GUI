@@ -24,27 +24,27 @@ export class RccTurnout3Way1Controller extends CiBaseController {
     [
       {
         // ---turnout station bypass----------------------------
-        id: 't3w1',
+        id: 't3101',
         name: 'To3way1',
         iLState: -10,
         iRState: -10,
         sDCCL: '101',
         sDCCR: '102',
-        subTopic: 'rcc/demo1/ret/101 rcc/demo1/ret/102 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/101',
-        pubTopicR: 'rcc/demo1/set/102',
+        subTopic: 'rcc/module10/ret/101 rcc/module10/ret/102 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/101',
+        pubTopicR: 'rcc/module10/set/102',
       },
             {
         // ---turnout station-----------------------------------
-        id: 't3w2',
-        name: 'To3way1',
+        id: 't3103',
+        name: 'To3way103',
         iLState: -10,
         iRState: -10,
-        sDCCL: '101',
-        sDCCR: '102',
-        subTopic: 'rcc/demo1/ret/101 rcc/demo1/ret/102 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/101',
-        pubTopicR: 'rcc/demo1/set/102',
+        sDCCL: '103',
+        sDCCR: '104',
+        subTopic: 'rcc/module10/ret/103 rcc/module10/ret/104 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/103',
+        pubTopicR: 'rcc/module10/set/104',
       },
     ],
   )

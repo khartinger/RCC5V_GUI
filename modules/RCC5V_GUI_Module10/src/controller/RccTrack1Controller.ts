@@ -22,22 +22,22 @@ export class RccTrack1Controller extends CiBaseController {
     [
       {
         // ---track platform 2----------------------------------
-        id: 'tkp2',
+        id: 'tk106',
         name: 'platform2',
         iTrack1State: -99,
         sDCC: '106',
-        subTopic: 'rcc/demo1/ret/106 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/106',
+        subTopic: 'rcc/module10/ret/106 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/106',
         payloadInvert: false,
       },
       {
         // ---track platform 3----------------------------------
-        id: 'tkp3',
+        id: 'tk107',
         name: 'platform3',
         iTrack1State: -99,
         sDCC: '107',
-        subTopic: 'rcc/demo1/ret/107 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/107',
+        subTopic: 'rcc/module10/ret/107 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/107',
         payloadInvert: false,
       },
 
