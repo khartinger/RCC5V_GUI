@@ -22,7 +22,7 @@ export class RccTurnout1Controller extends CiBaseController {
     [
       {
         // ---turnout 1 north-----------------------------------
-        id: 'to1',
+        id: 'to123',
         name: 'Turnout1',
         iTurnout1State: -1,
         sDCC: '123',
@@ -32,7 +32,7 @@ export class RccTurnout1Controller extends CiBaseController {
       },
       {
         // ---turnout 2 east------------------------------------
-        id: 'to2',
+        id: 'to128',
         name: 'Turnout2',
         iTurnout1State: -1,
         sDCC: '128',

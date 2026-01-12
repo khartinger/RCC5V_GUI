@@ -22,8 +22,8 @@ export class RccTrack1Controller extends CiBaseController {
     [
       {
         // ---track 1-------------------------------------------
-        id: 'tk1',
-        name: 'track1',
+        id: 'tk011',
+        name: 'track_011',
         iTrack1State: -99,
         sDCC: '11',
         subTopic: 'rcc/module01/ret/11 rcc/module01/ret/status',

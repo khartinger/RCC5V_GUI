@@ -23,15 +23,23 @@
   <RccTrack1       :x="x0+4*dx" :y="y0+1*dy" sid="tk106" dir="15" footer="106" footeralign="C" :border="border"></RccTrack1>
   <!-- Platform 3: Locomotive shed -------------------------- -->
   <RccTrack1       :x="x0+3*dx" :y="y0+2*dy" sid="tk107" dir="48" footer="107" footeralign="C" :border="border"></RccTrack1>
-  <!-- rail connectors, isolators and module name----------- -->
+  <!-- rail connectors, isolators, module name and border--- -->
   <RccTrackCon1    :x="x0+0.5*dx" :y="y0+0.5*dy" sid="con0" dir="2"></RccTrackCon1>
   <RccTrackCon1    :x="x0+0.5*dx" :y="y0+1.5*dy" sid="con0" dir="4"></RccTrackCon1>
   <RccTrackIso1    :x="x0+0.5*dx" :y="y0+1*dy" sid="iso0" dir="1"></RccTrackIso1>
   <RccTrackCon1    :x="x0+2.5*dx" :y="y0+0.5*dy" sid="con0" dir="2"></RccTrackCon1>
   <RccTrackIso1    :x="x0+2.5*dx" :y="y0+1.5*dy" sid="iso0" dir="4"></RccTrackIso1>
-  <text class="ciFont1" :x="x0-0.48*dx" :y="y0-0.3*dy">Module 10</text>
+  <rect :x="x0-0.5*dx" :y="y0-0.5*dy" :width="m10.nx*dx" :height="m10.ny*dy" stroke="blue" stroke-width="4" fill="none" />
+  <text class="ciFont1" :x="x0-0.47*dx" :y="y0-0.27*dy">Module 10</text>
 </g>
 </template>
+
+<script lang="ts">
+export const m10 = {
+  nx: 5,
+  ny: 3
+}
+</script>
 
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue'

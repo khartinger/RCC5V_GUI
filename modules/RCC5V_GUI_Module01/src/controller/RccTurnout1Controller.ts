@@ -22,8 +22,8 @@ export class RccTurnout1Controller extends CiBaseController {
     [
       {
         // ---turnout 1a----------------------------------------
-        id: 'to12a',
-        name: 'Turnout_12a',
+        id: 'to012a',
+        name: 'Turnout_012a',
         iTurnout1State: -1,
         sDCC: '12',
         subTopic: 'rcc/module01/ret/12 rcc/module01/ret/status',
@@ -32,8 +32,8 @@ export class RccTurnout1Controller extends CiBaseController {
       },
       {
         // ---turnout 1b----------------------------------------
-        id: 'to12b',
-        name: 'Turnout_12b',
+        id: 'to012b',
+        name: 'Turnout_012b',
         iTurnout1State: -1,
         sDCC: '12',
         subTopic: 'rcc/module01/ret/12 rcc/module01/ret/status',

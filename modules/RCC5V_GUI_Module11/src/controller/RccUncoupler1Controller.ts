@@ -21,7 +21,7 @@ export class RccUncoupler1Controller extends CiBaseController {
     [
       {
         // ---uncoupler platform 1------------------------------
-        id: 'uc1',
+        id: 'uc113',
         name: 'Uncoupler1',
         iUncoupler1State: 0,
         sDCC: '113',

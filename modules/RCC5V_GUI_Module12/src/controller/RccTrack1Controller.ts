@@ -22,7 +22,7 @@ export class RccTrack1Controller extends CiBaseController {
     [
       {
         // ---track 1-------------------------------------------
-        id: 'tk1',
+        id: 'tk125',
         name: 'track1',
         iTrack1State: -99,
         sDCC: '125',
@@ -32,7 +32,7 @@ export class RccTrack1Controller extends CiBaseController {
       },
       {
         // ---track 1a------------------------------------------
-        id: 'tk1a',
+        id: 'tk12529',
         name: 'track1a',
         iTrack1State: -99,
         sDCC: '129',
@@ -42,7 +42,7 @@ export class RccTrack1Controller extends CiBaseController {
       },
       {
         // ---track 2-------------------------------------------
-        id: 'tk2',
+        id: 'tk126',
         name: 'track2',
         iTrack1State: -99,
         sDCC: '126',
@@ -52,7 +52,7 @@ export class RccTrack1Controller extends CiBaseController {
       },
       {
         // ---track 3-------------------------------------------
-        id: 'tk3',
+        id: 'tk127',
         name: 'track3',
         iTrack1State: -99,
         sDCC: '127',

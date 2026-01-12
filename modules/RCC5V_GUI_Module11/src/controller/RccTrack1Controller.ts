@@ -22,7 +22,7 @@ export class RccTrack1Controller extends CiBaseController {
     [
       {
         // ---track 2-------------------------------------------
-        id: 'tk1',
+        id: 'tk112',
         name: 'track1',
         iTrack1State: -99,
         sDCC: '112',

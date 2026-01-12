@@ -284,7 +284,7 @@ export default defineComponent({
       const dyo2 = this.geof.dyo2()
       const tk0x = -this.geof.tk.value[0].x
       const tk0y = -this.geof.tk.value[0].y
-      const tk2 = this.geof.tk2
+      const tk126 = this.geof.tk126
       const tkax = dxo2 - tk0x
       const tkbx = dxo2 + tk0x
       const tkcx = dxo2 - this.geof.tk.value[4].x
@@ -292,7 +292,7 @@ export default defineComponent({
       const tk59x = this.geof.dxo() - tkbx
       const tk59y = dyo2 - tkcy + tk0y
       // -----symbol "Section insulator" || --------------------
-      const tks = tk2 / 2
+      const tks = tk126 / 2
       let s1 = ' M' + this.x + ',' + this.y
       switch (dirTrack_) {
         case 14: // ----- \_ direction--------------------------

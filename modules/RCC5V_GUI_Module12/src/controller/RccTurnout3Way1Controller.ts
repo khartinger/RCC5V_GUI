@@ -24,7 +24,7 @@ export class RccTurnout3Way1Controller extends CiBaseController {
     [
       {
         // ---turnout station bypass----------------------------
-        id: 't3w1',
+        id: 't3121',
         name: 'To3way1',
         iLState: -10,
         iRState: -10,

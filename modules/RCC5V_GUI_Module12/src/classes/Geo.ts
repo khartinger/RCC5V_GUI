@@ -27,29 +27,29 @@ const dxi2_ = dxo2_ - dxm_ //                    half dxi_
 const dxt_ = Math.round(0.5 + fh_ / 14 + 18 / 14) // text-border
 const tmax_ = Math.floor((dxi_ - 2 * dxt_) / fw_) // max number character per line
 // -----------track values--------------------------------------
-const tk2_ = dyo_ / 10 //                        half track width
+const tk126_ = dyo_ / 10 //                        half track width
 const tkk_ = dyo_ / dxo_ //                      slope dy/dx
 const tkw_ = Math.sqrt(1 + tkk_ * tkk_) //       help value
 const txkyo_ = dxo_ + tkk_ * dyo_
 const tk_ = ref([
   // .....Tk0.....
-  { x: tk2_ * (1 - tkw_) / tkk_, y: -tk2_ },
+  { x: tk126_ * (1 - tkw_) / tkk_, y: -tk126_ },
   // .....Tk1.....
-  { x: (-2 * tkk_ / tkw_ - (1 - tkw_) / tkk_) * tk2_, y: (1 - 2 / tkw_) * tk2_ },
+  { x: (-2 * tkk_ / tkw_ - (1 - tkw_) / tkk_) * tk126_, y: (1 - 2 / tkw_) * tk126_ },
   // .....Tk2.....
-  { x: tk2_ * tkw_ / tkk_, y: 0 },
+  { x: tk126_ * tkw_ / tkk_, y: 0 },
   // .....Tk3.....
-  { x: tk2_ * (1 + tkw_) / tkk_, y: -tk2_ },
+  { x: tk126_ * (1 + tkw_) / tkk_, y: -tk126_ },
   // .....Tk4.....
-  { x: (dyo2_ - tk2_ * tkw_) / tkk_, y: -dyo2_ },
+  { x: (dyo2_ - tk126_ * tkw_) / tkk_, y: -dyo2_ },
   // .....Tk5.....
-  { x: dxo2_, y: tk2_ * tkw_ - tkk_ * dxo2_ },
+  { x: dxo2_, y: tk126_ * tkw_ - tkk_ * dxo2_ },
   // .....Tk6.....
-  { x: (-tkk_ * tk2_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 + tk2_ * tkw_) / (1 + tkk_ * tkk_) },
+  { x: (-tkk_ * tk126_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 + tk126_ * tkw_) / (1 + tkk_ * tkk_) },
   // .....Tk7.....
-  { x: (tkk_ * tk2_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 - tk2_ * tkw_) / (1 + tkk_ * tkk_) },
+  { x: (tkk_ * tk126_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 - tk126_ * tkw_) / (1 + tkk_ * tkk_) },
   // .....Tk8.....
-  { x: tkk_ * tk2_ / tkw_, y: tk2_ / tkw_ },
+  { x: tkk_ * tk126_ / tkw_, y: tk126_ / tkw_ },
 ])
 
 // -----------special dimensions--------------------------------
@@ -111,7 +111,7 @@ export class Geo {
   public dw2 = dw2_ //            half wall thickness
   // ---------track values--------------------------------------
   public tk = tk_
-  public tk2 = tk2_ //             half track width
+  public tk126 = tk126_ //             half track width
   public tkk = tkk_ //             slope dy/dx
 
   // =========absolute geometric values=========================

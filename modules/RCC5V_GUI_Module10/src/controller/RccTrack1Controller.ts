@@ -40,7 +40,6 @@ export class RccTrack1Controller extends CiBaseController {
         pubTopic: 'rcc/module10/set/107',
         payloadInvert: false,
       },
-
     ],
   )
 

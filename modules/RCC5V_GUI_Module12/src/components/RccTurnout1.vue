@@ -299,7 +299,7 @@ export default defineComponent({
       const dyo2 = this.geof.dyo2()
       const tk0x = -this.geof.tk.value[0].x
       const tk0y = -this.geof.tk.value[0].y
-      const tk2 = this.geof.tk2
+      const tk126 = this.geof.tk126
       const tkax = dxo2 - tk0x
       const tkbx = dxo2 + tk0x
       const tkcx = dxo2 - this.geof.tk.value[4].x
@@ -308,7 +308,7 @@ export default defineComponent({
       const tk59y = dyo2 - tkcy + tk0y
       const tkdy = tk0x + tk0y
       // -----symbol "Section insulator" || --------------------
-      const tks = tk2 / 2
+      const tks = tk126 / 2
       let s1 = ' M' + this.x + ',' + this.y
       switch (dir1) {
         case 12: // ----- Z - symbol (above)--------------------
@@ -456,15 +456,15 @@ export default defineComponent({
           s1 += ' z'
 
           s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk2 + 2 * tks)
+          s1 += ' v' + (2 * tk126 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
+          s1 += ' v' + (-2 * tk126 - 2 * tks)
           s1 += ' z'
 
           s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk2 + 2 * tks)
+          s1 += ' v' + (2 * tk126 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
+          s1 += ' v' + (-2 * tk126 - 2 * tks)
           s1 += ' z'
           break
 
@@ -476,15 +476,15 @@ export default defineComponent({
           s1 += ' z'
 
           s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk2 + 2 * tks)
+          s1 += ' v' + (2 * tk126 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
+          s1 += ' v' + (-2 * tk126 - 2 * tks)
           s1 += ' z'
 
           s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk2 + 2 * tks)
+          s1 += ' v' + (2 * tk126 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
+          s1 += ' v' + (-2 * tk126 - 2 * tks)
           s1 += ' z'
           break
         default:

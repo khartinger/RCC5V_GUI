@@ -251,9 +251,9 @@ export default defineComponent({
       const iDir_ = this.iDir
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
-      const tk2 = this.geof.tk2
+      const tk126 = this.geof.tk126
       const ucl2 = dxo2 / 2
-      const ucw2 = tk2 * 0.8
+      const ucw2 = tk126 * 0.8
       const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
       const ucl3 = 2 * ucl2 * dyo2 / w
       const ucl4 = 2 * ucl2 * dxo2 / w

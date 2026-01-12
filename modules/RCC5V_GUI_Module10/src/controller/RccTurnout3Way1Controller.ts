@@ -34,7 +34,7 @@ export class RccTurnout3Way1Controller extends CiBaseController {
         pubTopic: 'rcc/module10/set/101',
         pubTopicR: 'rcc/module10/set/102',
       },
-            {
+      {
         // ---turnout station-----------------------------------
         id: 't3103',
         name: 'To3way103',
