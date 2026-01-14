@@ -9,12 +9,12 @@
   <RccTrack1       :x="x0+4*dx" :y="y0+2*dy" sid="tk0" dir="0" :border="border"></RccTrack1>
   <!-- station bypass -------------------------------------- -->
   <RccTrack1       :x="x0+1*dx" :y="y0+0*dy" sid="tk0" dir="26" :border="border"></RccTrack1>
-  <RccTurnout3Way1 :x="x0+0*dx" :y="y0+1*dy" sid="t3101" dir="1" header="101" headeralign="C" footer="102" footeralign="C" :border="border"></RccTurnout3Way1>
+  <RccTurnout3Way1 :x="x0+0*dx" :y="y0+1*dy" sid="tt101" dir="1" header="101" headeralign="C" footer="102" footeralign="C" :border="border"></RccTurnout3Way1>
   <RccTrack1       :x="x0+1*dx" :y="y0+2*dy" sid="tk0" dir="48" :border="border"></RccTrack1>
   <!-- entrance to the station ----------------------------- -->
   <RccTrack1       :x="x0+1*dx" :y="y0+1*dy" sid="tk106" dir="15" footer="106" footeralign="C" :border="border"></RccTrack1>
   <!-- Platform 1 ------------------------------------------ -->
-  <RccTurnout3Way1 :x="x0+2*dx" :y="y0+1*dy" sid="t3103" dir="1" header="103" headeralign="C" footer="104" footeralign="C" :border="border"></RccTurnout3Way1>
+  <RccTurnout3Way1 :x="x0+2*dx" :y="y0+1*dy" sid="tt103" dir="1" header="103" headeralign="C" footer="104" footeralign="C" :border="border"></RccTurnout3Way1>
   <RccTurnout1     :x="x0+3*dx" :y="y0+0*dy" sid="to105" type="5L" header="105" headeralign="C" :border="border"></RccTurnout1>  
   <RccTrack1       :x="x0+2*dx" :y="y0+0*dy" sid="tk106" dir="1" header="106" headeralign="C" :border="border"></RccTrack1>
   <RccUncoupler1   :x="x0+4*dx" :y="y0+0*dy" sid="uc108" dir="15" header="[ON]" headeralign="C" footer="108" footeralign="C" :border="border"></RccUncoupler1>

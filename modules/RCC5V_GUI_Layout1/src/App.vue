@@ -1,7 +1,8 @@
 <!-- ----App.vue--------------------------------- 2023-01-01 -->
 <template>
   <div id="nav">
-    <router-link to="/">MainView</router-link> |
+    <router-link to="/">MainView</router-link> | 
+    <router-link to="/shortcuts">ShortCuts</router-link> | 
     <router-link to="/about">About</router-link>
     &nbsp; &nbsp; &nbsp;
     <span v-if="isConnected">

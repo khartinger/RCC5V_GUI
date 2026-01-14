@@ -8,13 +8,13 @@
   <RccTrack1    :x="x0+0*dx" :y="y0+2*dy" sid="tk0" dir="0" :border="border"></RccTrack1>
   <RccTrack1    :x="x0+2*dx" :y="y0+2*dy" sid="tk0" dir="0" :border="border"></RccTrack1>
   <!-- row 1 ----------------------------------------------- -->
-  <RccTrack1    :x="x0+1*dx" :y="y0+0*dy" sid="tk0" dir="48" :border="border"></RccTrack1>
+  <RccTrack1    :x="x0+1*dx" :y="y0+0*dy" sid="m13b0" dir="48" :border="border"></RccTrack1>
   <!-- row 2 ----------------------------------------------- -->
   <RccTrack1     :x="x0+0*dx" :y="y0+1*dy" sid="tk133" dir="15" header="[ON]" headeralign="C" footer="133" footeralign="C" :border="border"></RccTrack1>
   <RccUncoupler1 :x="x0+1*dx" :y="y0+1*dy" sid="uc134" dir="15" header="[ON]" headeralign="C" footer="134" footeralign="C" :border="border"></RccUncoupler1>
-  <RccTurnout3Way1 :x="x0+2*dx" :y="y0+1*dy" sid="t3132" dir="4" header="132" headeralign="R" footer="131" footeralign="R" :border="border"></RccTurnout3Way1>
+  <RccTurnout3Way1 :x="x0+2*dx" :y="y0+1*dy" sid="tt132" dir="4" header="132" headeralign="R" footer="131" footeralign="R" :border="border"></RccTurnout3Way1>
   <!-- row 3 ----------------------------------------------- -->
-  <RccTrack1    :x="x0+1*dx" :y="y0+2*dy" sid="tk0" dir="26" :border="border"></RccTrack1>
+  <RccTrack1    :x="x0+1*dx" :y="y0+2*dy" sid="m13b2" dir="26" :border="border"></RccTrack1>
   <!-- rail connectors, isolators, module name and border--- -->
   <RccTrackCon1 :x="x0+1.5*dx" :y="y0+0.5*dy" sid="con0" dir="8"></RccTrackCon1>
   <RccTrackCon1 :x="x0+1.5*dx" :y="y0+1.5*dy" sid="con0" dir="2"></RccTrackCon1>

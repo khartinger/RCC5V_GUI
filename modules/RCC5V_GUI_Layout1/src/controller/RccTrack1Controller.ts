@@ -4,6 +4,7 @@ import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
 
+const WAIT_BETWEEN_MQTT_MSG_MS = 100
 export interface Track1 extends IBase {
   iTrack1State: number;
   sDCC: string,
@@ -113,6 +114,8 @@ export class RccTrack1Controller extends CiBaseController {
     ],
   )
 
+  //_____Check whether topic matches topics in tracks array_____
+  // If so: analyze the message and act accordingly
   public onMessage (message: Message): void {
     this.tracks1.forEach(track1 => {
       const aSubTopic = track1.subTopic.split(' ')
@@ -142,10 +145,42 @@ export class RccTrack1Controller extends CiBaseController {
     })
   }
 
+  // ____publish a MQTT message_________________________________
   public publishCi (topic: string, payload: string): void {
     // console.log('RccTrack1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
     this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTrack1Controller: ERROR:', e) })
   }
+
+  // ____publish message: "All tracks on"_______________________
+  public async sendAllTracksOn(): Promise<void> {
+    for (const track of this.tracks1) {
+      try {
+        await this.publish(track.pubTopic, this.payloadTrackOn, false, 0)
+        await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
+      } catch (e) {
+        console.error('RccTrack1Controller:', e)
+      }
+    }
+  }
+
+  // ____publish message: "All tracks off"______________________
+  public async sendAllTracksOff(): Promise<void> {
+    for (const track of this.tracks1) {
+      try {
+        await this.publish(track.pubTopic, this.payloadTrackOff, false, 0)
+        await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
+      } catch (e) {
+        console.error('RccTrack1Controller:', e)
+      }
+    }
+  }
+
+} // END OF export class RccTrack1Controller
+
+
+// ______sleep given milliseconds_______________________________
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export const rccTrack1Controller = new RccTrack1Controller()

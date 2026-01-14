@@ -10,7 +10,7 @@
   <RccTurnout1  :x="x0+1*dx" :y="y0+0*dy" sid="to123" type="5L" header="123" headeralign="C" :border="border"></RccTurnout1>
   <RccTrack1    :x="x0+2*dx" :y="y0+0*dy" sid="tk125" dir="58" header="125  [ON]" headeralign="R" footer="[OFF]" :border="border"></RccTrack1>
   <!-- row 2 ----------------------------------------------- -->
-  <RccTurnout3Way1 :x="x0+0*dx" :y="y0+1*dy" sid="t3121" dir="1" header=" 121" headeralign="L" footer=" 122" footeralign="L" :border="border"></RccTurnout3Way1>
+  <RccTurnout3Way1 :x="x0+0*dx" :y="y0+1*dy" sid="tt121" dir="1" header=" 121" headeralign="L" footer=" 122" footeralign="L" :border="border"></RccTurnout3Way1>
   <RccTrack1    :x="x0+1*dx" :y="y0+1*dy" sid="tk126" dir="15" header="126" headeralign="C" footer="[OFF]" footeralign="C" :border="border"></RccTrack1>
   <RccTrack1    :x="x0+2*dx" :y="y0+1*dy" sid="tk126" dir="15" header="126" headeralign="C" footer="[OFF]" footeralign="C" :border="border"></RccTrack1>
   <RccTurnout1  :x="x0+3*dx" :y="y0+1*dy" sid="to128" type="5R" header="  128" headeralign="C" :border="border"></RccTurnout1>

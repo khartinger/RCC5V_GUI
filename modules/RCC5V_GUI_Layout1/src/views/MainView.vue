@@ -3,7 +3,7 @@
 <template>
   <svg width="100%" :viewBox="viewbox">
     <rect class="ciBackground" :x="x1" :y="y1" :width="w1" :height="h1" />
-    <RccModule13 :x0="0*dx" :y0="0*dy" sid="m13" :border="border" />
+    <RccModule13 :x0="0*dx" :y0="0*dy" sid="m13" :border="border" color="#0000C0"/>
     <RccModule12 :x0="(m13.nx)*dx" :y0="0*dy" sid="m12" :border="border" />
     <RccModule11 :x0="(m13.nx+m12.nx)*dx" :y0="0*dy" sid="m11" :border="border" />
     

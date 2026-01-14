@@ -1,9 +1,13 @@
 <!-- ----About.vue---------------------------khartinger----- -->
 <!-- 2026-01-10: New                                         -->
 <template>
+  <svg width="100%" viewBox="0 0 300 10">
+    <rect class="ciBackground" x="0" y="0" width="300" height="10" />
+  </svg>
+
   <div class="about">
-    <h2>RCC5V_GUI_Module13</h2>
-    Grafische Benutzeroberfl&auml;che (GUI) zur Steuerung der RCC-Komponenten von <b>Module 13</b>.<br>
+    <h2>RCC5V_GUI_Layout1</h2>
+    Grafische Benutzeroberfl&auml;che (GUI) zur Steuerung der RCC-Komponenten der Modulzusammenstellung <b>"Layout1"</b>.<br>
   </div>
   <div align="left">
     <br>
