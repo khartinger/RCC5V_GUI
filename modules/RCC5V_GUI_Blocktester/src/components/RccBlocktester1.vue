@@ -15,7 +15,7 @@
       :headeralign="symbol.ha"
       :footer="symbol.f"
       :footeralign="symbol.fa"
-      :color="getColor2(symbol.col, symbol.row, aPath, color)"
+      :color="getColor2(symbol.col, symbol.row, aRoute, color)"
     />
   </g>
   <g>
@@ -68,10 +68,10 @@ export const bt1 = {
     y0: number
     sid: string
     border?: number
-    path?: string
+    route?: string
     color?: string
   }>(),{
-    path: '',
+    route: '',
     color: '-',
     border: 1,
   })
@@ -96,18 +96,18 @@ export const bt1 = {
     { type: 'ti',  row: 2, col: 1.5, sid: 'iso0', dir: '1' }
   ]
 
-  // ____split path to array aPath______________________________
-  const aPath = computed<string[]>(() => {
-    const aPath_= props.path.split(',').map(p => p.trim()).filter(p => p.length > 0)
-    // console.log('aPath_=',aPath_)
-    return aPath_
+  // ____split route to array aRoute____________________________
+  const aRoute = computed<string[]>(() => {
+    const aRoute_= props.route.split(',').map(p => p.trim()).filter(p => p.length > 0)
+    // console.log('aRoute_=',aRoute_)
+    return aRoute_
   })
 
   // ____color for a module_____________________________________
-  function getColor2(col_: number, row_: number, aPath_: string[], color: string): string {
+  function getColor2(col_: number, row_: number, aRoute_: string[], color: string): string {
     const s1=col_+'/'+row_
-    const c2 = aPath_.includes(s1) ? color : '-'
-    // console.log('getColor2: s1=', s1 + ', path=' + path +  ' => c2=' + c2)
+    const c2 = aRoute_.includes(s1) ? color : '-'
+    // console.log('getColor2: s1=', s1 + ', route=' + route +  ' => c2=' + c2)
     return c2
   }
 

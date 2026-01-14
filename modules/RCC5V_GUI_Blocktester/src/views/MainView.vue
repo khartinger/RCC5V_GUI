@@ -4,22 +4,22 @@
 <template>
   <svg width="100%" :viewBox="viewbox">
     <rect class="ciBackground" :x="x1" :y="y1" :width="w1" :height="h1" />
-    <RccBlocktester1 :x0="xB" :y0="yB" sid="bt1" :border="border" :color="color" :path="pathXm00" />
+    <RccBlocktester1 :x0="xB" :y0="yB" sid="bt1" :border="border" :color="color" :route="routeXm00" />
   </svg>
 <br>
 <table><tr><td>
 <button
-  v-for="p in pathsOn"
+  v-for="p in routesOn"
   :key="p.id"
-  @click="onClkPathOn(p.id)"
+  @click="onClkRouteOn(p.id)"
   class="my-button"
 > Weichenstraße {{ p.label }} durchschalten
 </button><br>
 </td><td>
 <button
-  v-for="p in pathsOff"
+  v-for="p in routesOff"
   :key="p.id"
-  @click="onClkPathOff(p.id)"
+  @click="onClkRouteOff(p.id)"
   class="my-button"
 > Weichenstraße {{ p.label }} aufl&ouml;sen
 </button><br>
@@ -32,54 +32,54 @@
   import { ciMqttClientInstance } from '@/services/CiMqttClientInstance'
   import RccBlocktester1, { bt1 } from '@/components/RccBlocktester1.vue'
   const border = 1
-  const pathXm00 = ref('')    // Path für RccBlocktester1
+  const routeXm00 = ref('')    // Route für RccBlocktester1
   const color = ref('-')      // Color für RccBlocktester1
-  const colorPath='#88BBFF'
+  const colorRoute='#88BBFF'
 
-  const path1dcc = '32/0'
-  const path1m00 = ' 0/0,1/0, 1.5/0.5, 2/1'
-  const path2dcc = '31/1, 32/1'
-  const path2m00 = '0/1,1/1,2/1'
-  const path3dcc = '21/1,41/1'
-  const path3m00 = '0/2, 1/2, 2/2'
+  const route1dcc = '32/0'
+  const route1m00 = ' 0/0,1/0, 1.5/0.5, 2/1'
+  const route2dcc = '31/1, 32/1'
+  const route2m00 = '0/1,1/1,2/1'
+  const route3dcc = '21/1,41/1'
+  const route3m00 = '0/2, 1/2, 2/2'
 
-  const pathsOn = [
-    { id: 1, label: '1', sPathMxx: path1m00, sPathDcc: path1dcc },
-    { id: 2, label: '2', sPathMxx: path2m00, sPathDcc: path2dcc },
-    { id: 3, label: '3', sPathMxx: path3m00, sPathDcc: path3dcc }
+  const routesOn = [
+    { id: 1, label: '1', sRouteMxx: route1m00, sRouteDcc: route1dcc },
+    { id: 2, label: '2', sRouteMxx: route2m00, sRouteDcc: route2dcc },
+    { id: 3, label: '3', sRouteMxx: route3m00, sRouteDcc: route3dcc }
   ]
-  const pathsOff = [
-    { id: 1, label: '1', sPathMxx: path1m00, sPathDcc: path1dcc },
-    { id: 2, label: '2', sPathMxx: path2m00, sPathDcc: path2dcc },
-    { id: 3, label: '3', sPathMxx: path3m00, sPathDcc: path3dcc }
+  const routesOff = [
+    { id: 1, label: '1', sRouteMxx: route1m00, sRouteDcc: route1dcc },
+    { id: 2, label: '2', sRouteMxx: route2m00, sRouteDcc: route2dcc },
+    { id: 3, label: '3', sRouteMxx: route3m00, sRouteDcc: route3dcc }
   ]
 
-  // ____turn on path # n_______________________________________
-  function onClkPathOn(n: number): void {
+  // ____turn on route # n______________________________________
+  function onClkRouteOn(n: number): void {
     // --cells to collor----------------------------------------
-    const sPathXY = pathsOn.find(p => p.id === n)?.sPathMxx
-    if(!sPathXY) return
-    // console.log('Button clicked:', n + ', sPathXY=' + sPathXY)
-    pathXm00.value = sPathXY // for <RCCBlocktester ..>
-    color.value = colorPath  // for <RCCBlocktester ..>
+    const sRouteXY = routesOn.find(p => p.id === n)?.sRouteMxx
+    if(!sRouteXY) return
+    // console.log('Button clicked:', n + ', sRouteXY=' + sRouteXY)
+    routeXm00.value = sRouteXY // for <RCCBlocktester ..>
+    color.value = colorRoute  // for <RCCBlocktester ..>
     // --get dcc commands (topic + payload)---------------------
-    const sPathDcc = pathsOn.find(p => p.id === n)?.sPathDcc
-    if(!sPathDcc) return
-    const aPath1 = sPathDcc.split(',').map(p => p.trim()).filter(p => p.length > 0)
-    aPath1.forEach(msg => {
+    const sRouteDcc = routesOn.find(p => p.id === n)?.sRouteDcc
+    if(!sRouteDcc) return
+    const aRoute1 = sRouteDcc.split(',').map(p => p.trim()).filter(p => p.length > 0)
+    aRoute1.forEach(msg => {
       const aMsg = msg.split('/').map(p => p.trim()).filter(p => p.length > 0)
       const topic='rcc/demo1/set/'+aMsg[0]
       ciMqttClientInstance.publish(topic, aMsg[1], false, 0).catch((e) => { console.error('RccBlocktester1: ERROR:', e) })
     });
   }
 
-  // ____turn off path # n_______________________________________
-  function onClkPathOff(n: number): void {
+  // ____turn off route # n_____________________________________
+  function onClkRouteOff(n: number): void {
     // --cells to collor----------------------------------------
-    const sPathXY = pathsOff.find(p => p.id === n)?.sPathMxx
-    if(!sPathXY) return
-    // console.log('Button clicked:', n + ', sPathXY=' + sPathXY)
-    pathXm00.value = sPathXY // for <RCCBlocktester ..>
+    const sRouteXY = routesOff.find(p => p.id === n)?.sRouteMxx
+    if(!sRouteXY) return
+    // console.log('Button clicked:', n + ', sRouteXY=' + sRouteXY)
+    routeXm00.value = sRouteXY // for <RCCBlocktester ..>
     color.value = '-'        // for <RCCBlocktester ..>
   }
 
