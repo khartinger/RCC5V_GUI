@@ -24,7 +24,7 @@ export class RccTurnout3Way1Controller extends CiBaseController {
     [
       {
         // ---test track 1--------------------------------------
-        id: 't3w1',
+        id: 'tt031',
         name: 'To3way1',
         iLState: -10,
         iRState: -10,

@@ -149,13 +149,12 @@ export default defineComponent({
     },
     // _______color 1 of the track (active path)________________
     colorTurnout1: function (): string {
-      if (this.color !== '-') return this.color
+      if (this.color.length > 1) return this.color
       if (this.iTo3way1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutClear
     },
     // _______color 2 of the track (inactive path)______________
     colorTurnout2: function (): string {
-      if (this.color !== '-') return this.color
       if (this.iTo3way1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutBlocked
     },
