@@ -149,13 +149,12 @@ export default defineComponent({
     },
     // _______color 1 of the track (active path)________________
     colorTurnout1: function (): string {
-      if (this.color !== '-') return this.color
+      if (this.color.length > 1) return this.color
       if (this.iTo3way1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutClear
     },
     // _______color 2 of the track (inactive path)______________
     colorTurnout2: function (): string {
-      if (this.color !== '-') return this.color
       if (this.iTo3way1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutBlocked
     },
@@ -180,7 +179,7 @@ export default defineComponent({
     },
     // _______click area "top"__________________________________
     pathTop: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
@@ -194,7 +193,7 @@ export default defineComponent({
         s1 += ' v' + dyo
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5)
       { //----------turnout to the left >- ---------------------
         s1 += ' h' + dxo2
         s1 += ' v' + (-dyo2)
@@ -206,7 +205,7 @@ export default defineComponent({
 
     // _______click area "middle" (stright)_____________________
     pathMid: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dyo = this.geof.dyo()
       const dxo2 = this.geof.dxo2()
@@ -218,7 +217,7 @@ export default defineComponent({
         s1 += ' v' + (-dyo)
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5) 
       { //----turnout to the left >- ------------------------
         s1 += ' l' + (-dxo2) + ',' + (-dyo2)
         s1 += ' v' + dyo
@@ -228,7 +227,7 @@ export default defineComponent({
     },
     // _______click area "bottom"_______________________________
     pathBottom: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
@@ -242,7 +241,7 @@ export default defineComponent({
         s1 += ' v' + (-dyo)
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5) 
       { //----------turnout to the left >- -----------------
         s1 += ' h' + dxo2
         s1 += ' v' + dyo2
@@ -262,15 +261,15 @@ export default defineComponent({
       let ret_=''
       let state_ = this.iTo3way1State // 1=right, 2=left, 3=stright
       if(state_ < 0) state_ = 1
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ret_
-      if(dir_!==1 && dir_!==4) return ret_
+      if(dir_!==1 && dir_!==5) return ret_
       // .....number of used path tracks........................
       let aTrack = Array(25, 15, 58, 25, 15)
-      if (dir_ === 4) aTrack = Array(16, 15, 14, 16, 15)
+      if (dir_ === 5) aTrack = Array(16, 15, 14, 16, 15)
       // =====select path track number to draw==================
       const i_ = Number(pathNr_ + state_ - 2)
-      if (i_ < 0  || i_ > 4) return ret_
+      if (i_ < 0  || i_ > 5) return ret_
       const dirTrack_=aTrack[i_]
       // =====return path of track to draw======================
       ret_ = this.pathTrack(dirTrack_)
@@ -284,7 +283,7 @@ export default defineComponent({
       const dyo2 = this.geof.dyo2()
       const tk0x = -this.geof.tk.value[0].x
       const tk0y = -this.geof.tk.value[0].y
-      const tk126 = this.geof.tk126
+      const tk2 = this.geof.tk2
       const tkax = dxo2 - tk0x
       const tkbx = dxo2 + tk0x
       const tkcx = dxo2 - this.geof.tk.value[4].x
@@ -292,7 +291,7 @@ export default defineComponent({
       const tk59x = this.geof.dxo() - tkbx
       const tk59y = dyo2 - tkcy + tk0y
       // -----symbol "Section insulator" || --------------------
-      const tks = tk126 / 2
+      const tks = tk2 / 2
       let s1 = ' M' + this.x + ',' + this.y
       switch (dirTrack_) {
         case 14: // ----- \_ direction--------------------------
@@ -352,7 +351,7 @@ export default defineComponent({
       let payload = 'onClkTop: sid=' + this.sid
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.dir === '4') { // turnout 1 -< or 4 >-)
+        if(this.dir === '5') { // turnout 1 -< or 5 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
@@ -387,7 +386,7 @@ export default defineComponent({
       let payload = 'onClkBottom: sid=' + this.sid
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.dir === '1') { // turnout 1 -< or 4 >-)
+        if(this.dir === '1') { // turnout 1 -< or 5 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 

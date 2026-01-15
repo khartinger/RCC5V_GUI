@@ -1,6 +1,6 @@
 // ______Geo.ts__________________________________khartinger_____
 // 2025-12-27: new
-// 2026-01-09: add tk_, right(), colors track,...
+// 2026-01-15: add tk_, right(), colors track,...
 
 import { ref } from 'vue'
 
@@ -27,29 +27,29 @@ const dxi2_ = dxo2_ - dxm_ //                    half dxi_
 const dxt_ = Math.round(0.5 + fh_ / 14 + 18 / 14) // text-border
 const tmax_ = Math.floor((dxi_ - 2 * dxt_) / fw_) // max number character per line
 // -----------track values--------------------------------------
-const tk126_ = dyo_ / 10 //                        half track width
+const tk2_ = dyo_ / 10 //                        half track width
 const tkk_ = dyo_ / dxo_ //                      slope dy/dx
 const tkw_ = Math.sqrt(1 + tkk_ * tkk_) //       help value
 const txkyo_ = dxo_ + tkk_ * dyo_
 const tk_ = ref([
   // .....Tk0.....
-  { x: tk126_ * (1 - tkw_) / tkk_, y: -tk126_ },
+  { x: tk2_ * (1 - tkw_) / tkk_, y: -tk2_ },
   // .....Tk1.....
-  { x: (-2 * tkk_ / tkw_ - (1 - tkw_) / tkk_) * tk126_, y: (1 - 2 / tkw_) * tk126_ },
+  { x: (-2 * tkk_ / tkw_ - (1 - tkw_) / tkk_) * tk2_, y: (1 - 2 / tkw_) * tk2_ },
   // .....Tk2.....
-  { x: tk126_ * tkw_ / tkk_, y: 0 },
+  { x: tk2_ * tkw_ / tkk_, y: 0 },
   // .....Tk3.....
-  { x: tk126_ * (1 + tkw_) / tkk_, y: -tk126_ },
+  { x: tk2_ * (1 + tkw_) / tkk_, y: -tk2_ },
   // .....Tk4.....
-  { x: (dyo2_ - tk126_ * tkw_) / tkk_, y: -dyo2_ },
+  { x: (dyo2_ - tk2_ * tkw_) / tkk_, y: -dyo2_ },
   // .....Tk5.....
-  { x: dxo2_, y: tk126_ * tkw_ - tkk_ * dxo2_ },
+  { x: dxo2_, y: tk2_ * tkw_ - tkk_ * dxo2_ },
   // .....Tk6.....
-  { x: (-tkk_ * tk126_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 + tk126_ * tkw_) / (1 + tkk_ * tkk_) },
+  { x: (-tkk_ * tk2_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 + tk2_ * tkw_) / (1 + tkk_ * tkk_) },
   // .....Tk7.....
-  { x: (tkk_ * tk126_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 - tk126_ * tkw_) / (1 + tkk_ * tkk_) },
+  { x: (tkk_ * tk2_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 - tk2_ * tkw_) / (1 + tkk_ * tkk_) },
   // .....Tk8.....
-  { x: tkk_ * tk126_ / tkw_, y: tk126_ / tkw_ },
+  { x: tkk_ * tk2_ / tkw_, y: tk2_ / tkw_ },
 ])
 
 // -----------special dimensions--------------------------------
@@ -75,16 +75,18 @@ export class Geo {
   public colorClose = '#FF6666' //     light red
   public colorLock = '#C00000' //      red
 
-  public colorTrack = '#303030' //     dark grey
-  public colorTrackOff = '#F00000' //  red
-  public colorTrackOn = '#00B000' //   light green
-  public colorTrackUsed = '#C0C800' // yellow-green
-  public colorTrackInfo = '#0000FF' // blue
+  public colorTrack = '#303030' //        dark grey
+  public colorTrackOff = '#F00000' //     red
+  public colorTrackOn = '#00B000' //      light green
+  public colorTrackUsed = '#C0C800' //    yellow-green
+  public colorTrackInfo = '#0000FF' //    blue
   public colorTrackUnknown = '#805050' // red/grey
   public colorTurnoutClear = '#FFD700' // gold
   public colorTurnoutBlocked = '#703030' // red/grey
-  public colorUncouplerOn = '#90ee90' // light green
+  public colorUncouplerOn = '#90ee90' //  light green
   public colorUncouplerOff = '#808080' // grey
+  public colorRoute = '#88BBFF' //        light blue
+  public colorNone ='-'
   public noDate = '--.--.----'
   public noTime = '--:--:--'
   public batteryMin = 15
@@ -111,7 +113,7 @@ export class Geo {
   public dw2 = dw2_ //            half wall thickness
   // ---------track values--------------------------------------
   public tk = tk_
-  public tk126 = tk126_ //             half track width
+  public tk2 = tk2_ //             half track width
   public tkk = tkk_ //             slope dy/dx
 
   // =========absolute geometric values=========================

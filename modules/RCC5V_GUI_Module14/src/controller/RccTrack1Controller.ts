@@ -20,16 +20,6 @@ export class RccTrack1Controller extends CiBaseController {
 
   public tracks1: Array<Track1> = reactive(
     [
-      {
-        // ---track 2-------------------------------------------
-        id: 'tk1',
-        name: 'track1',
-        iTrack1State: -99,
-        sDCC: '112',
-        subTopic: 'rcc/module14/ret/112 rcc/module14/ret/status',
-        pubTopic: 'rcc/module14/set/112',
-        payloadInvert: false,
-      },
     ],
   )
 

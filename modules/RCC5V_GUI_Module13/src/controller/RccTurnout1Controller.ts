@@ -20,16 +20,6 @@ export class RccTurnout1Controller extends CiBaseController {
   
   public turnouts1: Array<Turnout1> = reactive(
     [
-      {
-        // ---demo turnout 1------------------------------------
-        id: 'to1',
-        name: 'Turnout1',
-        iTurnout1State: -1,
-        sDCC: '105',
-        subTopic: 'rcc/moduleXX/ret/105 rcc/moduleXX/ret/status',
-        pubTopic: 'rcc/moduleXX/set/105',
-        payloadInvert: false,
-      },
     ],
   )
 

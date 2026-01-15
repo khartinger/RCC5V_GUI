@@ -9,14 +9,14 @@ const routes: Array<RouteRecordRaw> = [
     name: 'MainView',
     component: MainView,
     meta: {
-      title: 'RCC5V_GUI_Module13 MainView',
+      title: 'RCC5V_GUI_Module 13 MainView',
     },
   },
   {
     path: '/about',
     name: 'About',
     meta: {
-      title: 'RCC5V_GUI_Module13 About',
+      title: 'RCC5V_GUI_Module 13 About',
     },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -31,7 +31,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = (to.meta.title as string) ?? 'RCC5V_GUI_Module13'
+  document.title = (to.meta.title as string) ?? 'RCC5V_GUI_Module 13'
   // document.title = <string> to.meta.title
   next()
 })

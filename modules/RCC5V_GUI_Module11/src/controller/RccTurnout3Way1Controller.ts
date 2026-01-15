@@ -22,18 +22,6 @@ export class RccTurnout3Way1Controller extends CiBaseController {
   
   public to3ways1: Array<To3way1> = reactive(
     [
-      {
-        // ---turnout station bypass----------------------------
-        id: 't3w1',
-        name: 'To3way1',
-        iLState: -10,
-        iRState: -10,
-        sDCCL: '131',
-        sDCCR: '132',
-        subTopic: 'rcc/module11/ret/131 rcc/module11/ret/132 rcc/module11/ret/status',
-        pubTopic: 'rcc/module11/set/131',
-        pubTopicR: 'rcc/module11/set/132',
-      },
     ],
   )
 

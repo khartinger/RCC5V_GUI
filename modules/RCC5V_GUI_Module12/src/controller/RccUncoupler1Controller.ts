@@ -20,7 +20,7 @@ export class RccUncoupler1Controller extends CiBaseController {
   public turnouts1: Array<Uncoupler1> = reactive(
     [
       {
-        // ---uncoupler platform 1------------------------------
+        // ---module 12: uncoupler platform 1-------------------
         id: 'uc124',
         name: 'Uncoupler1',
         iUncoupler1State: 0,

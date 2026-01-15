@@ -44,7 +44,12 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    type: {
+    // type: {
+    //   type: String,
+    //   required: false, // true,
+    //   default: '',
+    // },
+    dir: {
       type: String,
       required: true,
     },
@@ -129,8 +134,9 @@ export default defineComponent({
     // _______type as string #C_________________________________
     sType: function(): string {
       // -----Break down direction "dir" into int and char-------
-      if(this.type.length !== 2) return ''
-      let sType_ = String(this.type.toUpperCase())
+      //if(this.type.length !== 2) return ''
+if(this.dir.length !== 2) return ''
+      let sType_ = String(this.dir.toUpperCase())
       if (!['L', 'R'].includes(sType_[1])) {
         if (!['L', 'R'].includes(sType_[0])) return ''
         sType_ = String(sType_[0] + sType_[1])
@@ -149,13 +155,12 @@ export default defineComponent({
     },
     // _______color 1 of the track (active path)________________
     colorTurnout1: function (): string {
-      if (this.color !== '-') return this.color
+      if (this.color.length > 1) return this.color
       if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutClear
     },
     // _______color 2 of the track (inactive path)______________
     colorTurnout2: function (): string {
-      // if (this.color !== '-') return this.color
       if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutBlocked
     },
@@ -299,7 +304,7 @@ export default defineComponent({
       const dyo2 = this.geof.dyo2()
       const tk0x = -this.geof.tk.value[0].x
       const tk0y = -this.geof.tk.value[0].y
-      const tk126 = this.geof.tk126
+      const tk2 = this.geof.tk2
       const tkax = dxo2 - tk0x
       const tkbx = dxo2 + tk0x
       const tkcx = dxo2 - this.geof.tk.value[4].x
@@ -308,7 +313,7 @@ export default defineComponent({
       const tk59y = dyo2 - tkcy + tk0y
       const tkdy = tk0x + tk0y
       // -----symbol "Section insulator" || --------------------
-      const tks = tk126 / 2
+      const tks = tk2 / 2
       let s1 = ' M' + this.x + ',' + this.y
       switch (dir1) {
         case 12: // ----- Z - symbol (above)--------------------
@@ -456,15 +461,15 @@ export default defineComponent({
           s1 += ' z'
 
           s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
 
           s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
           break
 
@@ -476,15 +481,15 @@ export default defineComponent({
           s1 += ' z'
 
           s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
 
           s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
           break
         default:
@@ -507,7 +512,7 @@ export default defineComponent({
         }
         // payload = rccTurnout1Controller.payloadTurnoutCurved
         payload = curved1
-        if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
+        if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
           // payload = rccTurnout1Controller.payloadTurnoutStright
           payload = stright1
         }
@@ -535,7 +540,7 @@ export default defineComponent({
         }
         // payload = rccTurnout1Controller.payloadTurnoutStright
         payload = stright1
-        if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
+        if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
           // payload = rccTurnout1Controller.payloadTurnoutCurved
           payload = curved1
         }

@@ -143,13 +143,12 @@ export default defineComponent({
     },
     // _______color of the track________________________________
     colorUncouplerTrack: function (): string {
-      // if (this.color !== '-') return this.color
+      if (this.color.length > 1) return this.color
       return this.geof.colorTrack
     },
     // _______color of the active block_________________________
     colorUncouplerBlock: function (): string {
       if (this.iUncoupler1State === 1) {
-        if (this.color !== '-') return this.color
         return this.geof.colorUncouplerOn
       }
       return this.geof.colorUncouplerOff
@@ -251,9 +250,9 @@ export default defineComponent({
       const iDir_ = this.iDir
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
-      const tk126 = this.geof.tk126
+      const tk2 = this.geof.tk2
       const ucl2 = dxo2 / 2
-      const ucw2 = tk126 * 0.8
+      const ucw2 = tk2 * 0.8
       const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
       const ucl3 = 2 * ucl2 * dyo2 / w
       const ucl4 = 2 * ucl2 * dxo2 / w

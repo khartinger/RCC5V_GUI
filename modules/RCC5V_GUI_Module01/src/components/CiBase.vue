@@ -119,4 +119,5 @@ export default defineComponent({
   .ciFillIt  { stroke: blue; stroke-width: 1; }
   .ciClick   { fill-opacity: 0.0; stroke-width: 1; }
   .ciBorder  { fill-opacity: 0.0; stroke: blue; stroke-width: 1; }
+  .my-button { display: block; margin-bottom: 8px; }
 </style>

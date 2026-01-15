@@ -21,7 +21,7 @@ export class RccTrack1Controller extends CiBaseController {
   public tracks1: Array<Track1> = reactive(
     [
       {
-        // ---track 1-------------------------------------------
+        // ---module12: track 1---------------------------------
         id: 'tk125',
         name: 'track1',
         iTrack1State: -99,
@@ -31,7 +31,7 @@ export class RccTrack1Controller extends CiBaseController {
         payloadInvert: false,
       },
       {
-        // ---track 1a------------------------------------------
+        // ---module12: track 1a--------------------------------
         id: 'tk12529',
         name: 'track1a',
         iTrack1State: -99,
@@ -41,7 +41,7 @@ export class RccTrack1Controller extends CiBaseController {
         payloadInvert: false,
       },
       {
-        // ---track 2-------------------------------------------
+        // ---module12: track 2---------------------------------
         id: 'tk126',
         name: 'track2',
         iTrack1State: -99,
@@ -51,7 +51,7 @@ export class RccTrack1Controller extends CiBaseController {
         payloadInvert: false,
       },
       {
-        // ---track 3-------------------------------------------
+        // ---module12: track 3---------------------------------
         id: 'tk127',
         name: 'track3',
         iTrack1State: -99,

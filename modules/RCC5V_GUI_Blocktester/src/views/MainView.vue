@@ -1,6 +1,6 @@
 <!-- ----MainView.vue------------------------khartinger----- -->
 <!-- 2026-01-09: New                                         -->
-<!-- 2026-01-14: Update, add set/release a route             -->
+<!-- 2026-01-15: Update, add set/release a route             -->
 <template>
   <svg width="100%" :viewBox="viewbox">
     <rect class="ciBackground" :x="x1" :y="y1" :width="w1" :height="h1" />

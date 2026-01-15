@@ -143,13 +143,12 @@ export default defineComponent({
     },
     // _______color of the track________________________________
     colorUncouplerTrack: function (): string {
-      // if (this.color !== '-') return this.color
+      if (this.color.length > 1) return this.color
       return this.geof.colorTrack
     },
     // _______color of the active block_________________________
     colorUncouplerBlock: function (): string {
       if (this.iUncoupler1State === 1) {
-        if (this.color !== '-') return this.color
         return this.geof.colorUncouplerOn
       }
       return this.geof.colorUncouplerOff

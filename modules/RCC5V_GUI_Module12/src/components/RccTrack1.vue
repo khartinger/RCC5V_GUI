@@ -152,7 +152,7 @@ export default defineComponent({
     },
     // _______color of the track________________________________
     colorTrack: function (): string {
-      if (this.color !== '-') return this.color
+      if (this.color.length > 2) return this.color
       if (this.iTrack1State === 0) return this.geof.colorTrackOff
       if (this.iTrack1State === 1) return this.geof.colorTrackOn
       if (this.iTrack1State === 2) return this.geof.colorTrackUsed
@@ -187,7 +187,7 @@ export default defineComponent({
       const dyo2 = this.geof.dyo2()
       const tk0x = -this.geof.tk.value[0].x
       const tk0y = -this.geof.tk.value[0].y
-      const tk126 = this.geof.tk126
+      const tk2 = this.geof.tk2
       const tkax = dxo2 - tk0x
       const tkbx = dxo2 + tk0x
       const tkcx = dxo2 - this.geof.tk.value[4].x
@@ -198,7 +198,7 @@ export default defineComponent({
       const tk59y = dyo2 - tkcy + tk0y
       const tkdy = tk0x + tk0y
       // -----used by symbol "end of track"---------------------
-      const tks = tk126 / 2
+      const tks = tk2 / 2
       const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
       const tks4 = dxo2 * tks / w
       const tks3 = dyo2 * tks / w
@@ -221,9 +221,9 @@ export default defineComponent({
           s1 += ' z'
           break
         case 3: // ----- ! (up) direction-----------------------
-          s1 += ' m' + (-this.geof.tk126) + ',' + (-dyo2) // Tk0
+          s1 += ' m' + (-this.geof.tk2) + ',' + (-dyo2) // Tk0
           s1 += ' v' + dyo2
-          s1 += ' h' + (2 * this.geof.tk126)
+          s1 += ' h' + (2 * this.geof.tk2)
           s1 += ' v' + (-dyo2)
           s1 += ' z'
           break
@@ -251,10 +251,10 @@ export default defineComponent({
           s1 += ' z'
           break
         case 7: // ----- i (down) direction-----------------------
-          s1 += ' m' + (-tk126) + ',' + (dyo2) // Tk0
-          s1 += ' h' + (2 * tk126)
+          s1 += ' m' + (-tk2) + ',' + (dyo2) // Tk0
+          s1 += ' h' + (2 * tk2)
           s1 += ' v' + (-dyo2)
-          s1 += ' h' + (-2 * tk126)
+          s1 += ' h' + (-2 * tk2)
           s1 += ' z'
           break
         case 8: // ----- \ (down) direction---------------------
@@ -405,39 +405,39 @@ export default defineComponent({
           break
 
         case 13: // ----- L direction---------------------------
-          s1 += ' m' + (tk126) + ',' + (-tk126)
-          s1 += ' v' + (tk126 - dyo2)
-          s1 += ' h' + (-2 * tk126)
-          s1 += ' v' + (tk126 + dyo2)
-          s1 += ' h' + (tk126 + dxo2)
-          s1 += ' v' + (-2 * tk126)
+          s1 += ' m' + (tk2) + ',' + (-tk2)
+          s1 += ' v' + (tk2 - dyo2)
+          s1 += ' h' + (-2 * tk2)
+          s1 += ' v' + (tk2 + dyo2)
+          s1 += ' h' + (tk2 + dxo2)
+          s1 += ' v' + (-2 * tk2)
           s1 += ' z'
           break
         case 17: // ----- r direction---------------------------
-          s1 += ' m' + (tk126) + ',' + (tk126)
-          s1 += ' v' + (-tk126 + dyo2)
-          s1 += ' h' + (-2 * tk126)
-          s1 += ' v' + (-tk126 - dyo2)
-          s1 += ' h' + (tk126 + dxo2)
-          s1 += ' v' + (2 * tk126)
+          s1 += ' m' + (tk2) + ',' + (tk2)
+          s1 += ' v' + (-tk2 + dyo2)
+          s1 += ' h' + (-2 * tk2)
+          s1 += ' v' + (-tk2 - dyo2)
+          s1 += ' h' + (tk2 + dxo2)
+          s1 += ' v' + (2 * tk2)
           s1 += ' z'
           break
         case 35: // ----- -! direction--------------------------
-          s1 += ' m' + (-tk126) + ',' + (-tk126)
-          s1 += ' v' + (tk126 - dyo2)
-          s1 += ' h' + (2 * tk126)
-          s1 += ' v' + (tk126 + dyo2)
-          s1 += ' h' + (-tk126 - dxo2)
-          s1 += ' v' + (-2 * tk126)
+          s1 += ' m' + (-tk2) + ',' + (-tk2)
+          s1 += ' v' + (tk2 - dyo2)
+          s1 += ' h' + (2 * tk2)
+          s1 += ' v' + (tk2 + dyo2)
+          s1 += ' h' + (-tk2 - dxo2)
+          s1 += ' v' + (-2 * tk2)
           s1 += ' z'
           break
         case 57: // ----- -7 direction---------------------------
-          s1 += ' m' + (-tk126) + ',' + (tk126)
-          s1 += ' v' + (-tk126 + dyo2)
-          s1 += ' h' + (2 * tk126)
-          s1 += ' v' + (-tk126 - dyo2)
-          s1 += ' h' + (-tk126 - dxo2)
-          s1 += ' v' + (2 * tk126)
+          s1 += ' m' + (-tk2) + ',' + (tk2)
+          s1 += ' v' + (-tk2 + dyo2)
+          s1 += ' h' + (2 * tk2)
+          s1 += ' v' + (-tk2 - dyo2)
+          s1 += ' h' + (-tk2 - dxo2)
+          s1 += ' v' + (2 * tk2)
           s1 += ' z'
           break
 
@@ -449,15 +449,15 @@ export default defineComponent({
           s1 += ' z'
 
           s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
 
           s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
           break
 
@@ -469,15 +469,15 @@ export default defineComponent({
           s1 += ' z'
 
           s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
 
           s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk126 + 2 * tks)
+          s1 += ' v' + (2 * tk2 + 2 * tks)
           s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk126 - 2 * tks)
+          s1 += ' v' + (-2 * tk2 - 2 * tks)
           s1 += ' z'
           break
         default:

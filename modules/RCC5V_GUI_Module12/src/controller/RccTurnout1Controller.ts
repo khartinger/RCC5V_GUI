@@ -21,7 +21,7 @@ export class RccTurnout1Controller extends CiBaseController {
   public turnouts1: Array<Turnout1> = reactive(
     [
       {
-        // ---turnout 1 north-----------------------------------
+        // ---module12: turnout 1 north-------------------------
         id: 'to123',
         name: 'Turnout1',
         iTurnout1State: -1,
@@ -31,7 +31,7 @@ export class RccTurnout1Controller extends CiBaseController {
         payloadInvert: false,
       },
       {
-        // ---turnout 2 east------------------------------------
+        // ---module12: turnout 2 east--------------------------
         id: 'to128',
         name: 'Turnout2',
         iTurnout1State: -1,

@@ -74,41 +74,41 @@ export default defineComponent({
   methods: {
     pathIso: function (part: number): string {
       // -----symbol "Section insulator" || --------------------
-      const tk126 = this.geof.tk126
-      const tks = tk126 / 2
+      const tk2 = this.geof.tk2
+      const tks = tk2 / 2
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
-      const tk1264 = dxo2 * tk126 / w
-      const tk1263 = dyo2 * tk126 / w
+      const tk24 = dxo2 * tk2 / w
+      const tk23 = dyo2 * tk2 / w
       const tks4 = dxo2 * tks / w
       const tks3 = dyo2 * tks / w
-      const tkdx = 2 * tks3 + 2 * tk1263
-      const tkdy = 2 * tks4 + 2 * tk1264
+      const tkdx = 2 * tks3 + 2 * tk23
+      const tkdy = 2 * tks4 + 2 * tk24
       let s1 = ' M' + this.x + ',' + this.y
       const dir_ = Number(this.dir)
       switch (dir_) {
         case 1: case 5:// === - horizontal======================
           switch (part) {
             case 1: // ----- 1. | x+ direction------------------
-              s1 += ' m' + (-2 * tks) + ',' + (-tk126 - tks)
-              s1 += ' v' + (2 * tk126 + 2 * tks)
+              s1 += ' m' + (-2 * tks) + ',' + (-tk2 - tks)
+              s1 += ' v' + (2 * tk2 + 2 * tks)
               s1 += ' h' + (+tks)
-              s1 += ' v' + (-2 * tk126 - 2 * tks)
+              s1 += ' v' + (-2 * tk2 - 2 * tks)
               s1 += ' z'
               break
             case 2: // ----- 2. space x+ direction--------------
-              s1 += ' m' + (-1 * tks) + ',' + (-tk126 - tks)
-              s1 += ' v' + (2 * tk126 + 2 * tks)
+              s1 += ' m' + (-1 * tks) + ',' + (-tk2 - tks)
+              s1 += ' v' + (2 * tk2 + 2 * tks)
               s1 += ' h' + (2 * tks)
-              s1 += ' v' + (-2 * tk126 - 2 * tks)
+              s1 += ' v' + (-2 * tk2 - 2 * tks)
               s1 += ' z'
               break
             case 3: // ----- 3. | x+ direction------------------
-              s1 += ' m' + (tks) + ',' + (-tk126 - tks)
-              s1 += ' v' + (2 * tk126 + 2 * tks)
+              s1 += ' m' + (tks) + ',' + (-tk2 - tks)
+              s1 += ' v' + (2 * tk2 + 2 * tks)
               s1 += ' h' + (+tks)
-              s1 += ' v' + (-2 * tk126 - 2 * tks)
+              s1 += ' v' + (-2 * tk2 - 2 * tks)
               s1 += ' z'
               break
             default:
@@ -117,21 +117,21 @@ export default defineComponent({
         case 2: case 6: // == / right up========================
           switch (part) {
             case 1: // ----- 1. \ direction---------------------
-              s1 += ' m' + (-(tk1263 + tks3 + 2 * tks4)) + ',' + (-(tk1264 + tks4 - 2 * tks3))
+              s1 += ' m' + (-(tk23 + tks3 + 2 * tks4)) + ',' + (-(tk24 + tks4 - 2 * tks3))
               s1 += ' l' + (tkdx) + ',' + (tkdy)
               s1 += ' l' + (tks4) + ',' + (-tks3)
               s1 += ' l' + (-tkdx) + ',' + (-tkdy)
               s1 += ' z'
               break
             case 2: // ----- 2. space \ direction---------------
-              s1 += ' m' + (-(tk1263 + tks3 + tks4)) + ',' + (-(tk1264 + tks4 - tks3))
+              s1 += ' m' + (-(tk23 + tks3 + tks4)) + ',' + (-(tk24 + tks4 - tks3))
               s1 += ' l' + (tkdx) + ',' + (tkdy)
               s1 += ' l' + (2 * tks4) + ',' + (-2 * tks3)
               s1 += ' l' + (-tkdx) + ',' + (-tkdy)
               s1 += ' z'
               break
             case 3: // ----- 3. \ direction---------------------
-              s1 += ' m' + (-(tk1263 + tks3 - tks4)) + ',' + (-(tk1264 + 2 * tks3))
+              s1 += ' m' + (-(tk23 + tks3 - tks4)) + ',' + (-(tk24 + 2 * tks3))
               s1 += ' l' + (tkdx) + ',' + (tkdy)
               s1 += ' l' + (tks4) + ',' + (-tks3)
               s1 += ' l' + (-tkdx) + ',' + (-tkdy)
@@ -143,21 +143,21 @@ export default defineComponent({
         case 4: case 8: // == / right down======================
           switch (part) {
             case 1: // ----- 1. / direction---------------------
-              s1 += ' m' + (-(tk1263 + tks3 + 2 * tks4)) + ',' + ((tk1264 + tks4 - 2 * tks3))
+              s1 += ' m' + (-(tk23 + tks3 + 2 * tks4)) + ',' + ((tk24 + tks4 - 2 * tks3))
               s1 += ' l' + (tkdx) + ',' + (-tkdy)
               s1 += ' l' + (tks4) + ',' + (tks3)
               s1 += ' l' + (-tkdx) + ',' + (tkdy)
               s1 += ' z'
               break
             case 2: // ----- 2. space / direction---------------
-              s1 += ' m' + (-(tk1263 + tks3 + tks4)) + ',' + ((tk1264 + tks4 - tks3))
+              s1 += ' m' + (-(tk23 + tks3 + tks4)) + ',' + ((tk24 + tks4 - tks3))
               s1 += ' l' + (tkdx) + ',' + (-tkdy)
               s1 += ' l' + (2 * tks4) + ',' + (2 * tks3)
               s1 += ' l' + (-tkdx) + ',' + (tkdy)
               s1 += ' z'
               break
             case 3: // ----- 3. / direction---------------------
-              s1 += ' m' + (-(tk1263 + tks3 - tks4)) + ',' + ((tk1264 + 2 * tks3))
+              s1 += ' m' + (-(tk23 + tks3 - tks4)) + ',' + ((tk24 + 2 * tks3))
               s1 += ' l' + (tkdx) + ',' + (-tkdy)
               s1 += ' l' + (tks4) + ',' + (tks3)
               s1 += ' l' + (-tkdx) + ',' + (tkdy)
