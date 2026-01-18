@@ -152,7 +152,7 @@ export default defineComponent({
     },
     // _______color of the track________________________________
     colorTrack: function (): string {
-      if (this.color.length > 2) return this.color
+      if (this.color !== '-') return this.color
       if (this.iTrack1State === 0) return this.geof.colorTrackOff
       if (this.iTrack1State === 1) return this.geof.colorTrackOn
       if (this.iTrack1State === 2) return this.geof.colorTrackUsed
