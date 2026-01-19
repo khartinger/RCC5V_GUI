@@ -55,33 +55,25 @@
     <RccTrack1 :x="7*dx"  :y="3*dy" sid="tk0" dir="57" :border="border"></RccTrack1>
 
     <!--Reihe 4 + 5-->
-    <RccTrack1 :x="0*dx" :y="5*dy"  sid="tk0" dir="58" :border="border"></RccTrack1>
-    <text class="ciFont1" :x="0.55*dx" :y="5.45*dy">label="1"</text>
-    <RccTrack1 :x="1*dx" :y="6*dy" sid="tk1" dir="14" :border="border" label="1"></RccTrack1>
-    <text class="ciFont1" :x="1.55*dx" :y="5.45*dy">label="3"</text>
-    <RccTrack1 :x="2*dx" :y="6*dy" sid="tk1" dir="15" :border="border" label="3"></RccTrack1>
-    <text class="ciFont1" :x="2.55*dx" :y="5.45*dy">label="2"</text>
-    <RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25" :border="border" label="2"></RccTrack1>
-    <RccTrack1 :x="4*dx" :y="5*dy"  sid="tk0" dir="16"  label="1" header="TOP" :border="border"></RccTrack1>
-    <RccTrack1 :x="5*dx" :y="5*dy"  sid="tk0" dir="25" footer="BOTTOM" :border="border"></RccTrack1>
-    <RccTrack1 :x="6*dx" :y="5*dy"  sid="tk0" dir="14" footer="RIGHT" footeralign="R" :border="1"></RccTrack1>
-    <RccTrack1 :x="7*dx" :y="5*dy"  sid="tk0" dir="15" header="TOP CENTER" headeralign="C" :border="1"></RccTrack1>
-    <!--Reihe 6 + 7-->
-    <RccTrack1 :x="0*dx" :y="8*dy" sid="tk0" dir="52" :border="0"></RccTrack1>
-    <RccTrack1 :x="1*dx" :y="7*dy" sid="tk1" dir="16" :border="0" label="1"></RccTrack1>
-    <RccTrack1 :x="2*dx" :y="7*dy" sid="tk1" dir="15" :border="0" label="3"></RccTrack1>
-    <RccTrack1 :x="3*dx" :y="7*dy" sid="tk1" dir="58" :border="0" label="1"></RccTrack1>
-    <RccTrack1 :x="4*dx" :y="8*dy" sid="tk0" dir="14" :border="0"></RccTrack1>
-    <RccTrack1 :x="5*dx" :y="8*dy" sid="tk0" dir="15" footer="STRIGHT..." :border="0"></RccTrack1>
+    <RccTrack1 :x="0*dx" :y="5*dy" sid="tk0" dir="15"></RccTrack1>
+    <RccTrack1 :x="1*dx" :y="5*dy" sid="tk0" dir="58" :border="0"></RccTrack1>
+    <RccTrack1 :x="2*dx" :y="6*dy" sid="tk1" dir="14" label="3" :border="border"></RccTrack1>
+    <RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25" footer="DCC 41" footeralign="C" :border="border"></RccTrack1>
+    <RccTrack1 :x="4*dx" :y="5*dy" sid="tk1" dir="26" header="[ON]" headeralign="L" footer="[OFF]" footeralign="R" :border="border"></RccTrack1>
+    <RccTrack1 :x="5*dx" :y="4*dy" sid="tk0" dir="68" :border="3"></RccTrack1>
+    <RccTrack1 :x="6*dx" :y="5*dy" sid="tk0" dir="48" :border="border"></RccTrack1>
+    <RccTrackIso1 :x="4.5*dx" :y="4.5*dy" sid="iso0" dir="2"></RccTrackIso1>
+    <RccTrackCon1 :x="1.5*dx" :y="5.5*dy" sid="con0" dir="4"></RccTrackCon1>
+    <RccTrackCon1 :x="5.5*dx" :y="4.5*dy" sid="con0" dir="4"></RccTrackCon1>
+    <RccTrackCon1 :x="3.5*dx" :y="5.5*dy" sid="con0" dir="2" :color="geof.colorTrackOff"></RccTrackCon1>
 
-    <!-- draw insulated rail joints (track isolation points) -->
-    <RccTrackIso1 :x="2.5*dx" :y="6*dy" sid="iso1" dir="1"></RccTrackIso1>
-    <RccTrackIso1 :x="0.5*dx" :y="7.5*dy" sid="iso1" dir="2"></RccTrackIso1>
-    <RccTrackIso1 :x="3.5*dx" :y="7.5*dy" sid="iso1" dir="8"></RccTrackIso1>
-
-    <!-- draw diagonal track connections -->
-    <RccTrackCon1 :x="3.5*dx" :y="5.5*dy" sid="con1" dir="2"></RccTrackCon1>
-    <RccTrackCon1 :x="0.5*dx" :y="5.5*dy" sid="con1" dir="8"></RccTrackCon1>
+    <text class="ciFont1" :x="1.4*dx" :y="3.9*dy">dir= "4"|"1"|"2"</text>
+   
+    <RccTrack1 :x="2.5*dx" :y="4.7*dy" sid="tk0" dir="24" footer="4  1  2" footeralign="C" color="#BBBBBB"></RccTrack1>
+    <RccTrackIso1 :x="2.5*dx" :y="4.7*dy" sid="iso0" dir="1"></RccTrackIso1>
+    <RccTrackIso1 :x="3.0*dx" :y="4.2*dy" sid="iso0" dir="2"></RccTrackIso1>
+    <RccTrackIso1 :x="2.0*dx" :y="4.2*dy" sid="iso0" dir="4"></RccTrackIso1>
+    <RccTrackIso1 :x="1.5*dx" :y="4.7*dy" sid="iso0" dir="1" :color="geof.colorRoute"></RccTrackIso1>
   </svg>
 </template>
 
