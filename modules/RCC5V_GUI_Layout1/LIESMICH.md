@@ -10,7 +10,9 @@ Um eine Vorstellung zu bekommen, worum es geht, zeigt das folgende Bild die graf
 ![GUI_Layout1](./images/600_GUI_layout1.png "GUI_Layout1")   
 _Bild 1: GUI_Layout1_   
 
-Diese VUE-Anwendung beschreibt daher   
+Mit Hilfe dieser Oberfläche ist es möglich, einzelne Weichen und Gleise zu schalten oder ganze Fahrstraßen einzurichten.   
+
+Wie diese VUE-Anwendung erstellt wird in folgenden Kapiteln beschrieben.   
 1. [die erforderliche Hardware](#x20)   
 2. [Vu3-Tipps](#x30)   
 3. [das grafische Zusammenfügen
@@ -66,7 +68,7 @@ Zum Programmieren von `GUI_layout1` wird ein PC  oder Laptop mit folgender Softw
 2. Browser   
 3. Windows Eingabe-Fenster (cmd)   
 4. Putty (Client für den Fernzugriff mit SSH oder Telnet)   
-5. WinSCP oder ein anderer FTP/SFTP-Client   
+5. WinSCP oder ein anderes FTP/SFTP-Client-Programm   
 
 Im Eingabe-Fenster kann man die gesendeten MQTT-Nachrichten mitverfolgen:   
 `mosquitto_sub -h 10.1.1.1 -t rcc/# -v`   
