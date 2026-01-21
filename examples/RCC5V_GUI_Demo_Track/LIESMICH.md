@@ -9,8 +9,7 @@ Letzte &Auml;nderung: 21.1.2026 <a name="up"></a><br>
 # 1. Einleitung
 Dieses Dokument beschreibt die Verwendung von Gleissymbolen zur Erzeugung eines Gleisstellbildes f&uuml;r RCC5V-GUI-Anwendungen.   
 _Bild 1_ zeigt verschiedene Symbole:   
-![Gleissymbole](./images/300_symbol_track1.png 
-"Gleissymbole")   
+![Gleissymbole](./images/300_symbol_track1.png "Gleissymbole")   
 _Bild 1: Gleissymbole_   
 
 ## Inhaltsverzeichnis
@@ -26,20 +25,19 @@ _Bild 1: Gleissymbole_
 
 # 2. Erforderliche Hardware und Software
 Jedes Gleissymbol besitzt die F&auml;higkeit, MQTT-Nachrichten zu senden und zu empfangen, um so den Fahrstrom ein- und auszuschalten. Um diese M&ouml;glichkeit zu testen, ist folgende __Hardware__ erforderlich:   
-* Ein Gleis, dessen Stromzuf&uuml;hrung mit einem RCC-Block ein- und ausgeschaltet werden kann.   
+* Ein Gleis, dessen Stromzuf&uuml;hrung &uuml;ber einen RCC-Mikrocontroller mit einem RCC-Block ein- und ausgeschaltet werden kann.   
   _Empfehlung_: Verwendung des abschaltbaren Gleises des RCC-Blocktesters mit der DCC-Adresse 41.   
   Der Blocktester wird auf [https://github.com/khartinger/RCC5V/tree/main/examples/blocktester](https://github.com/khartinger/RCC5V/tree/main/examples/blocktester)   
   beschrieben.   
 * Ein laufender MQTT-Server (zB `mosquitto`), der &uuml;ber die IP `10.1.1.1` erreichbar ist.   
 * Ein PC, Laptop oder Tablet, das mit dem MQTT-Server verbunden ist (zB &uuml;ber WLAN).   
 
-Weiters wird zum Testen aller M&ouml;glichkeiten dieses Projektes diese __Software__ ben&ouml;tigt:   
+Weiters wird zum Testen aller M&ouml;glichkeiten dieses Projektes folgende __Software__ ben&ouml;tigt:   
 1. Visual Studio Code   
 2. die Dateien aus diesem Verzeichnis (Projekt `RCC5V_GUI_Demo_Track`)   
 3. ein Browser   
 4. ein installierter MQTT-Client   
-  _Beispiel_: `mosquitto` mit 
-`mosquitto_sub` und `mosquitto_pub`   
+  _Beispiel_: `mosquitto` mit `mosquitto_sub` und `mosquitto_pub`   
 5. ein (oder zwei) Windows Eingabe-Fenster (cmd)   
 6. `WinSCP` oder ein anderes FTP/SFTP-Client-Programm   
 
@@ -54,8 +52,7 @@ Zum Anzeigen der Symbole in einem Browser-Fenster sind folgende Schritte erforde
 4. Browser starten und folgende Adresse eingeben:   
 `http://localhost:8080/#/`   
 
-Es werden die Gleissymbole angezeigt, 
-allerdings haben sie noch keine Funktionalit&auml;t, weil die Verbindung zum MQTT-Server fehlt.   
+Es werden die Gleissymbole angezeigt, allerdings haben sie noch keine Funktionalit&auml;t, weil die Verbindung zum MQTT-Server fehlt.   
 
 Damit die Gleissymbole funktionieren (d.h. MQTT Nachrichten senden und empfangen), sind weitere Schritte notwendig:   
 
@@ -65,13 +62,10 @@ Damit die Gleissymbole funktionieren (d.h. MQTT Nachrichten senden und empfangen
    (zB `Raspi11`, Passwort `12345678`)   
 7. Die Hardware RCC-Blocktester einschalten und kontrollieren, ob sie sich mit dem MQTT-Server verbunden hat.   
 
-Jetzt kann man im Browser kontrollieren, ob 
-sich einige Gleise rot (oder gr&uuml;n) gef&auml;rbt haben.
+Jetzt kann man im Browser kontrollieren, ob sich einige Gleise rot (oder gr&uuml;n) gef&auml;rbt haben.
 
-![Gleissymbole3](./images/480_symbol_track3.png 
-"Gleissymbole3")   
-_Bild 2: Gleissymbole und ihre Verwendung (hier 
-bereits mit Verbindung zur Hardware)_   
+![Gleissymbole3](./images/480_symbol_track3.png "Gleissymbole3")   
+_Bild 2: Gleissymbole und ihre Verwendung (hier bereits mit Verbindung zur Hardware)_   
 
 Ist auf dem PC/Laptop `mosquitto` installiert, so kann man in einem Terminal-Fenster (cmd) die MQTT-Daten&uuml;bertragung mitverfolgen. Dazu muss man zuerst ins mosquitto-Verzeichnis wechseln und den Subscriber starten:   
 `cd C:/programme/mosquitto`   
@@ -118,15 +112,13 @@ Gleissymbole werden in der Datei `MainView.vue` mit dem Tag `<RccTrack1 ...>` ge
 * `sid` (optional): ID des Symbols, mit dem Gleise gruppiert und &uuml;ber MQTT angesprochen werden.   
 * `con` (optional): Verbindung eines schr&auml;gen Gleis-Endes mit dem Nachbargleis.   
    M&ouml;gliche Werte: '2', '4', '6' oder '8', je nach Richtung. Die Ziffer muss in `dir` enthalten sein.   
-* `border` (optional): Gibt an, ob ein Rahmen um ein Gleissymbol gezeichnet werden soll. (M&ouml;gliche Werte 0 bis 3)   
-* `label` (optional): Gibt an, ob und welche Beschriftung eines Gleissymbols angezeigt werden soll. (M&ouml;gliche Werte: "0" bis "3")   
-* `color` (optional): Setzen einer Farbe f&uuml;r das Gleissymbol. (Keine Farbe "-")    
+* `border` (optional): Gibt an, ob ein Rahmen um ein Gleissymbol gezeichnet werden soll. (M&ouml;gliche Werte 0 bis 3, Default-Wert `'0'`)   
+* `label` (optional): Gibt an, ob und welche Beschriftung eines Gleissymbols angezeigt werden soll. (M&ouml;gliche Werte: "0" bis "3", Default-Wert `'0'`)   
+* `color` (optional): Setzen einer Farbe f&uuml;r das Gleissymbol. (Default-Wert: keine Farbe "-")    
 * `header` (optional): Text in der Kopfzeile   
-* `headeralign` (optional): Ausrichtung der Kopfzeile ("L" f&uuml;r links, "C" f&uuml;r Mitte, "R" f&uuml;r rechte Ausrichtung)   
+* `headeralign` (optional): Ausrichtung der Kopfzeile ("L" f&uuml;r links, "C" f&uuml;r Mitte, "R" f&uuml;r rechte Ausrichtung, Default-Wert: `'L'`)   
 * `footer` (optional): Text in der Fu&szlig;zeile   
-* `footeralign` (optional): Ausrichtung der Fu&szlig;zeile 
-("L" f&uuml;r links, "C" f&uuml;r Mitte, "R" f&uuml;r rechte 
-Ausrichtung)   
+* `footeralign` (optional): Ausrichtung der Fu&szlig;zeile ("L" f&uuml;r links, "C" f&uuml;r Mitte, "R" f&uuml;r rechte Ausrichtung, Default-Wert: `'L'`)   
 
 <a name="x52"></a>   
 
@@ -150,7 +142,7 @@ _Bild 3: Gleisrichtungen_
 15 ... gerades, waagrechtes Gleis   
 25 ... Gleis, das gerade (waagrecht) von links kommt (5) und nach rechts oben (2) abbiegt.   
 
-Im _Bild 1_ oben sind alle M&ouml;glichkeiten mit ihren Zahlenwerten dargestellt.
+Im _Bild 1_ (oben) sind alle M&ouml;glichkeiten mit ihren Zahlenwerten dargestellt.   
 
 <a name="x53"></a>   
 
@@ -196,7 +188,7 @@ const dy = computed(() => geof.dyo()) // y heighth of a symbol in pixel (60)
 ```
 Damit ergibt sich f&uuml;r die Positionierung ein Raster mit den Schrittweiten dx und dy. Die Position eines Symbols erfolgt somit &uuml;blicherweise folgenderma&szlig;en:   
 `:x="1*dx"  :y="0*dy"`   
-Der Punkt vor dem x bzw, y bedeutet, dass der Wert dynamisch (zu berechnen) ist.   
+Der Punkt vor dem x bzw. y bedeutet, dass der Wert dynamisch (zu berechnen) ist.   
 
 ### sid
 Die `sid` stellt die Verbindung zur Funktionalit&auml;t dar (definiert in der Datei `RccTrack1Controller.ts`). Hat ein Gleis keine Funktionalit&auml;t (d.h. der Fahrstrom kann nicht beeinflusst werden), so wird `sid="tk0"` gesetzt.
@@ -244,8 +236,7 @@ Folgende Parameter sind m&ouml;glich:
 * `y` (erforderlich): y-Koordinate des Zentrums des Symbols in Pixel   
 * `dir` (erforderlich): Richtung des Symbols (Werte "1", "2" oder "4". Siehe unten)   
 * `sid` (optional): ID des Symbols. Diese hat keine besondere Bedeutung.   
-* `color` (optional): Setzen einer Farbe f&uuml;r das 
-Gleissymbol (Keine Farbe "-")    
+* `color` (optional): Setzen einer Farbe f&uuml;r das Gleissymbol (Keine Farbe "-")    
 
 F&uuml;r die Richtung des Symbols (`dir`) gibt es drei M&ouml;glichkeiten, wie das folgende Bild zeigt:   
 
@@ -269,16 +260,11 @@ Soll das Verbindungselement seine Farbe __gemeinsam__ mit dem Gleis mit &auml;nd
 
 
 F&uuml;r die Parameter gilt das gleiche wie f&uuml;r `RccTrack1Iso`:   
-* `x` (erforderlich): x-Koordinate des Zentrums des 
-Symbols in Pixel   
-* `y` (erforderlich): y-Koordinate des Zentrums des 
-Symbols in Pixel   
-* `dir` (erforderlich): Richtung des Symbols (Werte 
-"2" oder "4").   
-* `sid` (optional): ID des Symbols. Diese hat keine 
-besondere Bedeutung.   
-* `color` (optional): Setzen einer Farbe f&uuml;r das 
-Gleissymbol (Keine Farbe "-").   
+* `x` (erforderlich): x-Koordinate des Zentrums des Symbols in Pixel   
+* `y` (erforderlich): y-Koordinate des Zentrums des Symbols in Pixel   
+* `dir` (erforderlich): Richtung des Symbols (Werte "2" oder "4").   
+* `sid` (optional): ID des Symbols. Diese hat keine besondere Bedeutung.   
+* `color` (optional): Setzen einer Farbe f&uuml;r das Gleissymbol (Keine Farbe "-").   
 
 ### Beispiele
 1. Verbindungselement an der Position 1,5/5,5 in Richtung rechts unten (4) mit der Farbe `geof.colorTrackOff`.   
