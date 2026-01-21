@@ -44,7 +44,7 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    type: {
+    dir: {
       type: String,
       required: true,
     },
@@ -127,15 +127,15 @@ export default defineComponent({
       return ret
     },
     // _______type as string #C_________________________________
-    sType: function(): string {
+    sDir: function(): string {
       // -----Break down direction "dir" into int and char-------
-      if(this.type.length !== 2) return ''
-      let sType_ = String(this.type.toUpperCase())
-      if (!['L', 'R'].includes(sType_[1])) {
-        if (!['L', 'R'].includes(sType_[0])) return ''
-        sType_ = String(sType_[0] + sType_[1])
+      if(this.dir.length !== 2) return ''
+      let sDir_ = String(this.dir.toUpperCase())
+      if (!['L', 'R'].includes(sDir_[1])) {
+        if (!['L', 'R'].includes(sDir_[0])) return ''
+        sDir_ = String(sDir_[0] + sDir_[1])
       }
-      return sType_
+      return sDir_
     },
     // _______draw the active path of the turnout_______________
     drawTurnout1: function(): string {
@@ -149,13 +149,12 @@ export default defineComponent({
     },
     // _______color 1 of the track (active path)________________
     colorTurnout1: function (): string {
-      if (this.color !== '-') return this.color
+      if (this.color.length > 1) return this.color
       if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutClear
     },
     // _______color 2 of the track (inactive path)______________
     colorTurnout2: function (): string {
-      // if (this.color !== '-') return this.color
       if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
       return this.geof.colorTurnoutBlocked
     },
@@ -185,8 +184,8 @@ export default defineComponent({
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ''
-      if (this.sType === '1R' || this.sType === '1L' ||
-          this.sType === '5R' || this.sType === '5L') 
+      if (this.sDir === '1R' || this.sDir === '1L' ||
+          this.sDir === '5R' || this.sDir === '5L') 
       { // --------rectangle as top click area------------------
         s1 += ' M' + this.x + ',' + this.y
         s1 += ' m' + (-dxo2) + ',' + (-dyo2)
@@ -197,7 +196,7 @@ export default defineComponent({
       } 
       else // -----triangle as top click area-------------------
       {
-        if (this.sType === '2R' || this.sType === '6R') {
+        if (this.sDir === '2R' || this.sDir === '6R') {
           // ......top left triangle............................
           s1 += ' M' + this.x + ',' + this.y
           s1 += ' m' + (dxo2) + ',' + (-dyo2)
@@ -222,8 +221,8 @@ export default defineComponent({
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ''
-      if (this.sType === '1R' || this.sType === '1L' ||
-          this.sType === '5R' || this.sType === '5L') 
+      if (this.sDir === '1R' || this.sDir === '1L' ||
+          this.sDir === '5R' || this.sDir === '5L') 
       { // --------rectangle as bottom click area---------------
         s1 += ' M' + this.x + ',' + this.y
         s1 += ' m' + (-dxo2) + ',' + (dyo2)
@@ -234,7 +233,7 @@ export default defineComponent({
       } 
       else // -----triangle as bottom click area----------------
       {
-        if (this.sType === '2R' || this.sType === '6R') {
+        if (this.sDir === '2R' || this.sDir === '6R') {
           // ......bottom right triangle.........................
           s1 += ' M' + this.x + ',' + this.y
           s1 += ' m' + (-dxo2) + ',' + (dyo2)
@@ -256,7 +255,7 @@ export default defineComponent({
   methods: {
         // _______draw a path of the turnout________________________
     pathTurnout: function (curve_: boolean): string {
-      const type_ = this.sType
+      const type_ = this.sDir
       // -----draw path-----------------------------------------
       if (type_ === '1L') {
         if (curve_) return this.pathTrack(25) // curve
@@ -507,7 +506,7 @@ export default defineComponent({
         }
         // payload = rccTurnout1Controller.payloadTurnoutCurved
         payload = curved1
-        if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
+        if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
           // payload = rccTurnout1Controller.payloadTurnoutStright
           payload = stright1
         }
@@ -535,7 +534,7 @@ export default defineComponent({
         }
         // payload = rccTurnout1Controller.payloadTurnoutStright
         payload = stright1
-        if(this.type === '1R' || this.type === '2R' || this.type === '4L' || this.type === '5L') {
+        if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
           // payload = rccTurnout1Controller.payloadTurnoutCurved
           payload = curved1
         }
