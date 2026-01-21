@@ -265,7 +265,7 @@ Isoliersymbol an der Stelle 4,5/4,5 in Richtung links oben.
 ## 6.2 Schr&auml;ge Verbindungselemente
 Schr&auml;ge Gleissymbole enden in der Ecke an den waagrechten und senkrechten Symbolgrenzen. Bei der Aneinanderreihung kommt es an den Ecken zu Fehlstellen, die durch Elemente des Typs `RccTrackCon1` ausgeglichen werden k&ouml;nnen.   
 Es gibt zwei Arten f&uuml;r die beiden schr&auml;gen Richtungen "2" und "4".   
-Soll das Verbindungselement seine Farbe __gemeinsam__ mit dem Gleis mit ändern, so muss man die Option "`con`" des `RccTrack1`-Tags verwenden!   
+Soll das Verbindungselement seine Farbe __gemeinsam__ mit dem Gleis mit &auml;ndern, so muss man die Option "`con`" des `RccTrack1`-Tags verwenden!   
 
 
 F&uuml;r die Parameter gilt das gleiche wie f&uuml;r `RccTrack1Iso`:   
