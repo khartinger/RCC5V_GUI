@@ -1,5 +1,5 @@
 // ______RccTrack1Controller.ts___________________khartinger_____
-// 2026-01-08: new
+// 2026-01-21: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
@@ -8,8 +8,6 @@ const WAIT_BETWEEN_MQTT_MSG_MS = 100
 export interface Track1 extends IBase {
   iTrack1State: number;
   sDCC: string,
-  textCenter?: string;
-  textFooter?: string;
   payloadInvert: boolean;
 }
 

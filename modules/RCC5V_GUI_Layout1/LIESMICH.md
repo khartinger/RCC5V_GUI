@@ -1,5 +1,5 @@
 <table><tr><td><img src="../images/RCC5V_Logo_96.png"></img></td><td>
-Letzte &Auml;nderung: 18.1.2026 <a name="up"></a><br>   
+Letzte &Auml;nderung: 121.1.2026 <a name="up"></a><br>   
 <h1>RCC5V_GUI_Layout1: GUI zum Steuern mehrerer RCC5V-Modelleisenbahnmodule</h1>
 <a href="README.md">==> English version</a>&nbsp; &nbsp; &nbsp; 
 </td></tr></table>   

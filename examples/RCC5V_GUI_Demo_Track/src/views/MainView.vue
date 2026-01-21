@@ -58,17 +58,15 @@
     <RccTrack1 :x="0*dx" :y="5*dy" sid="tk0" dir="15"></RccTrack1>
     <RccTrack1 :x="1*dx" :y="5*dy" sid="tk0" dir="58" :border="0"></RccTrack1>
     <RccTrack1 :x="2*dx" :y="6*dy" sid="tk1" dir="14" label="3" :border="border"></RccTrack1>
-    <RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25" footer="DCC 41" footeralign="C" :border="border"></RccTrack1>
+    <RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25" con="2" footer="DCC 41" footeralign="C" :border="border"></RccTrack1>
     <RccTrack1 :x="4*dx" :y="5*dy" sid="tk1" dir="26" header="[ON]" headeralign="L" footer="[OFF]" footeralign="R" :border="border"></RccTrack1>
     <RccTrack1 :x="5*dx" :y="4*dy" sid="tk0" dir="68" :border="3"></RccTrack1>
     <RccTrack1 :x="6*dx" :y="5*dy" sid="tk0" dir="48" :border="border"></RccTrack1>
     <RccTrackIso1 :x="4.5*dx" :y="4.5*dy" sid="iso0" dir="2"></RccTrackIso1>
-    <RccTrackCon1 :x="1.5*dx" :y="5.5*dy" sid="con0" dir="4"></RccTrackCon1>
+    <RccTrackCon1 :x="1.5*dx" :y="5.5*dy" sid="con0" dir="4" :color="geof.colorTrackOff"></RccTrackCon1>
     <RccTrackCon1 :x="5.5*dx" :y="4.5*dy" sid="con0" dir="4"></RccTrackCon1>
-    <RccTrackCon1 :x="3.5*dx" :y="5.5*dy" sid="con0" dir="2" :color="geof.colorTrackOff"></RccTrackCon1>
-
     <text class="ciFont1" :x="1.4*dx" :y="3.9*dy">dir= "4"|"1"|"2"</text>
-   
+
     <RccTrack1 :x="2.5*dx" :y="4.7*dy" sid="tk0" dir="24" footer="4  1  2" footeralign="C" color="#BBBBBB"></RccTrack1>
     <RccTrackIso1 :x="2.5*dx" :y="4.7*dy" sid="iso0" dir="1"></RccTrackIso1>
     <RccTrackIso1 :x="3.0*dx" :y="4.2*dy" sid="iso0" dir="2"></RccTrackIso1>

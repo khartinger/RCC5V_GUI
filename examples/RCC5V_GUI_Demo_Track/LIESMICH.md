@@ -116,6 +116,8 @@ Gleissymbole werden in der Datei `MainView.vue` mit dem Tag `<RccTrack ...>` gez
 * `y` (erforderlich): y-Koordinate des Zentrums des Symbols in Pixel   
 * `dir` (erforderlich): Richtung des Gleissymbols (siehe [Kapitel 5.2](#x52))   
 * `sid` (optional): ID des Symbols, mit dem Gleise gruppiert und &uuml;ber MQTT angesprochen werden.   
+* `con` (optional): Verbindung eines schrägen Gleis-Endes mit dem Nachbargleis.   
+   Mögliche Werte: '2', '4', '6' oder '8', je nach Richtung. Die Ziffer muss in `dir` enthalten sein.   
 * `border` (optional): Gibt an, ob ein Rahmen um ein Gleissymbol gezeichnet werden soll. (M&ouml;gliche Werte 0 bis 3)   
 * `label` (optional): Gibt an, ob und welche Beschriftung eines Gleissymbols angezeigt werden soll. (M&ouml;gliche Werte: "0" bis "3")   
 * `color` (optional): Setzen einer Farbe f&uuml;r das Gleissymbol (Keine Farbe "-")    
@@ -149,7 +151,7 @@ Im _Bild 1_ sind alle M&ouml;glichkeiten mit ihren Zahlenwerten dargestellt.
 <a name="x53"></a>   
 
 ## 5.3 MQTT-Funktionalit&auml;t
-W&auml;hrend die Anzeige eines Gleissymbols in der Datei `RccTrack1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTrack1Controller` bestimmt.   
+W&auml;hrend die Darstellung eines Gleissymbols in der Datei `RccTrack1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTrack1Controller` bestimmt.   
 Die Eigenschaften einzelner Gleise werden im Array `tracks1` gespeichert. Ein Eintrag ist zB folgenderma&szlig;en aufgebaut:   
 ```
       {
@@ -214,9 +216,8 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 `<RccTrack1 :x="2*dx" :y="6*dy" sid="tk1" dir="14"
 label="3" :border="border"></RccTrack1>`   
 
-4. An der Rasterposition 3/6: Gleis von links nach rechts oben mit Funktion "tk1" und Standardrahmen. Beschriftung: Unten Mitte "DCC 41"   
-`<RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25"
-footer="DCC 41" footeralign="C" :border="border"></RccTrack1>`   
+4. An der Rasterposition 3/6: Gleis von links nach rechts oben mit Funktion "tk1" und Standardrahmen. Beschriftung: Unten Mitte "DCC 41", das Gleis-Ende rechts oben soll mitgezeichnet werden.   
+`<RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25" con="2" footer="DCC 41" footeralign="C" :border="border"></RccTrack1>`   
 
 5. An der Rasterposition 4/5: Gleis von links unten nach rechts oben mit Funktion "tk1" und Standardrahmen. Beschriftung: Unten Rechts "[OFF]", Oben Links "[ON]"   
 `<RccTrack1 :x="4*dx" :y="5*dy" sid="tk1" dir="26" header="[ON]" headeralign="L" footer="[OFF]" footeralign="R" :border="border"></RccTrack1>`   
@@ -280,14 +281,11 @@ besondere Bedeutung.
 Gleissymbol (Keine Farbe "-").   
 
 ### Beispiele
-1. Verbindungselement an der Position 1,5/5,5 in Richtung rechts unten (4).   
-` <RccTrackCon1 :x="1.5*dx" :y="5.5*dy" sid="con0" dir="4"></RccTrackCon1>`   
+1. Verbindungselement an der Position 1,5/5,5 in Richtung rechts unten (4) mit der Farbe `geof.colorTrackOff`.   
+` <RccTrackCon1 :x="1.5*dx" :y="5.5*dy" sid="con0" dir="4" :color="geof.colorTrackOff"></RccTrackCon1>`   
+Hier ist die Farbe des Verbindungselements fest vorgegeben (rot). &Auml;ndert sich der Fahrstrom-Zustand des Gleises auf "ein", werden die Gleise gr&uuml;n gef&auml;rbt, aber das Verbindungselement bleibt rot.   
 
 2. Verbindungselement an der Position 5,5/4,5 in Richtung rechts unten (4).   
 ` <RccTrackCon1 :x="5.5*dx" :y="4.5*dy" sid="con0" dir="4"></RccTrackCon1>`   
-
-3. Verbindungselement an der Position 3,5/5,5 in Richtung links oben (2) mit der Farbe `geof.colorTrackOff`.   
-`<RccTrackCon1 :x="3.5*dx" :y="5.5*dy" sid="con0" dir="2" :color="geof.colorTrackOff"></RccTrackCon1>`   
-Hier ist die Farbe des Verbindungselements fest vorgegeben (rot). &Auml;ndert sich der Fahrstrom-Zustand des Gleises auf "ein", werden die Gleise gr&uuml;n gef&auml;rbt, aber das Verbindungselement bleibt rot.   
 
 [Zum Seitenanfang](#up)

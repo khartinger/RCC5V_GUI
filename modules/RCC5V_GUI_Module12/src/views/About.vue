@@ -1,5 +1,5 @@
 <!-- ----About.vue---------------------------khartinger----- -->
-<!-- 2026-01-08: New                                         -->
+<!-- 2026-01-21: New                                         -->
 <template>
   <div class="about">
     <h2>RCC5V_GUI_Module12</h2>

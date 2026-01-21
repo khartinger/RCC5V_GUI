@@ -1,5 +1,5 @@
 // ______RccUncoupler1Controller.ts______________khartinger_____
-// 2026-01-08: new
+// 2026-01-21: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
@@ -7,8 +7,6 @@ import { CiBaseController, IBase } from './CiBaseController'
 export interface Uncoupler1 extends IBase {
   iUncoupler1State: number;
   sDCC: string,
-  textCenter?: string;
-  textFooter?: string;
 }
 
 export class RccUncoupler1Controller extends CiBaseController {

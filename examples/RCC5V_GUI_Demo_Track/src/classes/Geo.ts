@@ -86,7 +86,7 @@ export class Geo {
   public colorUncouplerOn = '#90ee90' //  light green
   public colorUncouplerOff = '#808080' // grey
   public colorRoute = '#88BBFF' //        light blue
-  public colorNone ='-'
+  public colorNone = '-'
   public noDate = '--.--.----'
   public noTime = '--:--:--'
   public batteryMin = 15

@@ -1,5 +1,5 @@
 <!-- ----About.vue---------------------------khartinger----- -->
-<!-- 2026-01-08: New                                         -->
+<!-- 2026-01-21: New                                         -->
 <template>
   <div class="about">
     <h2>RCC5V_GUI_Blocktester1</h2>
@@ -19,11 +19,11 @@
     <i>Bild 3: Draufsicht auf den Blocktester</i><br>   
 
     <h3>Updates</h3>
-    2026-01-08 New<br/>
+    2026-01-21 New<br/>
     </div>
   <div class="about">
     <hr>
     Autor: DI Karl Hartinger<br>
-    Version: 2026-01-08<br>
+    Version: 2026-01-21<br>
   </div>
 </template>

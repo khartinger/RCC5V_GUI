@@ -1,5 +1,5 @@
 // ______RccTurnout3Way1Controller.ts____________khartinger_____
-// 2026-01-08: new
+// 2026-01-21: new
 import { reactive } from 'vue'
 import { Message } from '@/services/CiMqttClient'
 import { CiBaseController, IBase } from './CiBaseController'
@@ -10,8 +10,6 @@ export interface To3way1 extends IBase {
   sDCCL: string,
   sDCCR: string,
   pubTopicR: string,
-  textCenter?: string;
-  textFooter?: string;
 }
 
 export class RccTurnout3Way1Controller extends CiBaseController {

@@ -1,4 +1,4 @@
-// ___________router/index.ts____________________2026-01-19_____
+// ___________router/index.ts____________________2026-01-21_____
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import MainView from '../views/MainView.vue'
 // import About from '../views/About.vue'
