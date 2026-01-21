@@ -10,15 +10,19 @@
   <!--write text-------------------------------------------- -->
   <text v-if="(drawLabel & 1) > 0 && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
   <text v-if="(drawLabel &16) > 0 && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
+
   <!--draw track1------------------------------------------- -->
   <path :d="drawTrack1" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
+
+  <RccTrackCon1 v-if="conB" :x="conX" :y="conY" sid="con0" :dir="con" :color="colorTrack"></RccTrackCon1>
+
   <!--define click area------------------------------------- -->
-  <!--
-  <path :d="pathTop" @click="onClkTop()" class="ciClick" />
-  <path :d="pathBottom" @click="onClkBottom()" class="ciClick" />
+  <path :d="pathTop" @click="onClkTop()" class="ciClick"/>
+  <path :d="pathBottom" @click="onClkBottom()" class="ciClick"/>
+<!--
+  <rect @click="onClkTop()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
+  <rect @click="onClkBottom()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
   -->
-  <rect @click="onClkOn()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
-  <rect @click="onClkOff()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
 </g>
 </template>
 
@@ -28,10 +32,13 @@ import { Track1, rccTrack1Controller } from '../controller/RccTrack1Controller'
 import CiBase from './CiBase.vue'
 import { Geof } from '../classes/Geo'
 
+import RccTrackCon1 from './RccTrackCon1.vue'
+
 export default defineComponent({
   name: 'RccTrack1',
   components: {
     CiBase,
+    RccTrackCon1,
   },
   data () {
     return {
@@ -66,6 +73,11 @@ export default defineComponent({
       default: '0',
     },
     color: {
+      type: String,
+      required: false,
+      default: '-',
+    },
+    con: {
       type: String,
       required: false,
       default: '-',
@@ -129,8 +141,8 @@ export default defineComponent({
       // console.log('drawXAxis: xAxis=', this.xAxis + ' ret=' + String(ret))
       return ret
     },
-    // _______draw the full path of the track (attribute dir)___
-    drawTrack1: function (): string {
+    // _______convert dir string to number______________________
+    dirNum: function (): number {
       // -----Break down direction "dir" into digits-------------
       const aDigits = this.dir.split('').reverse()
       let z1_ = 0
@@ -144,15 +156,20 @@ export default defineComponent({
       if (z1_ === z2_) z1_ = 0
       const temp_ = z2_
       if (z1_ > z2_) { z2_ = z1_; z1_ = temp_ }
+      return z1_ * 10 + z2_
+    },
+    // _______draw the full path of the track (attribute dir)___
+    drawTrack1: function (): string {
+      const pathNr = this.dirNum
+      if (pathNr === 0) return '' // nothing to draw
       // -----draw path-----------------------------------------
-      if (z1_ === 0 && z2_ === 0) return '' // nothing to draw
-      const s1 = this.trackPath(z1_ * 10 + z2_)
+      const s1 = this.trackPath(pathNr)
       // console.log('drawTrack1: s1=', s1)
       return s1
     },
     // _______color of the track________________________________
     colorTrack: function (): string {
-      if (this.color !== '-') return this.color
+      if (this.color.length > 2) return this.color
       if (this.iTrack1State === 0) return this.geof.colorTrackOff
       if (this.iTrack1State === 1) return this.geof.colorTrackOn
       if (this.iTrack1State === 2) return this.geof.colorTrackUsed
@@ -177,6 +194,162 @@ export default defineComponent({
         return this.footer
       }
       return this.geof.center(this.geof.textTrackOff)
+    },
+    // =======connector specific functions======================
+    // _______draw a connector?_________________________________
+    conB: function (): boolean {
+      if (this.con.length > 0) {
+        if (this.dir.includes(this.con)) return true
+      }
+      return false
+    },
+    // _______x-position of connector___________________________
+    conX: function (): number {
+      if (this.con === '2' || this.con === '8') return this.x + this.geof.dxo2()
+      if (this.con === '4' || this.con === '6') return this.x - this.geof.dxo2()
+      return this.x
+    },
+    // _______y-position of connector___________________________
+    conY: function (): number {
+      if (this.con === '2' || this.con === '4') return this.y - this.geof.dyo2()
+      if (this.con === '6' || this.con === '8') return this.y + this.geof.dyo2()
+      return this.y
+    },
+    // _______path of top click area____________________________
+    pathTop: function (): string {
+      const dxo = this.geof.dxo()
+      const dyo = this.geof.dyo()
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      let s1 = ' M' + this.x + ',' + this.y
+      switch (this.dirNum) {
+        case 4: case 14: case 46:
+          s1 += ' h' + dxo2
+          s1 += ' v' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' z'
+          break
+        case 6: case 16:
+          s1 += ' h' + dxo2
+          s1 += ' v' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo)
+          s1 += ' z'
+          break
+        case 24:
+          s1 += ' l' + dxo2 + ',' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' z'
+          break
+        case 26:
+          s1 += ' l' + dxo2 + ',' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo)
+          s1 += ' z'
+          break
+        case 2: case 25: case 28:
+          s1 += ' l' + dxo2 + ',' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo2)
+          s1 += ' z'
+          break
+        case 8: case 58:
+          s1 += ' l' + dxo2 + ',' + (dyo2)
+          s1 += ' v' + (-dyo)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo2)
+          s1 += ' z'
+          break
+        case 48:
+          s1 += ' l' + dxo2 + ',' + dyo2
+          s1 += ' v' + (-dyo)
+          s1 += ' h' + (-dxo)
+          s1 += ' z'
+          break
+        case 68:
+          s1 += ' l' + dxo2 + ',' + dyo2
+          s1 += ' v' + (-dyo)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo)
+          s1 += ' z'
+          break
+        default:
+          s1 += ' h' + dxo2
+          s1 += ' v' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo2)
+          s1 += ' z'
+          break
+      }
+      return s1
+    },
+    // _______path of bottom click area_________________________
+    pathBottom: function (): string {
+      const dxo = this.geof.dxo()
+      const dyo = this.geof.dyo()
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      let s1 = ' M' + this.x + ',' + this.y
+      switch (this.dirNum) {
+        case 4: case 14: case 46:
+          s1 += ' h' + dxo2
+          s1 += ' v' + (dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (-dyo)
+          s1 += ' z'
+          break
+        case 6: case 16:
+          s1 += ' h' + dxo2
+          s1 += ' v' + (dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' z'
+          break
+        case 24:
+          s1 += ' l' + dxo2 + ',' + (-dyo2)
+          s1 += ' v' + (dyo)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (-dyo)
+          s1 += ' z'
+          break
+        case 26:
+          s1 += ' l' + dxo2 + ',' + (-dyo2)
+          s1 += ' v' + (dyo)
+          s1 += ' h' + (-dxo)
+          s1 += ' z'
+          break
+        case 2: case 25: case 28:
+          s1 += ' l' + dxo2 + ',' + (-dyo2)
+          s1 += ' v' + (dyo)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (-dyo2)
+          s1 += ' z'
+          break
+        case 8: case 58:
+          s1 += ' l' + dxo2 + ',' + (dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (-dyo2)
+          s1 += ' z'
+          break
+        case 48:
+          s1 += ' l' + dxo2 + ',' + dyo2
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (-dyo)
+          s1 += ' z'
+          break
+        case 68:
+          s1 += ' l' + dxo2 + ',' + dyo2
+          s1 += ' h' + (-dxo)
+          s1 += ' z'
+          break
+        default:
+          s1 += ' h' + dxo2
+          s1 += ' v' + (dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (-dyo2)
+          s1 += ' z'
+          break
+      }
+      return s1
     },
   },
   methods: {
@@ -523,7 +696,7 @@ export default defineComponent({
       return s1
     },
     // _______on click: turn track energy on____________________
-    onClkOn: function (): void {
+    onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
       let payload = 'onClkOn: sid=' + this.sid
       // const topic = 'rcc/error'
@@ -543,7 +716,7 @@ export default defineComponent({
       }
     },
     // _______on click: turn track energy off___________________
-    onClkOff: function (): void {
+    onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Off')
       let payload = 'onClkOff: sid=' + this.sid
       // const topic = 'rcc/error'
