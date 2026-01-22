@@ -180,7 +180,7 @@ export default defineComponent({
     },
     // _______click area "top"__________________________________
     pathTop: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
@@ -194,7 +194,7 @@ export default defineComponent({
         s1 += ' v' + dyo
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5) 
       { //----------turnout to the left >- ---------------------
         s1 += ' h' + dxo2
         s1 += ' v' + (-dyo2)
@@ -206,7 +206,7 @@ export default defineComponent({
 
     // _______click area "middle" (stright)_____________________
     pathMid: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dyo = this.geof.dyo()
       const dxo2 = this.geof.dxo2()
@@ -218,7 +218,7 @@ export default defineComponent({
         s1 += ' v' + (-dyo)
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5) 
       { //----turnout to the left >- ------------------------
         s1 += ' l' + (-dxo2) + ',' + (-dyo2)
         s1 += ' v' + dyo
@@ -228,7 +228,7 @@ export default defineComponent({
     },
     // _______click area "bottom"_______________________________
     pathBottom: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
@@ -242,7 +242,7 @@ export default defineComponent({
         s1 += ' v' + (-dyo)
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5) 
       { //----------turnout to the left >- -----------------
         s1 += ' h' + dxo2
         s1 += ' v' + dyo2
@@ -262,12 +262,12 @@ export default defineComponent({
       let ret_=''
       let state_ = this.iTo3way1State // 1=right, 2=left, 3=stright
       if(state_ < 0) state_ = 1
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ret_
-      if(dir_!==1 && dir_!==4) return ret_
+      if(dir_ !== 1 && dir_ !== 5) return ret_
       // .....number of used path tracks........................
       let aTrack = Array(25, 15, 58, 25, 15)
-      if (dir_ === 4) aTrack = Array(16, 15, 14, 16, 15)
+      if (dir_ === 5) aTrack = Array(16, 15, 14, 16, 15)
       // =====select path track number to draw==================
       const i_ = Number(pathNr_ + state_ - 2)
       if (i_ < 0  || i_ > 4) return ret_
@@ -346,18 +346,20 @@ export default defineComponent({
       }
       return s1
     },
-    // _______on click: turn track energy on____________________
+    // _______on click: set turnout branch curve left/right_____
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click Top')
-      let payload = 'onClkTop: sid=' + this.sid
+      // -----prepare send topics-------------------------------
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.dir === '4') { // turnout 1 -< or 4 >-)
+        if(this.dir === '5') { // turnout 1 -< or 5 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
         }
-        payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---set payload to "curved"---------------------------
+        const payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
             rccTurnout3Way1Controller.publishRcc(topic, payload)
@@ -365,15 +367,15 @@ export default defineComponent({
         })
       }
     },
-    // _______on click: turn track energy on____________________
+    // _______on click: set turnout to stright__________________
     onClkMid: function (): void {
       console.log(this.sid, 'Button-Click Mid')
-      let payload = 'onClkMid: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.to3way1) rccTo3way1Controller.publishRcc(topic, payload)
+      // -----prepare send topics-------------------------------
       if (this.to3way1?.pubTopic) {
         const aPubTopic = this.to3way1.pubTopic.split(' ')
-        payload = rccTurnout3Way1Controller.payloadTurnoutStright
+        // ---set payload to "stright"--------------------------
+        const payload = rccTurnout3Way1Controller.payloadTurnoutStright
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
             rccTurnout3Way1Controller.publishRcc(topic, payload)
@@ -381,18 +383,20 @@ export default defineComponent({
         })
       }
     },
-    // _______on click: turn track energy off___________________
+    // _______on click: set turnout branch curve left/right_____
     onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Bottom')
-      let payload = 'onClkBottom: sid=' + this.sid
+      // -----prepare send topics-------------------------------
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.dir === '1') { // turnout 1 -< or 4 >-)
+        if(this.dir === '1') { // turnout 1 -< or 5 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
         }
-        payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---set payload to "curved"---------------------------
+        const payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
             rccTurnout3Way1Controller.publishRcc(topic, payload)

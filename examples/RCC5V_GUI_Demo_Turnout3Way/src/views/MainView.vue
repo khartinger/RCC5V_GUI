@@ -4,12 +4,12 @@
   <svg width="100%" :viewBox="viewbox">
     <rect class="ciBackground" :x="x1" :y="y1" :width="w1" :height="h1" />
     <text class="ciFont1" :x="-0.4*dx" :y="-0.55*dy">dir="1"</text>
-    <text class="ciFont1" :x="0.8*dx" :y="-0.55*dy">dir="4"</text>
+    <text class="ciFont1" :x="0.8*dx" :y="-0.55*dy">dir="5"</text>
     <RccTurnout3Way1 :x="0*dx"  :y="0*dy" sid="t3w1" dir="1" :border="border"></RccTurnout3Way1>
-    <RccTurnout3Way1 :x="1.2*dx"  :y="0*dy" sid="t3w1" dir="4" :border="border"></RccTurnout3Way1>
+    <RccTurnout3Way1 :x="1.2*dx"  :y="0*dy" sid="t3w1" dir="5" :border="border"></RccTurnout3Way1>
     <RccTurnout3Way1 :x="2.8*dx"  :y="0*dy" sid="t3w1" dir="1" footer="UNTEN" :border="border"></RccTurnout3Way1>
-    <RccTurnout3Way1 :x="4*dx"  :y="0*dy" sid="t3w1" dir="4" header="        OBEN" :border="border"></RccTurnout3Way1>
-    <RccTurnout3Way1 :x="5.2*dx"  :y="0*dy" sid="t3w1" dir="4" label="3" :border="3"></RccTurnout3Way1>
+    <RccTurnout3Way1 :x="4*dx"  :y="0*dy" sid="t3w1" dir="5" header="OBEN" headeralign="R" :border="border"></RccTurnout3Way1>
+    <RccTurnout3Way1 :x="5.2*dx"  :y="0*dy" sid="t3w1" dir="5" label="3" :border="3"></RccTurnout3Way1>
   </svg>
 </template>
 

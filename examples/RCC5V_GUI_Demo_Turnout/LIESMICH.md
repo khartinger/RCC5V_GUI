@@ -1,12 +1,12 @@
 <table><tr><td><img src="./images/RCC5V_Logo_96.png"></img></td><td>
-Letzte &Auml;nderung: 21.1.2026 <a name="up"></a><br>   
+Letzte &Auml;nderung: 22.1.2026 <a name="up"></a><br>   
 <h1>Weichensymbole  f&uuml;r RCC5V-GUIs</h1><h3>RCC5V_GUI_Demo_Turnout</h3>
 <a href="README.md">==> English version</a>&nbsp; &nbsp; &nbsp; 
 </td></tr></table>   
 
 # 1. Einleitung
 Dieses Dokument beschreibt die Verwendung von (Zweiweg-)Weichensymbolen zur Erzeugung eines Gleisstellbildes f&uuml;r RCC5V-GUI-Anwendungen.   
-_Bild 1_ zeigt verschiedene Weichensymbole mit ihrer Bezeichnung . Die Symbole habe keine Verbindung zu einer realen Weiche, daher ist keine Schaltstellung eingezeichnet.   
+_Bild 1_ zeigt verschiedene Weichensymbole mit ihrer Bezeichnung. Die Symbole haben (noch) keine Verbindung zu einer realen Weiche, daher ist keine Schaltstellung eingezeichnet.   
 ![Weichensymbole](./images/200_symbol_turnout.png "Weichensymbole")   
 _Bild 1: Weichensymbole_   
 
@@ -75,9 +75,9 @@ rcc/demo1/ret/21 {"21":"0 received"}
 rcc/demo1/ret/21 {"21":"-1"}
 rcc/demo1/ret/21 {"21":"0"}
 ```
-Die erste Zeile ist der Schaltbefehl vom Browser und die zweite Zeile zeigt, dass der RCC-Blocktester die Nachricht erhalten hat. Die 3. Zeile ergibt sich aus dem undefinierten Zwischenzustand w&auml;hrend des Schaltens der Weiche (Wert `-1`) und die vierte Zeile zeigt, dass der Schaltvorgang erfolgreich ausgef&uuml;hrt wurde (`0` steht im Normalfall f&uuml;r Abzweig).   
+Die erste Zeile ist der Schaltbefehl vom Browser und die zweite Zeile zeigt, dass der RCC-Blocktester die Nachricht erhalten hat. Die dritte Zeile ergibt sich aus dem undefinierten Zwischenzustand w&auml;hrend des Schaltens der Weiche (Wert `-1`) und die vierte Zeile zeigt, dass der Schaltvorgang erfolgreich ausgef&uuml;hrt wurde (`0` steht im Normalfall f&uuml;r Abzweig).   
 
-Klickt man auf die untere H&auml;lfte des Feldes, wird Die Weiche auf Gerade geschaltet.   
+Klickt man auf die untere H&auml;lfte des Feldes, wird die Weiche auf Gerade geschaltet.   
 
 [Zum Seitenanfang](#up)   
 <a name="x40"></a>   
@@ -147,8 +147,8 @@ Bedeutung der einzelnen Parameter:
 * `id`: die ID stellt die Verbindung zum Anzeigeelement dar und muss mit dem Parameter `sid` &uuml;bereinstimmen.   
 * `name`: Name der Weiche. Dieser wird derzeit nicht weiter verwendet.   
 * `iTurnout1State`: Status der Weiche. Ein Wert -1 bedeutet "unbestimmt", 0 bedeutet "Abzweig" und 1 bedeutet "Gerade". Der Wert wird zB f&uuml;r die Anzeigefarbe des Symbols verwendet.   
-* `sDCC`: DCC-Adresse des Gleises als String (zB '41').
-* `subTopic`: Topics, auf die das Weichensymbol "h&ouml;rt". Dadurch kann z.B. der Schaltzustand des Gleises mit der richtigen Farbe dargestellt werden.   
+* `sDCC`: DCC-Adresse der Weiche als String (zB '41').
+* `subTopic`: Topics, auf die das Weichensymbol "h&ouml;rt". Dadurch kann z.B. der Schaltzustand der Weiche mit der richtigen Farbe dargestellt werden.   
    _Beispiel_: `'rcc/demo1/ret/21 rcc/demo1/ret/status'`.   
   Mehrere Topics werden durch ein Leerzeichen getrennt.   
 * `pubTopic`: Topic unter dem das Weichensymbol MQTT-Nachrichten sendet.   
@@ -211,7 +211,9 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 ## 6.1 Klickbereiche f&uuml;r Weichensymbole
 Der Klickbereich f&uuml;r Weichensymbole ist entweder ein Rechteck (1L, 1R, 5L, 5R) oder ein Dreieck (2R, 6R bzw. 4L, 8L).   
 
-## 7.2 Senden der MQTT-Nachrichten
+<a name="x62"></a>   
+
+## 6.2 Senden der MQTT-Nachrichten
 Das Senden von Nachrichten passiert in der `Klasse RccTurnoutController`. Dort werden zwei Variablen `payloadTurnoutStright` und `payloadTurnoutCurved` definiert, die den "Normalzustand" abbilden.   
 ```
 export class RccTurnout1Controller extends RccBaseController {
@@ -219,7 +221,7 @@ export class RccTurnout1Controller extends RccBaseController {
   public payloadTurnoutCurved = '0'
 ```
 
-Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` und der Lage der Weiche angepasst und gesendet:   
+Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` und der Lage der Weiche angepasst und die Nachricht(en) gesendet:   
 ```
     // _______on click: send a message to turnout_______________
     onClkTop: function (): void {
@@ -260,11 +262,10 @@ Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTurnout1C
 
 F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBottom` gemacht.   
 
-
 <a name="x63"></a>   
 
 ## 6.3 Empfang von MQTT-Nachrichten
-Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTurnout1Controller.vue`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTurnoutState` gespeichert.   
+Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTurnout1Controller.vue` in der Funktion `onMessage`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTurnoutState` gespeichert.   
 ```
   // _________receive a mqtt message____________________________
   public onMessage (message: Message): void {
@@ -296,6 +297,5 @@ Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTurnout1Controller.vue
     })
   }
 ```
-
 
 [Zum Seitenanfang](#up)

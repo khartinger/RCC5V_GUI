@@ -305,7 +305,7 @@ export class RccTrack1Controller extends RccBaseController {
   public payloadTrackOff = '0'
 ```
 
-Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` angepasst und gesendet:   
+Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` angepasst und die Nachricht(en) gesendet:   
 ```
     // _______on click: turn track energy on____________________
     onClkTop: function (): void {
@@ -341,7 +341,7 @@ F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBot
 <a name="x73"></a>   
 
 ## 7.3 Empfang von MQTT-Nachrichten
-Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTrack1Controller.vue`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTrack1State` gespeichert.   
+Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTrack1Controller.vue` in der Funktion `onMessage`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTrack1State` gespeichert.   
 ```
   // _________receive messages__________________________________
   public onMessage (message: Message): void {
