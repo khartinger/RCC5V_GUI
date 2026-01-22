@@ -86,11 +86,11 @@ Klickt man auf die untere H&auml;lfte des Feldes, wird Die Weiche auf Gerade ges
   Das VSC-Projekt liegt im Ordner `RCC5V_GUI_Demo_Turnout`. In diesem Verzeichnis befinden sich Dateien mit Informationen zum Projekt sowie die Unterverzeichnisse `.dist`, `images`, `node_modules` und `src`.   
 Im Verzeichnis `src` befinden sich die eigentlichen Programmdateien:   
 * Das Verzeichnis `classes` enth&auml;lt die Datei `Geo.ts`, in der viele Konstante und einfache Methoden definiert sind.   
-* Das Verzeichnis `components` enth&auml;lt die Basis-Anzeigedatei `CiBase.vue` sowie die grafische Darstellung der Weichensymbole (`RccTurnout1.vue`).
-* Das Verzeichnis `controller` enth&auml;lt einen Basis-Controller `CiBaseController.ts` sowie den Weichen-Controller `RccTurnout1Controller.ts`.   
+* Das Verzeichnis `components` enth&auml;lt die Basis-Anzeigedatei `RccBase.vue` sowie die grafische Darstellung der Weichensymbole (`RccTurnout1.vue`).
+* Das Verzeichnis `controller` enth&auml;lt einen Basis-Controller `RccBaseController.ts` sowie den Weichen-Controller `RccTurnout1Controller.ts`.   
 * Das Verzeichnis `router` enth&auml;lt die Datei `index.ts`, die f&uuml;r das Weiterleiten der Links in der Kopfzeile (`MainView` und `About`) verantwortlich ist.   
-* Das Verzeichnis `services` enth&auml;lt die beiden Dateien `CiMqttClient.ts` und `CiMqttClientInstance.ts`. Diese enthalten alle Funktionen, die f&uuml;r die MQTT-Kommunikation ben&ouml;tigt werden.   
-  Jeder Controller, der MQTT-Nachrichten empfangen will, muss in der Datei `CiMqttClientInstance.ts` registriert werden.   
+* Das Verzeichnis `services` enth&auml;lt die beiden Dateien `RccMqttClient.ts` und `RccMqttClientInstance.ts`. Diese enthalten alle Funktionen, die f&uuml;r die MQTT-Kommunikation ben&ouml;tigt werden.   
+  Jeder Controller, der MQTT-Nachrichten empfangen will, muss in der Datei `RccMqttClientInstance.ts` registriert werden.   
 * Das Verzeichnis `views` enth&auml;lt die Dateien `About.vue` und `MainView.vue`.   
   In `MainView.vue` werden die einzelnen Weichen angeordnet (mit `<RccTurnout1>` Tags).   
 * Die Datei `App.view` zeichnet die Gesamtansicht mit Kopfzeile und Grafik.   
@@ -155,12 +155,15 @@ Bedeutung der einzelnen Parameter:
    _Beispiel_: `'rcc/demo1/set/21'`   
 * `payloadInvert`: Damit kann die Bedeutung des Inhalts einer empfangenen Nachricht umgekehrt werden. Dies kann bei gekoppelten Weichen notwendig sein. Im Normalfall ist der Wert `false`.   
 
-#### Beispiel f&uuml;r `payloadInvert=true`
-Wenn zwei Weichen miteinander __hardwarem&auml;&szlig;ig__ gekoppelt und so miteinander verbunden sind, dass ein gerader Zweig auf eine Abzweigung st&ouml;&szlig;t, so muss eine der beiden Weichen die Status-Information f&uuml;r das Zeichnen "invertieren".   
+### Beispiele f&uuml;r die Verwendung von `payloadInvert=true`
+#### 1. Gekoppelte Weichen
+Wenn zwei Weichen miteinander __hardwarem&auml;&szlig;ig__ (d.h. elektrisch) gekoppelt und so miteinander verbunden sind, dass ein gerader Zweig auf eine Abzweigung st&ouml;&szlig;t, so muss eine der beiden Weichen die Status-Information f&uuml;r das Zeichnen "invertieren".   
 ![Gekoppelte Weichen](./images/300_coupled_turnouts1.png "Gekoppelte Weichen")   
 _Bild 4: Gekoppelte Weichen ohne Invertierung_   
+In diesem Fall haben beide Weichen die gleiche `sid` (damit sie gemeinsam schalten), ein empfangener DCC-Befehl '0' (im Normalfall Abzweig) muss bei der oberen Weiche aber als '1' ("Gerade") dargestellt werden, dh. bei dieser Weiche ist `payloadInvert=true`   
 
-In diesem Fall haben beide Weichen die gleiche `sid` (damit sie gemeinsam schalten), ein empfangener DCC-Befehl '0' (im Normalfall Abzweig) muss bei der oberen Weiche aber als '1' ("Gerade") dargestellt werden werden, dh. bei dieser Weiche ist `payloadInvert=true`   
+#### 2. Ober- und Unterflurantrieb
+Die Weichenantriebe f&uuml;r Fleischmann-Weichen k&ouml;nnen sowohl Ober- als auch Unterflur angesteckt werden. Steckt man einen Antrieb um, so &auml;ndert sich das Schaltverhalten (Antriebschalterstellung Gerade wird ungerade und umgekehrt). In diesem Fall muss man entweder die Verdrahtung der Weiche &auml;ndern oder `payloadInvert=true` verwenden.   
 
 <a name="x54"></a>   
 
@@ -192,13 +195,13 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 
 ## 5.5 Beispiele
 1. An der Rasterposition 0/0: Weiche "1L" mit Standardrahmen und ohne Beschriftung   
-<RccTurnout1 :x="0*dx" :y="0*dy" sid="to1" dir="1L" :border="border"></RccTurnout1>   
+`<RccTurnout1 :x="0*dx" :y="0*dy" sid="to1" dir="1L" :border="border"></RccTurnout1>`   
 
 2. An der Rasterposition 1/1: Weiche von links nach rechts mit Abzweig nach rechts unten, mit Standardrahmen und Beschriftung "UNTEN" links unten.   
-<RccTurnout1 :x="1*dx"  :y="1.2*dy" sid="to1" dir="1R" footer="UNTEN" :border="border"></RccTurnout1>   
+`<RccTurnout1 :x="1*dx"  :y="1.2*dy" sid="to1" dir="1R" footer="UNTEN" :border="border"></RccTurnout1>`   
 
 3. An der Rasterposition 1/2: Weiche von links unten nach rechts oben mit Abzweig nach x+, mit Standardrahmen und Standard-Beschriftung   
-<RccTurnout1 :x="2*dx"  :y="1*dy" sid="to1" dir="2R" label="3" :border="border"></RccTurnout1>   
+`<RccTurnout1 :x="2*dx"  :y="1*dy" sid="to1" dir="2R" label="3" :border="border"></RccTurnout1>`   
 
 [Zum Seitenanfang](#up)   
 <a name="x60"></a>   
@@ -207,5 +210,92 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 # 6. Anmerkungen zur Programmierung   
 ## 6.1 Klickbereiche f&uuml;r Weichensymbole
 Der Klickbereich f&uuml;r Weichensymbole ist entweder ein Rechteck (1L, 1R, 5L, 5R) oder ein Dreieck (2R, 6R bzw. 4L, 8L).   
+
+## 7.2 Senden der MQTT-Nachrichten
+Das Senden von Nachrichten passiert in der `Klasse RccTurnoutController`. Dort werden zwei Variablen `payloadTurnoutStright` und `payloadTurnoutCurved` definiert, die den "Normalzustand" abbilden.   
+```
+export class RccTurnout1Controller extends RccBaseController {
+  public payloadTurnoutStright = '1'
+  public payloadTurnoutCurved = '0'
+```
+
+Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` und der Lage der Weiche angepasst und gesendet:   
+```
+    // _______on click: send a message to turnout_______________
+    onClkTop: function (): void {
+      console.log(this.sid, 'Button-Click On')
+      // -----is there a topic for publishing?------------------
+      if (this.turnout1?.pubTopic) {
+        const aPubTopic = this.turnout1.pubTopic.split(' ')
+        // ---1. prepare payload (invert or not)----------------
+        let curved1 = rccTurnout1Controller.payloadTurnoutCurved
+        let stright1 = rccTurnout1Controller.payloadTurnoutStright
+        if (this.turnout1.payloadInvert) {
+          curved1 = rccTurnout1Controller.payloadTurnoutStright
+          stright1 = rccTurnout1Controller.payloadTurnoutCurved
+        }
+        // ---2. prepare payload depending on direction---------
+        let payload = curved1
+        if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
+          payload = stright1
+        }
+        // ---publish message(s)--------------------------------
+        aPubTopic.forEach(topic => {
+          if (this.turnout1?.pubTopic) {
+            rccTurnout1Controller.publishRcc(topic, payload)
+          }
+        })
+      }
+    },
+```
+
+Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTurnout1Controller.ts` steht:   
+```
+  // _________publish a mqtt message____________________________
+  public publishRcc (topic: string, payload: string): void {
+    // console.log('CiTurnout1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
+    this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTurnout1Controller: ERROR:', e) })
+  }
+```
+
+F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBottom` gemacht.   
+
+
+<a name="x63"></a>   
+
+## 6.3 Empfang von MQTT-Nachrichten
+Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTurnout1Controller.vue`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTurnoutState` gespeichert.   
+```
+  // _________receive a mqtt message____________________________
+  public onMessage (message: Message): void {
+    this.turnouts1.forEach(turnout1 => {
+      const aSubTopic = turnout1.subTopic.split(' ')
+      if (aSubTopic.includes(message.topic)) {
+        // ---turnout1 topic found -----------------------------
+        if (message.payload.length > 0) {
+          // ------message received: split JSON-data------------
+          try {
+            const aPayload = JSON.parse(message.payload)
+            const sDCC_ = turnout1.sDCC
+            const sState_ = aPayload[sDCC_]
+            // ----calculate the state number-------------------
+            if (sState_ === this.sState0) {
+              turnout1.iTurnout1State = 0
+              if(turnout1.payloadInvert) turnout1.iTurnout1State = 1
+            }
+            if (sState_ === this.sState1) {
+              turnout1.iTurnout1State = 1
+              if(turnout1.payloadInvert) turnout1.iTurnout1State = 0
+            }
+          } catch (error) {
+            turnout1.iTurnout1State = -99
+          }
+        }
+        // ---END: turnout1 topic found --------------------------
+      }
+    })
+  }
+```
+
 
 [Zum Seitenanfang](#up)

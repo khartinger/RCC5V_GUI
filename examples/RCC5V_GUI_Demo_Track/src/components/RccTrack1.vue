@@ -1,10 +1,10 @@
 <!-- RccTrack1.vue --------------------------khartinger----- -->
-<!-- 2026-01-09: new                                         -->
+<!-- 2026-01-22: new                                         -->
 
 <template>
   <g>
   <!--draw border------------------------------------------- -->
-  <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
+  <RccBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></RccBase>
   <!--draw a horizontal line-------------------------------- -->
   <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
@@ -29,7 +29,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Track1, rccTrack1Controller } from '../controller/RccTrack1Controller'
-import CiBase from './CiBase.vue'
+import RccBase from './RccBase.vue'
 import { Geof } from '../classes/Geo'
 
 import RccTrackCon1 from './RccTrackCon1.vue'
@@ -37,7 +37,7 @@ import RccTrackCon1 from './RccTrackCon1.vue'
 export default defineComponent({
   name: 'RccTrack1',
   components: {
-    CiBase,
+    RccBase,
     RccTrackCon1,
   },
   data () {
@@ -176,7 +176,7 @@ export default defineComponent({
       if (this.iTrack1State === -99) return this.geof.colorTrackUnknown
       return this.geof.colorTrack
     },
-    // _______text in line 1 and 5______________________________
+    // _______text in line 1 (top)______________________________
     lineHeader: function (): string {
       if (this.header.length > 0) {
         const a1 = String(this.headeralign).toUpperCase().charAt(0)
@@ -186,6 +186,7 @@ export default defineComponent({
       }
       return this.geof.center(this.geof.textTrackOn)
     },
+    // _______text in line 5 (bottom)___________________________
     lineFooter: function (): string {
       if (this.footer.length > 0) {
         const a1 = String(this.footeralign).toUpperCase().charAt(0)
@@ -698,19 +699,17 @@ export default defineComponent({
     // _______on click: turn track energy on____________________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
-      let payload = 'onClkOn: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.track1) rccTrack1Controller.publishCi(topic, payload)
+      // -----is there a topic for publishing?------------------
       if (this.track1?.pubTopic) {
         const aPubTopic = this.track1.pubTopic.split(' ')
+        // ---prepare payload (1 or 0)--------------------------
         let trackon1 = rccTrack1Controller.payloadTrackOn
         if (this.track1.payloadInvert) trackon1 = rccTrack1Controller.payloadTrackOff
-        // payload = rccTrack1Controller.payloadTrackOn
-        payload = trackon1
+        const payload = trackon1
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
-          // if (this.track1?.pubPayload) payload = this.track1.pubPayload
           if (this.track1?.pubTopic) {
-            rccTrack1Controller.publishCi(topic, payload)
+            rccTrack1Controller.publishRcc(topic, payload)
           }
         })
       }
@@ -718,18 +717,16 @@ export default defineComponent({
     // _______on click: turn track energy off___________________
     onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Off')
-      let payload = 'onClkOff: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.track1) rccTrack1Controller.publishCi(topic, payload)
+      // -----is there a topic for publishing?------------------
       if (this.track1?.pubTopic) {
         const aPubTopic = this.track1.pubTopic.split(' ')
+        // ---prepare payload (0 or 1)--------------------------
         let trackoff1 = rccTrack1Controller.payloadTrackOff
         if (this.track1.payloadInvert) trackoff1 = rccTrack1Controller.payloadTrackOn
-        // payload = rccTrack1Controller.payloadTrackOff
-        payload = trackoff1
+        const payload = trackoff1
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
-          // if (this.track1?.pubPayload) payload = this.track1.pubPayload
-          rccTrack1Controller.publishCi(topic, payload)
+          rccTrack1Controller.publishRcc(topic, payload)
         })
       }
     },

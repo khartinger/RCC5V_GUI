@@ -1,8 +1,8 @@
 // ______RccTurnout1Controller.ts___________________khartinger_____
 // 2026-01-21: new
 import { reactive } from 'vue'
-import { Message } from '@/services/CiMqttClient'
-import { CiBaseController, IBase } from './CiBaseController'
+import { Message } from '@/services/RccMqttClient'
+import { RccBaseController, IBase } from './RccBaseController'
 
 export interface Turnout1 extends IBase {
   iTurnout1State: number;
@@ -10,7 +10,7 @@ export interface Turnout1 extends IBase {
   payloadInvert: boolean;
 }
 
-export class RccTurnout1Controller extends CiBaseController {
+export class RccTurnout1Controller extends RccBaseController {
   public payloadTurnoutStright = '1'
   public payloadTurnoutCurved = '0'
   public sState0 = '0'
@@ -121,8 +121,8 @@ export class RccTurnout1Controller extends CiBaseController {
     })
   }
 
-  public publishCi (topic: string, payload: string): void {
-    // console.log('CiTurnout1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
+  public publishRcc (topic: string, payload: string): void {
+    // console.log('CiTurnout1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
     this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTurnout1Controller: ERROR:', e) })
   }
 }

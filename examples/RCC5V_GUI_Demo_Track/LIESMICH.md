@@ -89,11 +89,11 @@ Klickt man auf die untere H&auml;lfte eines Feldes, wird der Strom zum Gleis abg
   Das VSC-Projekt liegt im Ordner `RCC5V_GUI_Demo_Track`. In diesem Verzeichnis befinden sich Dateien mit Informationen zum Projekt sowie die Unterverzeichnisse `.dist`, `images`, `node_modules` und `src`.   
 Im Verzeichnis `src` befinden sich die eigentlichen Programmdateien:   
 * Das Verzeichnis `classes` enth&auml;lt die Datei `Geo.ts`, in der viele Konstante und einfache Methoden definiert sind.   
-* Das Verzeichnis `components` enth&auml;lt die Basis-Anzeigedatei `CiBase.vue` sowie die grafische Darstellung der Gleissymbole (`RccTrack1.vue`), der schr&auml;gen Verbindungselemente (`RccTrackCon1.vue`) und der Isolationssymbole (`RccTrackIso1.vue`).
-* Das Verzeichnis `controller` enth&auml;lt einen Basis-Controller `CiBaseController.ts` sowie den Gleis-Controller `RccTrack1Controller.ts`.   
+* Das Verzeichnis `components` enth&auml;lt die Basis-Anzeigedatei `RccBase.vue` sowie die grafische Darstellung der Gleissymbole (`RccTrack1.vue`), der schr&auml;gen Verbindungselemente (`RccTrackCon1.vue`) und der Isolationssymbole (`RccTrackIso1.vue`).
+* Das Verzeichnis `controller` enth&auml;lt einen Basis-Controller `RccBaseController.ts` sowie den Gleis-Controller `RccTrack1Controller.ts`.   
 * Das Verzeichnis `router` enth&auml;lt die Datei `index.ts`, die f&uuml;r das Weiterleiten der Links in der Kopfzeile (`MainView` und `About`) verantwortlich ist.   
-* Das Verzeichnis `services` enth&auml;lt die beiden Dateien `CiMqttClient.ts` und `CiMqttClientInstance.ts`. Diese enthalten alle Funktionen, die f&uuml;r die MQTT-Kommunikation ben&ouml;tigt werden.   
-  Jeder Controller, der MQTT-Nachrichten empfangen will, muss in der Datei `CiMqttClientInstance.ts` registriert werden.   
+* Das Verzeichnis `services` enth&auml;lt die beiden Dateien `RccMqttClient.ts` und `RccMqttClientInstance.ts`. Diese enthalten alle Funktionen, die f&uuml;r die MQTT-Kommunikation ben&ouml;tigt werden.   
+  Jeder Controller, der MQTT-Nachrichten empfangen will, muss in der Datei `RccMqttClientInstance.ts` registriert werden.   
 * Das Verzeichnis `views` enth&auml;lt die Dateien `About.vue` und `MainView.vue`.   
   In `MainView.vue` werden die einzelnen Gleise angeordnet (mit `<RccTrack1>` Tags).   
 * Die Datei `App.view` zeichnet die Gesamtansicht mit Kopfzeile und Grafik.   
@@ -171,7 +171,7 @@ Bedeutung der einzelnen Parameter:
   Mehrere Topics werden durch ein Leerzeichen getrennt.   
 * `pubTopic`: Topic unter dem das Gleissymbol MQTT-Nachrichten sendet.   
    _Beispiel_: `'rcc/demo1/set/41'`   
-* `payloadInvert`: Damit kann die Bedeutung des Inhalts einer empfangenen Nachricht umgekehrt werden. Im Normalfall wird das nicht gemacht und der Wert ist `false`.
+* `payloadInvert`: Damit kann der Inhalt von gesendeten und empfangenen Nachrichten umgekehrt werden. Im Normalfall bewirkt ein Klick auf die obere Schaltfl&auml;che das Senden einer "1" (bedeutet "Einschalten"). Will man stattdessen "0" senden, muss `payloadInvert=true` sein. Im Normalfall ist __`payloadInvert=false`__.
 
 <a name="x54"></a>   
 
@@ -293,5 +293,87 @@ _Bild 6: Alle Klickbereiche Top_
 
 Wenn kein spezieller Klickbereich zugeordnet ist, werden - so wie bisher - die Rechtecke verwendet.   
 
+<a name="x72"></a>   
+
+## 7.2 Senden der MQTT-Nachrichten
+Beim Schalten des Fahrstroms gilt normalerweise, dass 1 Einschalten und 0 Ausschalten bewirkt. Daher wird im Normalfall beim Klicken der oberen Schaltfl&auml;che ("Top") eine 1 und beim Klicken der unteren Schaltfl&auml;che ("Bottom") eine 0 gesendet. Manchmal kann es jedoch erforderlich sein, dass die Bedeutung von 0 und 1 genau umgekehrt ist. Diese Besonderheit wird in der Software folgenderma&szlig;en ber&uuml;cksichtigt.   
+
+Das Senden von Nachrichten passiert in der `Klasse RccTrack1Controller`. Dort werden zwei Variablen `payloadTrackOn` und `payloadTrackOff` definiert, die den "Normalzustand" abbilden.   
+```
+export class RccTrack1Controller extends RccBaseController {
+  public payloadTrackOn = '1'
+  public payloadTrackOff = '0'
+```
+
+Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` angepasst und gesendet:   
+```
+    // _______on click: turn track energy on____________________
+    onClkTop: function (): void {
+      console.log(this.sid, 'Button-Click On')
+      // -----is there a topic for publishing?------------------
+      if (this.track1?.pubTopic) {
+        const aPubTopic = this.track1.pubTopic.split(' ')
+        // ---prepare payload (1 or 0)--------------------------
+        let trackon1 = rccTrack1Controller.payloadTrackOn
+        if (this.track1.payloadInvert) trackon1 = rccTrack1Controller.payloadTrackOff
+        const payload = trackon1
+        // ---publish message(s)--------------------------------
+        aPubTopic.forEach(topic => {
+          if (this.track1?.pubTopic) {
+            rccTrack1Controller.publishRcc(topic, payload)
+          }
+        })
+      }
+    },
+```
+
+Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTrack1Controller.ts` steht:   
+```
+  // _________publish a mqtt message____________________________
+  public publishRcc (topic: string, payload: string): void {
+    // console.log('RccTrack1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
+    this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTrack1Controller: ERROR:', e) })
+  }
+```
+
+F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBottom` gemacht.   
+
+<a name="x73"></a>   
+
+## 7.3 Empfang von MQTT-Nachrichten
+Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTrack1Controller.vue`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTrack1State` gespeichert.   
+```
+  // _________receive messages__________________________________
+  public onMessage (message: Message): void {
+    this.tracks1.forEach(track1 => {
+      const aSubTopic = track1.subTopic.split(' ')
+      if (aSubTopic.includes(message.topic)) {
+      // -----track1 topic found -----------------------------
+        if (message.payload.length > 0) {
+          // ------message received: split JSON-data----------
+          try {
+            const aPayload = JSON.parse(message.payload)
+            const sDCC_ = track1.sDCC
+            const sState_ = aPayload[sDCC_]
+            // ----calculate the status number------------------
+            if (sState_ === this.sState0) {
+              track1.iTrack1State = 0
+              if (track1.payloadInvert) track1.iTrack1State = 1
+            }
+            if (sState_ === this.sState1) {
+              track1.iTrack1State = 1
+              if (track1.payloadInvert) track1.iTrack1State = 0
+            }
+            // console.log('onMessage: sState=', sState)
+          } catch (error) {
+            track1.iTrack1State = -99
+          }
+        }
+        // console.log('onMessage: track1.iTrack1State=', track1.iTrack1State)
+        // ---END: track1 topic found --------------------------
+      }
+    })
+  }
+```
 
 [Zum Seitenanfang](#up)

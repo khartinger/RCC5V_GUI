@@ -1,15 +1,15 @@
 // ______RccUncoupler1Controller.ts______________khartinger_____
 // 2026-01-21: new
 import { reactive } from 'vue'
-import { Message } from '@/services/CiMqttClient'
-import { CiBaseController, IBase } from './CiBaseController'
+import { Message } from '@/services/RccMqttClient'
+import { RccBaseController, IBase } from './RccBaseController'
 
 export interface Uncoupler1 extends IBase {
   iUncoupler1State: number;
   sDCC: string,
 }
 
-export class RccUncoupler1Controller extends CiBaseController {
+export class RccUncoupler1Controller extends RccBaseController {
   public payloadOn = '1'
   public payloadOff = '0'
   public sState0 = '0'
@@ -44,8 +44,8 @@ export class RccUncoupler1Controller extends CiBaseController {
     })
   }
 
-  public publishCi (topic: string, payload: string): void {
-    // console.log('RccUncoupler1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
+  public publishRcc (topic: string, payload: string): void {
+    // console.log('RccUncoupler1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
     this.publish(topic, payload, false, 0).catch((e) => { console.error('RccUncoupler1Controller: ERROR:', e) })
   }
 }

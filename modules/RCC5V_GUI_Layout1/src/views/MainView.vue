@@ -40,7 +40,7 @@
 <script setup lang="ts">
   import { ref, computed, reactive, watchEffect } from 'vue'
   import { Geof } from '../classes/Geo'
-  import { ciMqttClientInstance } from '@/services/CiMqttClientInstance'
+  import { rccMqttClientInstance } from '@/services/RccMqttClientInstance'
   import { rccTrack1Controller } from '../controller/RccTrack1Controller'
   
   // ***********************************************************
@@ -140,7 +140,7 @@
       const topic = `${topicSet}/${sDcc}`
       // -----4. try to send MQTT message-----------------------
       try {
-        await ciMqttClientInstance.publish(topic, sPayload, false, 0)
+        await rccMqttClientInstance.publish(topic, sPayload, false, 0)
       } catch (e) {
         console.error(topic + ': ERROR:', e)
       }

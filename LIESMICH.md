@@ -1,25 +1,28 @@
 <table><tr><td><img src="./images/RCC5V_Logo_96.png"></img></td><td>
-Letzte &Auml;nderung: 21.1.2026 <a name="up"></a><br>   
-<h1>RCC5V_GUI: GUI zur Steuerung von RCC5V  Modelleisenbahnkomponenten</h1>
+Letzte &Auml;nderung: 22.1.2026 <a name="up"></a><br>   
+<h1>RCC5V_GUI: Gleisstellpulte zur Steuerung von RCC5V Modelleisenbahnkomponenten</h1>
 <a href="README.md">==> English version</a>&nbsp; &nbsp; &nbsp; 
 </td></tr></table>   
 
 # Einleitung
-Dieses Repository enthält VUE-Anwendungen zur visuellen Darstellung von [RCC5V-Modelleisenbahn-Steuerkomponenten](https://github.com/khartinger/RCC5V) (GUI = Graphical User Interface). Damit kann man auf einfache Weise Module mit dem Browser steuern (mittels MQTT-Befehlen und WLAN).   
-Das folgende Bild zeigt eine VUE-Steuerung für das unter [https://github.com/khartinger/RCC5V/blob/main/examples/blocktester](https://github.com/khartinger/RCC5V/blob/main/examples/blocktester/LIESMICH.md)  beschriebene Modul "Blocktester":   
+Dieses Repository enth&auml;lt VUE-Komponenten zur Herstellung von Gleisstellpulten f&uuml;r [RCC5V-Modelleisenbahn-Steuerkomponenten](https://github.com/khartinger/RCC5V). Damit kann man auf einfache Weise Module mit dem Browser steuern (mittels MQTT-Befehlen und WLAN).   
+Das folgende Bild zeigt das Stellpult f&uuml;r das Modul "Blocktester", dessen Bau und Funktion ausf&uuml;hrlich unter [https://github.com/khartinger/RCC5V/blob/main/examples/blocktester](https://github.com/khartinger/RCC5V/blob/main/examples/blocktester/LIESMICH.md) beschrieben ist.   
 
 ![GUI Blocktester](./images/300_GUI_Blocktester1.png "GUI Blocktester")   
 _Bild 1: Grafisches Interface zur Steuerung des RCC5V-Blocktesters_   
 
-Das Repository ist folgendermaßen gegliedert:   
-Das Verzeichnis `examples` enthält verschiedene VUE-Programme, die die Anwendungsmöglichkeiten einer Symbolart zeigen wie   
+Das Repository ist folgenderma&szlig;en gegliedert:   
+Das Verzeichnis __`examples`__ enth&auml;lt verschiedene VUE-Programme, die die Anwendungsm&ouml;glichkeiten einer __Symbolart__ zeigen wie   
 * `RCC5V_GUI_Demo_Track`: Darstellung von Gleissymbolen   
 * `RCC5V_GUI_Demo_Turnout`: Darstellung von (Zweiweg-)Weichensymbolen   
 * `RCC5V_GUI_Demo_Turnout3Way`: Darstellung von Dreiwegweichensymbolen   
 * `RCC5V_GUI_Demo_Uncoupler`: Darstellung von Entkopplersymbolen   
 
-Das Verzeichnis `modules` enthält Modulsteuerungen für einzelne Modelleisenbahn-Module.   
+Das Verzeichnis __`images`__ enth&auml;lt Bilder und odg-Grafiken.   
 
-
+Das Verzeichnis `modules` enth&auml;lt Gleisstellpulte f&uuml;r verschiedene Modelleisenbahn-Module.   
+* `RCC5V_GUI_Blocktester`: Gleisstellpult f&uuml;r den Blocktester   
+* `RCC5V_GUI_Layout1`: Gleisstellpult f&uuml;r eine Modellbahn-Anlage aus sechs Modulen   
+* Gleisstellpulte f&uuml;r einzele Module   
 
 [Zum Seitenanfang](#up)

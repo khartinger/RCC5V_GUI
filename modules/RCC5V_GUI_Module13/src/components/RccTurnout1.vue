@@ -4,7 +4,7 @@
 <template>
   <g>
   <!--draw border------------------------------------------- -->
-  <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
+  <RccBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></RccBase>
   <!--draw a horizontal line-------------------------------- -->
   <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
@@ -22,13 +22,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Turnout1, rccTurnout1Controller } from '../controller/RccTurnout1Controller'
-import CiBase from './CiBase.vue'
+import RccBase from './RccBase.vue'
 import { Geof } from '../classes/Geo'
 
 export default defineComponent({
   name: 'RccTurnout1',
   components: {
-    CiBase,
+    RccBase,
   },
   data () {
     return {
@@ -501,7 +501,7 @@ if(this.dir.length !== 2) return ''
       console.log(this.sid, 'Button-Click On')
       let payload = 'onClkOn: sid=' + this.sid
       // const topic = 'rcc/error'
-      // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
+      // if (!this.turnout1) rccTurnout1Controller.publishRcc(topic, payload)
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
         let curved1 = rccTurnout1Controller.payloadTurnoutCurved
@@ -519,7 +519,7 @@ if(this.dir.length !== 2) return ''
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
           if (this.turnout1?.pubTopic) {
-            rccTurnout1Controller.publishCi(topic, payload)
+            rccTurnout1Controller.publishRcc(topic, payload)
           }
         })
       }
@@ -529,7 +529,7 @@ if(this.dir.length !== 2) return ''
       console.log(this.sid, 'Button-Click Off')
       let payload = 'onClkOff: sid=' + this.sid
       // const topic = 'rcc/error'
-      // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
+      // if (!this.turnout1) rccTurnout1Controller.publishRcc(topic, payload)
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
         let curved1 = rccTurnout1Controller.payloadTurnoutCurved
@@ -546,7 +546,7 @@ if(this.dir.length !== 2) return ''
         }
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
-          rccTurnout1Controller.publishCi(topic, payload)
+          rccTurnout1Controller.publishRcc(topic, payload)
         })
       }
     },

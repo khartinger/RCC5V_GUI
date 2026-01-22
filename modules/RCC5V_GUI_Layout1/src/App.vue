@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { ciMqttClientInstance } from '@/services/CiMqttClientInstance'
+import { rccMqttClientInstance } from '@/services/RccMqttClientInstance'
 
 export default defineComponent({
   name: 'Home',
@@ -30,31 +30,31 @@ export default defineComponent({
   },
   computed: {
     isConnected: function (): boolean {
-      return ciMqttClientInstance.mqttState.connected
+      return rccMqttClientInstance.mqttState.connected
     },
     isConnecting: function (): boolean {
-      if (ciMqttClientInstance.mqttState.iConnMqttState === 2) return true
+      if (rccMqttClientInstance.mqttState.iConnMqttState === 2) return true
       return false
     },
     isSubscribed: function (): boolean {
-      return ciMqttClientInstance.mqttSubscription.subscribed
+      return rccMqttClientInstance.mqttSubscription.subscribed
     },
     getMqttState: function (): string {
-      return ciMqttClientInstance.sConnMqttState()
+      return rccMqttClientInstance.sConnMqttState()
     },
     getConnectUrl: function (): string {
-      return ciMqttClientInstance.connectUrl()
+      return rccMqttClientInstance.connectUrl()
     },
   },
   methods: {
     reconnect: async function (): Promise<void> {
-      await ciMqttClientInstance.reconnectBroker()
+      await rccMqttClientInstance.reconnectBroker()
     },
     end: async function (): Promise<void> {
-      await ciMqttClientInstance.disconnect()
+      await rccMqttClientInstance.disconnect()
     },
     cancel: async function (): Promise<void> {
-      await ciMqttClientInstance.disconnect()
+      await rccMqttClientInstance.disconnect()
     },
   },
 })

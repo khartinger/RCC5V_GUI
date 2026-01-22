@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue'
 import { Geof } from '../classes/Geo'
-import { ciMqttClientInstance } from '@/services/CiMqttClientInstance'
+import { rccMqttClientInstance } from '@/services/RccMqttClientInstance'
 
 import RccTurnout1 from '@/components/RccTurnout1.vue'
 import RccTrack1 from '@/components/RccTrack1.vue'
@@ -37,8 +37,8 @@ const border = 1
 
 // -----------waiting for MQTT connection, then get status------
 watchEffect(() => {
-  if (ciMqttClientInstance.mqttState.connected) {
-    ciMqttClientInstance.publish('rcc/demo1/get', 'status', false, 0).catch((e) => { console.error('RccBlocktester1: ERROR:', e) })
+  if (rccMqttClientInstance.mqttState.connected) {
+    rccMqttClientInstance.publish('rcc/demo1/get', 'status', false, 0).catch((e) => { console.error('RccBlocktester1: ERROR:', e) })
   }
 })
 // ------Width and height of one Element (to make a grid)-------

@@ -29,7 +29,7 @@
 <script setup lang="ts">
   import { ref, computed, watchEffect } from 'vue'
   import { Geof } from '../classes/Geo'
-  import { ciMqttClientInstance } from '@/services/CiMqttClientInstance'
+  import { rccMqttClientInstance } from '@/services/RccMqttClientInstance'
 
   // ***********************************************************
   //     Customize data for the module here
@@ -89,7 +89,7 @@
       const aMsg = msg.split('/').map(p => p.trim()).filter(p => p.length > 0)
       const topic = topicSet + aMsg[0]
       try {
-        await ciMqttClientInstance.publish(topic, aMsg[1], false, 0)
+        await rccMqttClientInstance.publish(topic, aMsg[1], false, 0)
       } catch (e) {
         console.error('Module12: ERROR:', e)
       }
@@ -126,8 +126,8 @@
 /*
   // ____waiting for MQTT connection, then get status___________
   watchEffect(() => {
-    if (ciMqttClientInstance.mqttState.connected) {
-      ciMqttClientInstance.publish(topicGet, 'status', false, 0).catch((e) => { console.error('Module12: ERROR:', e) })
+    if (rccMqttClientInstance.mqttState.connected) {
+      rccMqttClientInstance.publish(topicGet, 'status', false, 0).catch((e) => { console.error('Module12: ERROR:', e) })
     }
   })
 */

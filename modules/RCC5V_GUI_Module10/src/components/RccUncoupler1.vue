@@ -4,7 +4,7 @@
 <template>
   <g>
   <!--draw border------------------------------------------- -->
-  <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
+  <RccBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></RccBase>
   <!--draw a horizontal line-------------------------------- -->
   <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
@@ -22,13 +22,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Uncoupler1, rccUncoupler1Controller } from '../controller/RccUncoupler1Controller'
-import CiBase from './CiBase.vue'
+import RccBase from './RccBase.vue'
 import { Geof } from '../classes/Geo'
 
 export default defineComponent({
   name: 'RccUncoupler1',
   components: {
-    CiBase,
+    RccBase,
   },
   data () {
     return {
@@ -338,14 +338,14 @@ export default defineComponent({
       console.log(this.sid, 'Button-Click On')
       let payload = 'onClkOn: sid=' + this.sid
       const topic = 'rcc/error'
-      if (!this.uncoupler1) rccUncoupler1Controller.publishCi(topic, payload)
+      if (!this.uncoupler1) rccUncoupler1Controller.publishRcc(topic, payload)
       if (this.uncoupler1?.pubTopic) {
         const aPubTopic = this.uncoupler1.pubTopic.split(' ')
         payload = rccUncoupler1Controller.payloadOn
         aPubTopic.forEach(topic => {
           // if (this.uncoupler1?.pubPayload) payload = this.uncoupler1.pubPayload
           if (this.uncoupler1?.pubTopic) {
-            rccUncoupler1Controller.publishCi(topic, payload)
+            rccUncoupler1Controller.publishRcc(topic, payload)
           }
         })
       }
@@ -355,13 +355,13 @@ export default defineComponent({
       console.log(this.sid, 'Button-Click Off')
       let payload = 'onClkOff: sid=' + this.sid
       const topic = 'rcc/error'
-      if (!this.uncoupler1) rccUncoupler1Controller.publishCi(topic, payload)
+      if (!this.uncoupler1) rccUncoupler1Controller.publishRcc(topic, payload)
       if (this.uncoupler1?.pubTopic) {
         const aPubTopic = this.uncoupler1.pubTopic.split(' ')
         payload = rccUncoupler1Controller.payloadOff
         aPubTopic.forEach(topic => {
           // if (this.uncoupler1?.pubPayload) payload = this.uncoupler1.pubPayload
-          rccUncoupler1Controller.publishCi(topic, payload)
+          rccUncoupler1Controller.publishRcc(topic, payload)
         })
       }
 

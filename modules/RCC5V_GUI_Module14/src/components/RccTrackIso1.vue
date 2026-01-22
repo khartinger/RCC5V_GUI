@@ -18,7 +18,7 @@ import { Geof } from '../classes/Geo'
 export default defineComponent({
   name: 'RccTrackIso1',
   components: {
-    // CiBase,
+    // RccBase,
   },
   data () {
     return {

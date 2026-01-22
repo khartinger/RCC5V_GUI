@@ -1,8 +1,8 @@
 // ______RccTrack1Controller.ts___________________khartinger_____
 // 2026-01-21: new
 import { reactive } from 'vue'
-import { Message } from '@/services/CiMqttClient'
-import { CiBaseController, IBase } from './CiBaseController'
+import { Message } from '@/services/RccMqttClient'
+import { RccBaseController, IBase } from './RccBaseController'
 
 export interface Track1 extends IBase {
   iTrack1State: number;
@@ -10,7 +10,7 @@ export interface Track1 extends IBase {
   payloadInvert: boolean;
 }
 
-export class RccTrack1Controller extends CiBaseController {
+export class RccTrack1Controller extends RccBaseController {
   public payloadTrackOn = '1'
   public payloadTrackOff = '0'
   public sState0 = '0'
@@ -50,8 +50,8 @@ export class RccTrack1Controller extends CiBaseController {
     })
   }
 
-  public publishCi (topic: string, payload: string): void {
-    // console.log('RccTrack1Controller:publishCi:', '-t ' + topic + ' -m ' + payload)
+  public publishRcc (topic: string, payload: string): void {
+    // console.log('RccTrack1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
     this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTrack1Controller: ERROR:', e) })
   }
 }

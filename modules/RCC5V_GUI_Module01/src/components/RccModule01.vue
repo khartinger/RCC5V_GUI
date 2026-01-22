@@ -47,7 +47,7 @@ export const m01 = {
   import RccTurnout1 from './RccTurnout1.vue'
   import RccTurnout3Way1 from './RccTurnout3Way1.vue'
   import RccUncoupler1 from './RccUncoupler1.vue'
-  import { ciMqttClientInstance } from '@/services/CiMqttClientInstance';
+  import { rccMqttClientInstance } from '@/services/RccMqttClientInstance';
 
   // ____3. Assignment of abbreviations to railway components___
   // e.g., “tk” to RccTrack1
@@ -84,8 +84,8 @@ export const m01 = {
   // ____5. Waiting for MQTT connection, then get module status_
   // Customize topic!
   watchEffect(() => {
-    if(ciMqttClientInstance.mqttState.connected) {
-      ciMqttClientInstance.publish('rcc/module01/get', 'status', false, 0).catch((e) => { console.error('RccModule01: ERROR:', e) })
+    if(rccMqttClientInstance.mqttState.connected) {
+      rccMqttClientInstance.publish('rcc/module01/get', 'status', false, 0).catch((e) => { console.error('RccModule01: ERROR:', e) })
     }
   })
 

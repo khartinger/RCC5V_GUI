@@ -29,7 +29,7 @@
 <script setup lang="ts">
   import { ref, computed, watchEffect } from 'vue'
   import { Geof } from '../classes/Geo'
-  import { ciMqttClientInstance } from '@/services/CiMqttClientInstance'
+  import { rccMqttClientInstance } from '@/services/RccMqttClientInstance'
   import RccBlocktester1, { bt1 } from '@/components/RccBlocktester1.vue'
   const border = 1
   const routeXm00 = ref('')    // Route für RccBlocktester1
@@ -69,7 +69,7 @@
     aRoute1.forEach(msg => {
       const aMsg = msg.split('/').map(p => p.trim()).filter(p => p.length > 0)
       const topic='rcc/demo1/set/'+aMsg[0]
-      ciMqttClientInstance.publish(topic, aMsg[1], false, 0).catch((e) => { console.error('RccBlocktester1: ERROR:', e) })
+      rccMqttClientInstance.publish(topic, aMsg[1], false, 0).catch((e) => { console.error('RccBlocktester1: ERROR:', e) })
     });
   }
 
@@ -85,8 +85,8 @@
 
   // ____waiting for MQTT connection, then get status___________
   watchEffect(() => {
-    if (ciMqttClientInstance.mqttState.connected) {
-      ciMqttClientInstance.publish('rcc/demo1/get', 'status', false, 0).catch((e) => { console.error('RccBlocktester1: ERROR:', e) })
+    if (rccMqttClientInstance.mqttState.connected) {
+      rccMqttClientInstance.publish('rcc/demo1/get', 'status', false, 0).catch((e) => { console.error('RccBlocktester1: ERROR:', e) })
     }
   })
 

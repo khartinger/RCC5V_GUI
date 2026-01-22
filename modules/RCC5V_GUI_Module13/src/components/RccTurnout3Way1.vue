@@ -4,7 +4,7 @@
 <template>
   <g>
   <!--draw border------------------------------------------- -->
-  <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
+  <RccBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></RccBase>
   <!--draw a horizontal line-------------------------------- -->
   <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
@@ -24,13 +24,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { To3way1, rccTurnout3Way1Controller } from '../controller/RccTurnout3Way1Controller'
-import CiBase from './CiBase.vue'
+import RccBase from './RccBase.vue'
 import { Geof } from '../classes/Geo'
 
 export default defineComponent({
   name: 'RccTurnout3way1',
   components: {
-    CiBase,
+    RccBase,
   },
   data () {
     return {
@@ -358,7 +358,7 @@ export default defineComponent({
         payload = rccTurnout3Way1Controller.payloadTurnoutCurved
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
-            rccTurnout3Way1Controller.publishCi(topic, payload)
+            rccTurnout3Way1Controller.publishRcc(topic, payload)
           }
         })
       }
@@ -368,13 +368,13 @@ export default defineComponent({
       console.log(this.sid, 'Button-Click Mid')
       let payload = 'onClkMid: sid=' + this.sid
       // const topic = 'rcc/error'
-      // if (!this.to3way1) rccTo3way1Controller.publishCi(topic, payload)
+      // if (!this.to3way1) rccTo3way1Controller.publishRcc(topic, payload)
       if (this.to3way1?.pubTopic) {
         const aPubTopic = this.to3way1.pubTopic.split(' ')
         payload = rccTurnout3Way1Controller.payloadTurnoutStright
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
-            rccTurnout3Way1Controller.publishCi(topic, payload)
+            rccTurnout3Way1Controller.publishRcc(topic, payload)
           }
         })
       }
@@ -393,7 +393,7 @@ export default defineComponent({
         payload = rccTurnout3Way1Controller.payloadTurnoutCurved
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
-            rccTurnout3Way1Controller.publishCi(topic, payload)
+            rccTurnout3Way1Controller.publishRcc(topic, payload)
           }
         })
       }

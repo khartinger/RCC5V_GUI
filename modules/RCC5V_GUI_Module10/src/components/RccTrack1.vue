@@ -4,7 +4,7 @@
 <template>
   <g>
   <!--draw border------------------------------------------- -->
-  <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
+  <RccBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></RccBase>
   <!--draw a horizontal line-------------------------------- -->
   <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
@@ -29,7 +29,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Track1, rccTrack1Controller } from '../controller/RccTrack1Controller'
-import CiBase from './CiBase.vue'
+import RccBase from './RccBase.vue'
 import { Geof } from '../classes/Geo'
 
 import RccTrackCon1 from './RccTrackCon1.vue'
@@ -37,7 +37,7 @@ import RccTrackCon1 from './RccTrackCon1.vue'
 export default defineComponent({
   name: 'RccTrack1',
   components: {
-    CiBase,
+    RccBase,
     RccTrackCon1,
   },
   data () {
@@ -700,7 +700,7 @@ export default defineComponent({
       console.log(this.sid, 'Button-Click On')
       let payload = 'onClkOn: sid=' + this.sid
       // const topic = 'rcc/error'
-      // if (!this.track1) rccTrack1Controller.publishCi(topic, payload)
+      // if (!this.track1) rccTrack1Controller.publishRcc(topic, payload)
       if (this.track1?.pubTopic) {
         const aPubTopic = this.track1.pubTopic.split(' ')
         let trackon1 = rccTrack1Controller.payloadTrackOn
@@ -710,7 +710,7 @@ export default defineComponent({
         aPubTopic.forEach(topic => {
           // if (this.track1?.pubPayload) payload = this.track1.pubPayload
           if (this.track1?.pubTopic) {
-            rccTrack1Controller.publishCi(topic, payload)
+            rccTrack1Controller.publishRcc(topic, payload)
           }
         })
       }
@@ -720,7 +720,7 @@ export default defineComponent({
       console.log(this.sid, 'Button-Click Off')
       let payload = 'onClkOff: sid=' + this.sid
       // const topic = 'rcc/error'
-      // if (!this.track1) rccTrack1Controller.publishCi(topic, payload)
+      // if (!this.track1) rccTrack1Controller.publishRcc(topic, payload)
       if (this.track1?.pubTopic) {
         const aPubTopic = this.track1.pubTopic.split(' ')
         let trackoff1 = rccTrack1Controller.payloadTrackOff
@@ -729,7 +729,7 @@ export default defineComponent({
         payload = trackoff1
         aPubTopic.forEach(topic => {
           // if (this.track1?.pubPayload) payload = this.track1.pubPayload
-          rccTrack1Controller.publishCi(topic, payload)
+          rccTrack1Controller.publishRcc(topic, payload)
         })
       }
     },

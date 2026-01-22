@@ -1,10 +1,10 @@
 <!-- RccTurnout1.vue ------------------------khartinger----- -->
-<!-- 2026-01-09: new                                         -->
+<!-- 2026-01-22: new                                         -->
 
 <template>
   <g>
   <!--draw border------------------------------------------- -->
-  <CiBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></CiBase>
+  <RccBase :x="x" :y="y" :border="border" :fx="1" :fy="1"></RccBase>
   <!--draw a horizontal line-------------------------------- -->
   <line v-if="(drawLabel & 4) > 0" :x1="geof.x0()" :y1="geof.y" :x2="geof.x3()" :y2="geof.y" :stroke="geof.colorTrackInfo" stroke-width="1" />
   <!--write text-------------------------------------------- -->
@@ -22,13 +22,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Turnout1, rccTurnout1Controller } from '../controller/RccTurnout1Controller'
-import CiBase from './CiBase.vue'
+import RccBase from './RccBase.vue'
 import { Geof } from '../classes/Geo'
 
 export default defineComponent({
   name: 'RccTurnout1',
   components: {
-    CiBase,
+    RccBase,
   },
   data () {
     return {
@@ -253,7 +253,7 @@ export default defineComponent({
     },
   },
   methods: {
-        // _______draw a path of the turnout________________________
+    // _______draw a path of the turnout________________________
     pathTurnout: function (curve_: boolean): string {
       const type_ = this.sDir
       // -----draw path-----------------------------------------
@@ -490,57 +490,54 @@ export default defineComponent({
       }
       return s1
     },
-    // _______on click: turn track energy on____________________
+    // _______on click: send a message to turnout_______________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
-      let payload = 'onClkOn: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
+      // -----is there a topic for publishing?------------------
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
+        // ---1. prepare payload (invert or not)----------------
         let curved1 = rccTurnout1Controller.payloadTurnoutCurved
         let stright1 = rccTurnout1Controller.payloadTurnoutStright
         if (this.turnout1.payloadInvert) {
           curved1 = rccTurnout1Controller.payloadTurnoutStright
           stright1 = rccTurnout1Controller.payloadTurnoutCurved
         }
-        // payload = rccTurnout1Controller.payloadTurnoutCurved
-        payload = curved1
+        // ---2. prepare payload depending on direction---------
+        let payload = curved1
         if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
-          // payload = rccTurnout1Controller.payloadTurnoutStright
           payload = stright1
         }
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
-          // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
           if (this.turnout1?.pubTopic) {
-            rccTurnout1Controller.publishCi(topic, payload)
+            rccTurnout1Controller.publishRcc(topic, payload)
           }
         })
       }
     },
-    // _______on click: turn track energy off___________________
+    // _______on click: send a message to turnout_______________
     onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Off')
-      let payload = 'onClkOff: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.turnout1) rccTurnout1Controller.publishCi(topic, payload)
+      // -----is there a topic for publishing?------------------
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
+        // ---1. prepare payload (invert or not)----------------
         let curved1 = rccTurnout1Controller.payloadTurnoutCurved
         let stright1 = rccTurnout1Controller.payloadTurnoutStright
         if (this.turnout1.payloadInvert) {
           curved1 = rccTurnout1Controller.payloadTurnoutStright
           stright1 = rccTurnout1Controller.payloadTurnoutCurved
         }
-        // payload = rccTurnout1Controller.payloadTurnoutStright
-        payload = stright1
+        // ---2. prepare payload depending on direction---------
+        let payload = stright1
         if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
-          // payload = rccTurnout1Controller.payloadTurnoutCurved
           payload = curved1
         }
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
-          rccTurnout1Controller.publishCi(topic, payload)
+          rccTurnout1Controller.publishRcc(topic, payload)
         })
       }
     },
