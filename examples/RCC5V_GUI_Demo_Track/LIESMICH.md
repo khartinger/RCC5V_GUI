@@ -114,7 +114,7 @@ Gleissymbole werden in der Datei `MainView.vue` mit dem Tag `<RccTrack1 ...>` ge
    M&ouml;gliche Werte: '2', '4', '6' oder '8', je nach Richtung. Die Ziffer muss in `dir` enthalten sein.   
 * `border` (optional): Gibt an, ob ein Rahmen um ein Gleissymbol gezeichnet werden soll. (M&ouml;gliche Werte 0 bis 3, Default-Wert `'0'`)   
 * `label` (optional): Gibt an, ob und welche Beschriftung eines Gleissymbols angezeigt werden soll. (M&ouml;gliche Werte: "0" bis "3", Default-Wert `'0'`)   
-* `color` (optional): Setzen einer Farbe f&uuml;r das Gleissymbol. (Default-Wert: keine Farbe "-")    
+* `color` (optional): Setzen einer Farbe f&uuml;r das Gleissymbol. (Default-Wert: "-" bedeutet Standardwert `this.geof.this.geof.colorTrack` nehmen)    
 * `header` (optional): Text in der Kopfzeile   
 * `headeralign` (optional): Ausrichtung der Kopfzeile ("L" f&uuml;r links, "C" f&uuml;r Mitte, "R" f&uuml;r rechte Ausrichtung, Default-Wert: `'L'`)   
 * `footer` (optional): Text in der Fu&szlig;zeile   

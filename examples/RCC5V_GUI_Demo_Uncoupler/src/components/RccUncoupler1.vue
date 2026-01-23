@@ -1,5 +1,5 @@
 <!-- RccUncoupler1.vue ----------------------khartinger----- -->
-<!-- 2026-01-09: new                                         -->
+<!-- 2026-01-23: new                                         -->
 
 <template>
   <g>
@@ -92,7 +92,7 @@ export default defineComponent({
     // =======standard methods==================================
     // _______find uncoupler1 object to given sid___________________
     uncoupler1: function (): Uncoupler1 | undefined {
-      return rccUncoupler1Controller.turnouts1.find(uncoupler1 => uncoupler1.id === this.sid)
+      return rccUncoupler1Controller.uncouplers1.find(uncoupler1 => uncoupler1.id === this.sid)
     },
     // _______get iUncoupler1State__________________________________
     iUncoupler1State: function (): number {
@@ -129,9 +129,9 @@ export default defineComponent({
     // _______direction of the track____________________________
     // return 15=horizontal, 26=right up, 48=right down, 0=error
     iDir: function(): number {
-      if(this.dir === '1' || this.dir === '15') return 15
-      if(this.dir === '2' || this.dir === '26') return 26
-      if(this.dir === '8' || this.dir === '48') return 48
+      if(this.dir === '1' || this.dir === '15'|| this.dir === '51') return 15
+      if(this.dir === '2' || this.dir === '6' || this.dir === '26' || this.dir === '62') return 26
+      if(this.dir === '4' || this.dir === '8' || this.dir === '48' || this.dir === '84') return 48
       return 0;
     },
     // _______draw the active path of the turnout_______________
@@ -149,7 +149,7 @@ export default defineComponent({
     // _______color of the active block_________________________
     colorUncouplerBlock: function (): string {
       if (this.iUncoupler1State === 1) {
-        if (this.color !== '-') return this.color
+        if (this.color.length > 1) return this.color
         return this.geof.colorUncouplerOn
       }
       return this.geof.colorUncouplerOff
@@ -334,17 +334,20 @@ export default defineComponent({
       }
       return s1
     },
-    // _______on click: turn track energy on____________________
+    // _______on click: turn uncoupler on_______________________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
+      // -----is there a uncouPler?-----------------------------
       let payload = 'onClkOn: sid=' + this.sid
-      const topic = 'rcc/error'
-      if (!this.uncoupler1) rccUncoupler1Controller.publishRcc(topic, payload)
+      const topicE = 'rcc/error'
+      if (!this.uncoupler1) rccUncoupler1Controller.publishRcc(topicE, payload)
+      // -----is there a topic for publishing?------------------
       if (this.uncoupler1?.pubTopic) {
         const aPubTopic = this.uncoupler1.pubTopic.split(' ')
+        // ---prepare payload (1)-------------------------------
         payload = rccUncoupler1Controller.payloadOn
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
-          // if (this.uncoupler1?.pubPayload) payload = this.uncoupler1.pubPayload
           if (this.uncoupler1?.pubTopic) {
             rccUncoupler1Controller.publishRcc(topic, payload)
           }
@@ -354,18 +357,20 @@ export default defineComponent({
     // _______on click: turn track energy off___________________
     onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Off')
+      // -----is there a uncouPler?-----------------------------
       let payload = 'onClkOff: sid=' + this.sid
-      const topic = 'rcc/error'
-      if (!this.uncoupler1) rccUncoupler1Controller.publishRcc(topic, payload)
+      const topicE = 'rcc/error'
+      if (!this.uncoupler1) rccUncoupler1Controller.publishRcc(topicE, payload)
+      // -----is there a topic for publishing?------------------
       if (this.uncoupler1?.pubTopic) {
         const aPubTopic = this.uncoupler1.pubTopic.split(' ')
+        // ---prepare payload (0)-------------------------------
         payload = rccUncoupler1Controller.payloadOff
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
-          // if (this.uncoupler1?.pubPayload) payload = this.uncoupler1.pubPayload
           rccUncoupler1Controller.publishRcc(topic, payload)
         })
       }
-
     },
   },
 })
