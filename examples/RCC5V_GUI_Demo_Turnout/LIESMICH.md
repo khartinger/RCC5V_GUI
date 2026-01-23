@@ -1,6 +1,6 @@
 <table><tr><td><img src="./images/RCC5V_Logo_96.png"></img></td><td>
 Letzte &Auml;nderung: 22.1.2026 <a name="up"></a><br>   
-<h1>Weichensymbole  f&uuml;r RCC5V-GUIs</h1><h3>RCC5V_GUI_Demo_Turnout</h3>
+<h1>Weichensymbole f&uuml;r RCC5V-GUIs</h1><h3>RCC5V_GUI_Demo_Turnout</h3>
 <a href="README.md">==> English version</a>&nbsp; &nbsp; &nbsp; 
 </td></tr></table>   
 
@@ -127,6 +127,7 @@ Insgesamt gibt es acht (sinnvolle) M&ouml;glichkeiten, eine Zweiwegweiche zu zei
 ![Weichenrichtungen](./images/300_turnout2_directions1.png "Weichenrichtungen")   
 _Bild 3: Weichenrichtungen_   
 
+<a name="x53"></a>   
 
 ## 5.3 MQTT-Funktionalit&auml;t
 W&auml;hrend die Darstellung eines Weichensymbols in der Datei `RccTurnout1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTurnout1Controller` bestimmt.   

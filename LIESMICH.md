@@ -12,17 +12,17 @@ Das folgende Bild zeigt das Stellpult f&uuml;r das Modul "Blocktester", dessen B
 _Bild 1: Grafisches Interface zur Steuerung des RCC5V-Blocktesters_   
 
 Das Repository ist folgenderma&szlig;en gegliedert:   
-Das Verzeichnis __`examples`__ enth&auml;lt verschiedene VUE-Programme, die die Anwendungsm&ouml;glichkeiten einer __Symbolart__ zeigen wie   
-* `RCC5V_GUI_Demo_Track`: Darstellung von Gleissymbolen   
-* `RCC5V_GUI_Demo_Turnout`: Darstellung von (Zweiweg-)Weichensymbolen   
-* `RCC5V_GUI_Demo_Turnout3Way`: Darstellung von Dreiwegweichensymbolen   
-* `RCC5V_GUI_Demo_Uncoupler`: Darstellung von Entkopplersymbolen   
+Das Verzeichnis __`examples`__ enth&auml;lt verschiedene VUE-Programme, die die Anwendungsm&ouml;glichkeiten __einer Symbolart__ zeigen wie   
+* [`RCC5V_GUI_Demo_Track`](https://github.com/khartinger/RCC5V_GUI/blob/main/examples/RCC5V_GUI_Demo_Track/LIESMICH.md): Darstellung von Gleissymbolen   
+* [`RCC5V_GUI_Demo_Turnout`](https://github.com/khartinger/RCC5V_GUI/blob/main/examples/RCC5V_GUI_Demo_Turnout/LIESMICH.md): Darstellung von (Zweiweg-)Weichensymbolen   
+* [`RCC5V_GUI_Demo_Turnout3Way`](https://github.com/khartinger/RCC5V_GUI/blob/main/examples/RCC5V_GUI_Demo_Turnout3Way/LIESMICH.md): Darstellung von Dreiwegweichensymbolen   
+* [`RCC5V_GUI_Demo_Uncoupler`](https://github.com/khartinger/RCC5V_GUI/blob/main/examples/RCC5V_GUI_Demo_Uncoupler/LIESMICH.md): Darstellung von Entkopplersymbolen   
 
 Das Verzeichnis __`images`__ enth&auml;lt Bilder und odg-Grafiken.   
 
-Das Verzeichnis `modules` enth&auml;lt Gleisstellpulte f&uuml;r verschiedene Modelleisenbahn-Module.   
+Das Verzeichnis __`modules`__ enth&auml;lt Gleisstellpulte f&uuml;r verschiedene Modelleisenbahn-Module.   
 * `RCC5V_GUI_Blocktester`: Gleisstellpult f&uuml;r den Blocktester   
 * `RCC5V_GUI_Layout1`: Gleisstellpult f&uuml;r eine Modellbahn-Anlage aus sechs Modulen   
-* Gleisstellpulte f&uuml;r einzele Module   
+* Gleisstellpulte f&uuml;r einzelne Module   
 
 [Zum Seitenanfang](#up)

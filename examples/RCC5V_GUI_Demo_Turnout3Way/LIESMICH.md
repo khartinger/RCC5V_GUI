@@ -77,7 +77,7 @@ rcc/demo1/ret/32 {"32":"-1"}
 rcc/demo1/ret/31 {"31":"0"}
 rcc/demo1/ret/32 {"32":"1"}
 ```
-Die erste Zeile ist der Schaltbefehl vom Browser und die zweite Zeile zeigt, dass der RCC-Blocktester die Nachricht erhalten hat. Die dritte und vierte Zeile ergibt sich aus dem undefinierten Zwischenzustand w&auml;hrend des Schaltens der Weiche (Wert `-1`) und die fünfte und sechste Zeile zeigen, dass der Schaltvorgang erfolgreich ausgef&uuml;hrt wurde (`0` steht im Normalfall f&uuml;r Abzweig, `1` f&uuml;r Gerade).   
+Die erste Zeile ist der Schaltbefehl vom Browser und die zweite Zeile zeigt, dass der RCC-Blocktester die Nachricht erhalten hat. Die dritte und vierte Zeile ergibt sich aus dem undefinierten Zwischenzustand w&auml;hrend des Schaltens der Weiche (Wert `-1`) und die f&uuml;nfte und sechste Zeile zeigen, dass der Schaltvorgang erfolgreich ausgef&uuml;hrt wurde (`0` steht im Normalfall f&uuml;r Abzweig, `1` f&uuml;r Gerade).   
 
 Klickt man auf die untere H&auml;lfte des Feldes, wird die Weiche auf "Rechts" geschaltet.   
 Klickt man in den rechten Bereich beim geraden Gleis, wird die Weiche auf "Gerade" gestellt.   
@@ -121,9 +121,11 @@ Weichensymbole werden in der Datei `MainView.vue` mit dem Tag `<RccTurnout3Way1 
 <a name="x52"></a>   
 
 ## 5.2 Richtung eines Weichensymbols
-Da senkrechte Gleise nicht unterstützt werden, gibt es nur zwei mögliche Richtungen für die Dreiweg-Weiche:   
+Da senkrechte Gleise nicht unterst&uuml;tzt werden, gibt es nur zwei m&ouml;gliche Richtungen f&uuml;r die Dreiweg-Weiche:   
 * `dir="1"`: Weiche zeigt nach rechts   
 * `dir="5"`: Weiche zeigt nach links   
+
+<a name="x53"></a>   
 
 ## 5.3 MQTT-Funktionalit&auml;t
 W&auml;hrend die Darstellung eines Dreiweg-Weichensymbols in der Datei `RccTurnout3Way1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTurnout3Way1Controller` bestimmt.   
@@ -217,7 +219,7 @@ export class RccTurnout3Way1Controller extends RccBaseController {
   public payloadTurnoutCurved = '0'
 ```
 
-Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` von `RccTurnout3Wway1.vue` aufgerufen. In dieser werden die richtigen Topics (je nach Weichenrichtung) ausgewählt, die Payload auf "Abzweig" gesetzt und die Nachricht(en) gesendet:   
+Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` von `RccTurnout3Wway1.vue` aufgerufen. In dieser werden die richtigen Topics (je nach Weichenrichtung) ausgew&auml;hlt, die Payload auf "Abzweig" gesetzt und die Nachricht(en) gesendet:   
 ```
     // _______on click: set turnout branch curve left/right_____
     onClkTop: function (): void {
