@@ -12,8 +12,8 @@
   <text v-if="(drawLabel &16) > 0 && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
 
   <!--draw track1------------------------------------------- -->
-  <path :d="drawTrack1" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
-
+  <path :d="trackPath" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
+  <path :d="drawBufferStop" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
   <RccTrackCon1 v-if="conB" :x="conX" :y="conY" sid="con0" :dir="con" :color="colorTrack"></RccTrackCon1>
 
   <!--define click area------------------------------------- -->
@@ -142,30 +142,16 @@ export default defineComponent({
       return ret
     },
     // _______convert dir string to number______________________
+    // Return: Number with tens digit smaller than ones digit,
+    //         0 if error occurs
     dirNum: function (): number {
-      // -----Break down direction "dir" into digits-------------
-      const aDigits = this.dir.split('').reverse()
-      let z1_ = 0
-      let z2_ = 0
-      if (aDigits.length === 1) z2_ = Number(aDigits[0])
-      if (aDigits.length > 1) {
-        z1_ = Number(aDigits[0])
-        z2_ = Number(aDigits[1])
-      }
-      // -----order digits: z1_ < z2_---------------------------
-      if (z1_ === z2_) z1_ = 0
-      const temp_ = z2_
-      if (z1_ > z2_) { z2_ = z1_; z1_ = temp_ }
-      return z1_ * 10 + z2_
-    },
-    // _______draw the full path of the track (attribute dir)___
-    drawTrack1: function (): string {
-      const pathNr = this.dirNum
-      if (pathNr === 0) return '' // nothing to draw
-      // -----draw path-----------------------------------------
-      const s1 = this.trackPath(pathNr)
-      // console.log('drawTrack1: s1=', s1)
-      return s1
+      // -----only 1 or 2 digits--------------------------------
+      if (!/^\d{1,2}$/.test(this.dir)) return 0
+      // -----one digit -> return as number---------------------
+      if (this.dir.length === 1) { return Number(this.dir) }
+      // -----split the digits, sort them, return value---------
+      const [a, b] = this.dir.split('').map(Number)
+      return Math.min(a, b) * 10 + Math.max(a, b)
     },
     // _______color of the track________________________________
     colorTrack: function (): string {
@@ -196,6 +182,196 @@ export default defineComponent({
       }
       return this.geof.center(this.geof.textTrackOff)
     },
+    // =======buffer stop=======================================
+    // _______draw a buffer stop ("end of track")_______________
+    // size of the rectangle: length = 3*tk2, width = tk2 (=tk/2)
+    drawBufferStop: function (): string {
+      const dir1 = this.dirNum
+      if (dir1 < 1 || dir1 > 8) return ''
+      const tk2 = this.geof.tk2
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      const tks = tk2 / 2
+      const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
+      const tks4 = dxo2 * tks / w
+      const tks3 = dyo2 * tks / w
+      let sgnx = 1
+      let s1 = ''
+      switch (dir1) {
+        case 1: case 5: // --vertical rectangle | --------------
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-tks) + ',' + (-3 * tks)
+          s1 += ' v' + (6 * tks)
+          s1 += ' h' + (2 * tks)
+          s1 += ' v' + (-6 * tks)
+          s1 += ' z'
+          break
+        case 3: case 7: // --horizontal rectangle - ------------
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-3 * tks) + ',' + (-tks)
+          s1 += ' v' + (2 * tks)
+          s1 += ' h' + (6 * tks)
+          s1 += ' v' + (-2 * tks)
+          s1 += ' z'
+          break
+        case 2: case 6: // --diagonal rectangle \ --------------
+          sgnx = -1
+          /* falls through */
+        case 4: case 8: // --diagonal rectangle / --------------
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + sgnx * (3 * tks3 + tks4) + ',' + (-3 * tks4 + tks3)
+          s1 += ' l' + sgnx * (-6 * tks3) + ',' + (6 * tks4)
+          s1 += ' l' + sgnx * (-2 * tks4) + ',' + (-2 * tks3)
+          s1 += ' l' + sgnx * (6 * tks3) + ',' + (-6 * tks4)
+          s1 += ' z'
+          break
+        default:
+      }
+      return s1
+    },
+    // =======track=============================================
+    // _______path of a track with the path number dirNum_______
+    trackPath: function (): string {
+      const dir1 = this.dirNum
+      // -----signs for drawing---------------------------------
+      let sgnx = 1
+      let sgny = 1
+      // -----(positive) values of line length------------------
+      const tk2 = this.geof.tk2
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      const q1x = dxo2 - this.geof.tkp.value[1].x
+      const q2y = dyo2 - this.geof.tkp.value[2].y
+      const q5x = dxo2 - this.geof.tkp.value[5].x
+      const d25y = this.geof.tkp.value[2].y - this.geof.tkp.value[5].y
+      let s1 = ' M' + this.x + ',' + this.y
+      switch (dir1) {
+        // ===horizontel line===================================
+        case 15:
+          s1 += ' m' + dxo2 + ',' + tk2 // P0 as start
+          s1 += ' v' + (-2 * tk2)
+          s1 += ' h' + sgnx * (-2) * dxo2
+          s1 += ' v' + (2 * tk2)
+          s1 += ' z'
+          break
+        // ===buffer stop=======================================
+        case 5: // ----- x direction----------------------------
+          sgnx = -1
+          /* falls through */
+        case 1:
+          s1 += ' m' + sgnx * dxo2 + ',' + tk2 // P0 as start
+          s1 += ' v' + (-2 * tk2)
+          s1 += ' h' + sgnx * (-dxo2)
+          s1 += ' v' + (2 * tk2)
+          s1 += ' z'
+          break
+        case 3: // ----- y direction----------------------------
+          sgny = -1
+          /* falls through */
+        case 7:
+          s1 += ' m' + tk2 + ',' + sgny * dyo2
+          s1 += ' v' + sgny * (-dyo2)
+          s1 += ' h' + (-2) * tk2
+          s1 += ' v' + sgny * dyo2
+          s1 += ' z'
+          break
+        case 2: case 4: case 6: // -----diagonal directions-----
+          sgnx = -1
+          sgny = -1
+          if (dir1 === 2) sgnx = 1
+          if (dir1 === 6) sgny = 1
+          /* falls through */
+        case 8:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + sgny * dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + sgny * (-q2y) // @ P2
+          s1 += ' l' + sgnx * (-dxo2 + this.geof.tkp.value[4].x) + ',' + sgny * (-this.geof.tkp.value[2].y + this.geof.tkp.value[4].y) // @ P4
+          s1 += ' l' + sgnx * (-2) * this.geof.tkp.value[4].x + ',' + sgny * (-2) * this.geof.tkp.value[4].y // @ P4*
+          s1 += ' z'
+          break
+        // ===horizontal, rectangular angle=====================
+        case 13: case 35: case 57:
+          sgnx = -1
+          sgny = -1
+          if (dir1 === 13) sgnx = 1
+          if (dir1 === 57) sgny = 1
+          /* falls through */
+        case 17:
+          s1 += ' m' + sgnx * dxo2 + ',' + sgny * tk2 // P0 as start
+          s1 += ' v' + sgny * (-2) * tk2 // @ P0'
+          s1 += ' h' + (-sgnx) * (dxo2 + tk2)
+          s1 += ' v' + sgny * (dyo2 + tk2)
+          s1 += ' h' + sgnx * 2 * tk2
+          s1 += ' v' + (-sgny) * (dyo2 - tk2)
+          s1 += ' z'
+          break
+        // ===diagonal straight line============================
+        case 26:
+          sgnx = -1
+          /* falls through */
+        case 48:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + sgny * dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + sgny * (-q2y) // @ P2
+          s1 += ' l' + sgnx * (-2 * dxo2 + q1x) + ',' + sgny * (-2 * dyo2 + q2y)
+          s1 += ' h' + (-sgnx) * q1x
+          s1 += ' v' + sgny * q2y
+          s1 += ' z'
+          break
+        // ===curved track======================================
+        case 14: case 16: case 25:
+          sgnx = -1
+          sgny = -1
+          if (dir1 === 16) sgny = 1
+          if (dir1 === 25) sgnx = 1
+          /* falls through */
+        case 58:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + sgny * dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + sgny * (-q2y) // @ P2
+          s1 += ' l' + (-sgnx) * q5x + ',' + (-sgny) * d25y // @ P5
+          s1 += ' h' + (-sgnx) * (2 * dxo2 - q5x)
+          s1 += ' v' + sgny * 2 * tk2
+          s1 += ' h' + sgnx * q5x
+          s1 += ' z'
+          break
+        // ===angel >< =========================================
+        case 46:
+          sgnx = -1
+          /* falls through */
+        case 28:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + (-q2y) // @ P2
+          s1 += ' l' + (-sgnx) * (dxo2 - this.geof.tkp.value[6].x) + ',' + (-this.geof.tkp.value[2].y) // @ P6
+          s1 += ' l' + sgnx * (dxo2 - this.geof.tkp.value[6].x) + ',' + (-this.geof.tkp.value[2].y) // @ P2'
+          s1 += ' v' + (-q2y)
+          s1 += ' h' + (-sgnx) * q1x // @ P1'
+          s1 += ' l' + (-sgnx) * (this.geof.tkp.value[1].x + this.geof.tkp.value[5].x) + ',' + (dyo2 - tk2)
+          s1 += ' v' + 2 * tk2
+          s1 += ' z'
+          break
+        // ===angel A V ========================================
+        case 24:
+          sgny = -1
+          /* falls through */
+        case 68:
+          s1 += ' m' + (dxo2 - q1x) + ',' + sgny * dyo2 // P1 as start
+          s1 += ' h' + q1x
+          s1 += ' v' + sgny * (-q2y) // @ P2
+          s1 += ' l' + -q5x + ',' + (-sgny) * d25y // @ P5
+          s1 += ' h' + (-2) * this.geof.tkp.value[5].x
+          s1 += ' l' + -q5x + ',' + sgny * d25y // @ P2"
+          s1 += ' v' + sgny * q2y
+          s1 += ' h' + q1x // @ P1"
+          s1 += ' l' + this.geof.tkp.value[1].x + ',' + sgny * (-dyo2 + this.geof.tkp.value[3].y) // @ P3
+          s1 += ' z'
+          break
+        default:
+          s1 = ''
+      }
+      return s1
+    },
     // =======connector specific functions======================
     // _______draw a connector?_________________________________
     conB: function (): boolean {
@@ -216,6 +392,7 @@ export default defineComponent({
       if (this.con === '6' || this.con === '8') return this.y + this.geof.dyo2()
       return this.y
     },
+    // =======path of click areas===============================
     // _______path of top click area____________________________
     pathTop: function (): string {
       const dxo = this.geof.dxo()
@@ -354,348 +531,6 @@ export default defineComponent({
     },
   },
   methods: {
-    // _______path command: draw a track________________________
-    trackPath: function (dir1: number): string {
-      // -----(positive) values of line length------------------
-      const dxo2 = this.geof.dxo2()
-      const dyo2 = this.geof.dyo2()
-      const tk0x = -this.geof.tk.value[0].x
-      const tk0y = -this.geof.tk.value[0].y
-      const tk2 = this.geof.tk2
-      const tkax = dxo2 - tk0x
-      const tkbx = dxo2 + tk0x
-      const tkcx = dxo2 - this.geof.tk.value[4].x
-      const tkcy = dyo2 + this.geof.tk.value[5].y
-      const tk58x = dxo2 - this.geof.tk.value[8].x
-      const tk58y = dyo2 - tkcy + this.geof.tk.value[8].y
-      const tk59x = this.geof.dxo() - tkbx
-      const tk59y = dyo2 - tkcy + tk0y
-      const tkdy = tk0x + tk0y
-      // -----used by symbol "end of track"---------------------
-      const tks = tk2 / 2
-      const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
-      const tks4 = dxo2 * tks / w
-      const tks3 = dyo2 * tks / w
-
-      let s1 = ' M' + this.x + ',' + this.y
-      switch (dir1) {
-        case 1: // ----- x+ direction---------------------------
-          s1 += ' m' + '0,' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + dxo2
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-          break
-        case 2: // ----- / (up) direction-----------------------
-          s1 += ' m' + (-this.geof.tk.value[8].x) + ',' + (-this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (2 * this.geof.tk.value[8].x) + ',' + (2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + tk58x + ',' + (-tk58y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 3: // ----- ! (up) direction-----------------------
-          s1 += ' m' + (-this.geof.tk2) + ',' + (-dyo2) // Tk0
-          s1 += ' v' + dyo2
-          s1 += ' h' + (2 * this.geof.tk2)
-          s1 += ' v' + (-dyo2)
-          s1 += ' z'
-          break
-        case 4: // ----- \ (up) direction-----------------------
-          s1 += ' m' + (this.geof.tk.value[8].x) + ',' + (-this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (-2 * this.geof.tk.value[8].x) + ',' + (2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + (-tk58x) + ',' + (-tk58y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          break
-        case 5: // ----- x- direction---------------------------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (dxo2)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-          break
-        case 6: // ----- / (down) direction---------------------
-          s1 += ' m' + (this.geof.tk.value[8].x) + ',' + (this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (-2 * this.geof.tk.value[8].x) + ',' + (-2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + (-tk58x) + ',' + (tk58y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          break
-        case 7: // ----- i (down) direction-----------------------
-          s1 += ' m' + (-tk2) + ',' + (dyo2) // Tk0
-          s1 += ' h' + (2 * tk2)
-          s1 += ' v' + (-dyo2)
-          s1 += ' h' + (-2 * tk2)
-          s1 += ' z'
-          break
-        case 8: // ----- \ (down) direction---------------------
-          s1 += ' m' + (-this.geof.tk.value[8].x) + ',' + (this.geof.tk.value[8].y) // Tk8´
-          s1 += ' l' + (2 * this.geof.tk.value[8].x) + ',' + (-2 * this.geof.tk.value[8].y) // Tk8
-          s1 += ' l' + tk58x + ',' + (tk58y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-
-        case 12: // ----- Z - symbol (above)--------------------
-          s1 += ' m' + (+dxo2) + ',' + (-dyo2)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (-tkcx) + ',' + (+tkcy)
-          s1 += ' z'
-          s1 += ' h' + (+tkcx)
-          s1 += ' l' + (-tkcx) + ',' + (+tkcy)
-          s1 += ' z'
-          break
-        case 18: // ----- Z - symbol (below)--------------------
-          s1 += ' m' + (+dxo2) + ',' + (+dyo2)
-          s1 += ' v' + (+tkcy)
-          s1 += ' l' + (-tkcx) + ',' + (-tkcy)
-          s1 += ' z'
-          s1 += ' h' + (+tkcx)
-          s1 += ' l' + (-tkcx) + ',' + (-tkcy)
-          s1 += ' z'
-          break
-
-        case 14: // ----- \_ direction--------------------------
-          s1 += ' m' + (tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' h' + (tkax)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (-tkbx) // Tk0´
-          s1 += ' l' + (-tk59x) + ',' + (-tk59y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          // s1 += ' M' + this.x + ',' + (this.y - dyo2)
-          // s1 += ' v' + (2 * dyo2)
-          break
-        case 15: // ----- -- direction--------------------------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + this.geof.dxo()
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-          break
-        case 16: // ----- /- direction--------------------------
-          s1 += ' m' + (tk0x) + ',' + (tk0y) // Tk0
-          s1 += ' h' + (tkax)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' h' + (-tkbx) // Tk0´
-          s1 += ' l' + (-tk59x) + ',' + (tk59y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          break
-
-        case 24: // ----- \/ direction--------------------------
-          s1 += ' m' + 0 + ',' + (-tkdy) // Tkd
-          s1 += ' l' + (-dxo2 + tkcx) + ',' + (-dyo2 + tkdy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' v' + (tkcy)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (tk59y)
-          s1 += ' h' + (2 * tk0x)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (-tk59y)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 25: // ----- _/ direction--------------------------
-          s1 += ' m' + (-tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' h' + (-tkax)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (tkbx) // Tk0´
-          s1 += ' l' + tk59x + ',' + (-tk59y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 26: // ----- / direction---------------------------
-          s1 += ' m' + (dxo2 - tkcx) + ',' + (-dyo2) // Tk4
-          s1 += ' l' + (-this.geof.dxo() + tkcx) + ',' + (this.geof.dyo() - tkcy)
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' l' + (this.geof.dxo() - tkcx) + ',' + (-this.geof.dyo() + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 28: // ----- < direction---------------------------
-          s1 += ' m' + (-tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' l' + (+dxo2 + tk0x - tkcx) + ',' + (dyo2 - tk0y)
-          s1 += ' h' + (+tkcx)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (-dxo2 + this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' l' + (+dxo2 - this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 46: // ----- > direction---------------------------
-          s1 += ' m' + (tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' l' + (-dxo2 - tk0x + tkcx) + ',' + (dyo2 - tk0y)
-          s1 += ' h' + (-tkcx)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (+dxo2 - this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' l' + (-dxo2 + this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (+tkcx)
-          s1 += ' z'
-          break
-        case 48: // ----- \ direction---------------------------
-          s1 += ' m' + (-dxo2 + tkcx) + ',' + (-dyo2) // Tk4
-          s1 += ' l' + (this.geof.dxo() - tkcx) + ',' + (this.geof.dyo() - tkcy)
-          s1 += ' v' + (+tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' l' + (-this.geof.dxo() + tkcx) + ',' + (-this.geof.dyo() + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (+tkcx)
-          s1 += ' z'
-          break
-        case 58: // ----- -\ direction--------------------------
-          s1 += ' m' + (-tk0x) + ',' + (tk0y)
-          s1 += ' h' + (-tkax)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' h' + (tkbx) // Tk0´
-          s1 += ' l' + tk59x + ',' + (tk59y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 68: // ----- /\ direction--------------------------
-          s1 += ' m' + 0 + ',' + (tkdy) // Tkd
-          s1 += ' l' + (-dxo2 + tkcx) + ',' + (dyo2 - tkdy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (-tk59y)
-          s1 += ' h' + (2 * tk0x)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (tk59y)
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-
-        case 13: // ----- L direction---------------------------
-          s1 += ' m' + (tk2) + ',' + (-tk2)
-          s1 += ' v' + (tk2 - dyo2)
-          s1 += ' h' + (-2 * tk2)
-          s1 += ' v' + (tk2 + dyo2)
-          s1 += ' h' + (tk2 + dxo2)
-          s1 += ' v' + (-2 * tk2)
-          s1 += ' z'
-          break
-        case 17: // ----- r direction---------------------------
-          s1 += ' m' + (tk2) + ',' + (tk2)
-          s1 += ' v' + (-tk2 + dyo2)
-          s1 += ' h' + (-2 * tk2)
-          s1 += ' v' + (-tk2 - dyo2)
-          s1 += ' h' + (tk2 + dxo2)
-          s1 += ' v' + (2 * tk2)
-          s1 += ' z'
-          break
-        case 35: // ----- -! direction--------------------------
-          s1 += ' m' + (-tk2) + ',' + (-tk2)
-          s1 += ' v' + (tk2 - dyo2)
-          s1 += ' h' + (2 * tk2)
-          s1 += ' v' + (tk2 + dyo2)
-          s1 += ' h' + (-tk2 - dxo2)
-          s1 += ' v' + (-2 * tk2)
-          s1 += ' z'
-          break
-        case 57: // ----- -7 direction---------------------------
-          s1 += ' m' + (-tk2) + ',' + (tk2)
-          s1 += ' v' + (-tk2 + dyo2)
-          s1 += ' h' + (2 * tk2)
-          s1 += ' v' + (-tk2 - dyo2)
-          s1 += ' h' + (-tk2 - dxo2)
-          s1 += ' v' + (2 * tk2)
-          s1 += ' z'
-          break
-
-        case 159: // ----- || - symbol (right side)--------------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (this.geof.dxo() - 3 * tks)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-
-          s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
-          s1 += ' z'
-
-          s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
-          s1 += ' z'
-          break
-
-        case 29: // ----- \\ - symbol (right up corner)---------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (this.geof.dxo() - 3 * tks)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-
-          s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
-          s1 += ' z'
-
-          s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
-          s1 += ' z'
-          break
-        default:
-      }
-      // -----add symbol "end of track"---------------------------
-      if (dir1 < 10) {
-        switch (dir1) {
-          case 1: case 5:
-            s1 += ' M' + this.x + ',' + this.y
-            s1 += ' m' + (-tks) + ',' + (-3 * tks)
-            s1 += ' v' + (6 * tks)
-            s1 += ' h' + (2 * tks)
-            s1 += ' v' + (-6 * tks)
-            s1 += ' z'
-            break
-          case 2: case 6:
-            s1 += ' M' + this.x + ',' + this.y
-            s1 += ' m' + (-3 * tks3 - tks4) + ',' + (-3 * tks4 + tks3)
-            s1 += ' l' + (6 * tks3) + ',' + (6 * tks4)
-            s1 += ' l' + (2 * tks4) + ',' + (-2 * tks3)
-            s1 += ' l' + (-6 * tks3) + ',' + (-6 * tks4)
-            s1 += ' z'
-            break
-          case 3: case 7:
-            s1 += ' M' + this.x + ',' + this.y
-            s1 += ' m' + (-3 * tks) + ',' + (-tks)
-            s1 += ' v' + (2 * tks)
-            s1 += ' h' + (6 * tks)
-            s1 += ' v' + (-2 * tks)
-            s1 += ' z'
-            break
-          case 4: case 8:
-            s1 += ' M' + this.x + ',' + this.y
-            s1 += ' m' + (3 * tks3 + tks4) + ',' + (-3 * tks4 + tks3)
-            s1 += ' l' + (-6 * tks3) + ',' + (6 * tks4)
-            s1 += ' l' + (-2 * tks4) + ',' + (-2 * tks3)
-            s1 += ' l' + (6 * tks3) + ',' + (-6 * tks4)
-            s1 += ' z'
-            break
-          default:
-        }
-      }
-      return s1
-    },
     // _______on click: turn track energy on____________________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
