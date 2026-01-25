@@ -279,7 +279,156 @@ Hier ist die Farbe des Verbindungselements fest vorgegeben (rot). &Auml;ndert si
 <a name="x71"></a>   
 
 # 7. Anmerkungen zur Programmierung   
-## 7.1 Klickbereiche f&uuml;r Gleissymbole
+## 7.1 Zeichnen der Gleissymbole
+Gleissymbole bestehen aus bis zu drei Teilen:   
+* das Gleissymbol selbst   
+* eventuell eine zusätzliche Verlängerung eines schrägen Gleises   
+* eventuell ein Prellbock   
+
+### 7.1.1 Gleissymbol
+Die Art des Gleissymbols wird durch die Angabe der Richtung (Parameter `dir`) festgelegt (siehe [Kapitel 5.2](#x52)). Das Zeichnen des Symbols erfolgt so:   
+
+Im `<template>` steht die Anweisung   
+`<path :d="trackPath" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />`   
+Darin ist `trackPath` der Pfad (die Geometrie) der Zeichnung und `colorTrack` die Farbe des Symbols.   
+
+Im `<script>` Bereich wird in der Funktion `trackPath` der Pfad zusammengestellt. Mit Hilfe der Funktion `dirNum` wird zuerst der eingegebene `dir=`-Parameter in eine Zahl `dir1` umgewandelt, bei der die Zehnerziffer immer kleiner als die Einerziffer ist.   
+Viele Symbole sind spiegelbildlich, daher wird ein Grundsymbol gezeichnet und dieses bei Bedarf gespiegelt. Das Spiegeln wird durch die Variablen `sgnx` und `sgny` bewirkt (Wert 1 = ungespiegelt, -1 = spiegeln).   
+Folgende Symbole werden mit Zeichenbefehlen (wie `M`, `m`, `h`, `v`, `l`) gezeichnet:   
+![Trackbasesymbols1](./images/200_track_basesymbol_1.png "Trackbasesymbols1") 
+![Trackbasesymbols2](./images/200_track_basesymbol_2.png "Trackbasesymbols2") 
+![Trackbasesymbols3](./images/200_track_basesymbol_3.png "Trackbasesymbols3") 
+![Trackbasesymbols4](./images/200_track_basesymbol_4.png "Trackbasesymbols4") 
+![Trackbasesymbols5](./images/200_track_basesymbol_5.png "Trackbasesymbols5") 
+![Trackbasesymbols6](./images/200_track_basesymbol_6.png "Trackbasesymbols6") 
+![Trackbasesymbols7](./images/200_track_basesymbol_7.png "Trackbasesymbols7") 
+![Trackbasesymbols8](./images/200_track_basesymbol_8.png "Trackbasesymbols8")   
+_Bild 4: Basissymbole für Gleise_   
+
+Die Koordinaten der Punkte P0 bis P7 werden im Ordner `classes` in der Datei `Geo.ts` berechnet, wobei die positive y-Achse nach __unten__ gerichtet ist.   
+#### Vorgegebene Größen   
+* `tk2 ....` Halbe Gleisbreite   
+* `txo2 ...` Halbe Breite des Symbolfeldes   
+* `tyo2 ...` Halbe Höhe des Symbolfeldes   
+
+#### Hilfsgrößen   
+$\ \text{Steigung} ~ k = \displaystyle{{dyo2} \over {dxo2}} $   
+
+$\ \text{Wurzel} ~ w = \sqrt {1 + k^2 ~} $   
+
+#### Koordinaten   
+$\ \Large P_0 \left( \displaystyle ~ dxo2 ~\Big/~ tk2 ~ \right) $   
+
+$\ \Large P_1 \left( \displaystyle \frac{1}{k} \cdot \Big[ dyo2 - tk2 \cdot \sqrt{1+k^2} \Big] \; \Big/ \; dyo2 \right) $
+
+$\ \Large P_2 \left( \displaystyle dxo2 \; \Big/ \; k \cdot dxo2 - tk2 \cdot \sqrt{1+k^2} \right) $
+
+$\ \Large P_3 \left( \displaystyle 0 \; \Big/ \; tk2 \cdot \sqrt{1+k^2} \right) $
+
+$\ \Large P_4 \left( \displaystyle \frac{k \cdot tk2}{\sqrt{1+k^2}}  \; / \; \frac{-tk2}{\sqrt{1+k^2}} \right) $
+
+$\ \Large P_5 \left( \displaystyle \frac{tk2}{k} \cdot \Big[\sqrt{1+k^2} \; - \; 1 \Big] \; \Big/ \; -tk2 \right) $
+
+$\ \Large P_6 \left( \displaystyle \frac{tk2}{k} \cdot \sqrt{1+k^2} \; \Big/ \; 0 \right) $
+
+
+### 7.1.2 Zusätzliche Verlängerung
+Die Verlängerung eines schrägen Gleises dient zur Verbindung mit dem Nachbargleis und durch die Verwendung des Parameters `con` bewirkt.   
+Im `<template>` steht die Anweisung   
+`<RccTrackCon1 v-if="conB" :x="conX" :y="conY" sid="con0" :dir="con" :color="colorTrack"></RccTrackCon1>`   
+
+Das bedeutet, zum Zeichnen wird ein Objekt `RccTrackCon1` verwendet, dass in der Datei `RccTrackCon1.vue` erzeugt wird. Damit man es verwenden kann, muss es im `<script>`-Bereich eingebunden werden:   
+```   
+import RccTrackCon1 from './RccTrackCon1.vue'
+
+export default defineComponent({
+  name: 'RccTrack1',
+  components: {
+    RccBase,
+    RccTrackCon1,
+  },
+```   
+
+`colorTrack` die Farbe des Symbols und die übrigen Parameter werden im Bereich `computed: {` erzeugt:   
+```   
+    // =======connector specific functions======================
+    // _______draw a connector?_________________________________
+    conB: function (): boolean {
+      if (this.con.length > 0) {
+        if (this.dir.includes(this.con)) return true
+      }
+      return false
+    },
+    // _______x-position of connector___________________________
+    conX: function (): number {
+      if (this.con === '2' || this.con === '8') return this.x + this.geof.dxo2()
+      if (this.con === '4' || this.con === '6') return this.x - this.geof.dxo2()
+      return this.x
+    },
+    // _______y-position of connector___________________________
+    conY: function (): number {
+      if (this.con === '2' || this.con === '4') return this.y - this.geof.dyo2()
+      if (this.con === '6' || this.con === '8') return this.y + this.geof.dyo2()
+      return this.y
+    },
+```   
+
+### 7.1.3 Prellbock (buffer stop)
+Gleise, die in der Mitte des Symbols enden (Pfad Nummer 1 bis 8), erhalten ein Rechteck als "Prellbock". Dieses wird im `<template>` durch   
+`<path :d="drawBufferStop" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />`   
+gezeichnet, wobei der Pfad in der Funktion `drawBufferStop` zusammengestellt wird(`<script`-Bereich `computed`).   
+```   
+    // _______draw a buffer stop ("end of track")_______________
+    // size of the rectangle: length = 3*tk2, width = tk2 (=tk/2)
+    drawBufferStop: function (): string {
+      const dir1 = this.dirNum
+      if (dir1 < 1 || dir1 > 8) return ''
+      const tk2 = this.geof.tk2
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      const tks = tk2 / 2
+      const w = Math.sqrt(dxo2 * dxo2 + dyo2 * dyo2)
+      const tks4 = dxo2 * tks / w
+      const tks3 = dyo2 * tks / w
+      let sgnx = 1
+      let s1 = ''
+      switch (dir1) {
+        case 1: case 5: // --vertical rectangle | --------------
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-tks) + ',' + (-3 * tks)
+          s1 += ' v' + (6 * tks)
+          s1 += ' h' + (2 * tks)
+          s1 += ' v' + (-6 * tks)
+          s1 += ' z'
+          break
+        case 3: case 7: // --horizontal rectangle - ------------
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-3 * tks) + ',' + (-tks)
+          s1 += ' v' + (2 * tks)
+          s1 += ' h' + (6 * tks)
+          s1 += ' v' + (-2 * tks)
+          s1 += ' z'
+          break
+        case 2: case 6: // --diagonal rectangle \ --------------
+          sgnx = -1
+          /* falls through */
+        case 4: case 8: // --diagonal rectangle / --------------
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + sgnx * (3 * tks3 + tks4) + ',' + (-3 * tks4 + tks3)
+          s1 += ' l' + sgnx * (-6 * tks3) + ',' + (6 * tks4)
+          s1 += ' l' + sgnx * (-2 * tks4) + ',' + (-2 * tks3)
+          s1 += ' l' + sgnx * (6 * tks3) + ',' + (-6 * tks4)
+          s1 += ' z'
+          break
+        default:
+      }
+      return s1
+    },
+```   
+
+<a name="x72"></a>   
+
+## 7.2 Klickbereiche f&uuml;r Gleissymbole
 Zu Beginn der Entwicklung wurden die beiden rechteckigen Klickbereiche "Ein" = obere H&auml;lfte des Symbol-Rechtecks und "Aus" = untere H&auml;lfte definiert:   
 ![Rechteckige Klickbereiche](./images/150_clickarea_rect1.png "Rechteckige Klickbereiche")   
 _Bild 5: Rechteckige Klickbereiche_   
@@ -293,9 +442,9 @@ _Bild 6: Alle Klickbereiche Top_
 
 Wenn kein spezieller Klickbereich zugeordnet ist, werden - so wie bisher - die Rechtecke verwendet.   
 
-<a name="x72"></a>   
+<a name="x73"></a>   
 
-## 7.2 Senden der MQTT-Nachrichten
+## 7.3 Senden der MQTT-Nachrichten
 Beim Schalten des Fahrstroms gilt normalerweise, dass 1 Einschalten und 0 Ausschalten bewirkt. Daher wird im Normalfall beim Klicken der oberen Schaltfl&auml;che ("Top") eine 1 und beim Klicken der unteren Schaltfl&auml;che ("Bottom") eine 0 gesendet. Manchmal kann es jedoch erforderlich sein, dass die Bedeutung von 0 und 1 genau umgekehrt ist. Diese Besonderheit wird in der Software folgenderma&szlig;en ber&uuml;cksichtigt.   
 
 Das Senden von Nachrichten passiert in der `Klasse RccTrack1Controller`. Dort werden zwei Variablen `payloadTrackOn` und `payloadTrackOff` definiert, die den "Normalzustand" abbilden.   
@@ -338,9 +487,9 @@ Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTrack1Con
 
 F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBottom` gemacht.   
 
-<a name="x73"></a>   
+<a name="x74"></a>   
 
-## 7.3 Empfang von MQTT-Nachrichten
+## 7.4 Empfang von MQTT-Nachrichten
 Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTrack1Controller.vue` in der Funktion `onMessage`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTrack1State` gespeichert.   
 ```
   // _________receive messages__________________________________
