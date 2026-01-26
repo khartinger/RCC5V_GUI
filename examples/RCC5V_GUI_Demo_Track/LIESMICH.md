@@ -478,6 +478,7 @@ Insgesamt werden f&uuml;r den oberen Bereich neun Klickfl&auml;chen f&uuml;r fol
 _Bild 6: Alle Klickbereiche Top_   
 
 Wenn kein spezieller Klickbereich zugeordnet ist, werden - so wie bisher - die Rechtecke verwendet.   
+Die unteren Klickfl&auml;chen ergeben sich aus dem "Rest" des Symbolrechtecks.   
 
 <a name="x73"></a>   
 
@@ -491,7 +492,7 @@ export class RccTrack1Controller extends RccBaseController {
   public payloadTrackOff = '0'
 ```
 
-Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` angepasst und die Nachricht(en) gesendet:   
+Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` angepasst und es werden die Nachricht(en) gesendet:   
 ```ts
     // _______on click: turn track energy on____________________
     onClkTop: function (): void {

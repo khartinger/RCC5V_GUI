@@ -5,8 +5,9 @@ Letzte &Auml;nderung: 22.1.2026 <a name="up"></a><br>
 </td></tr></table>   
 
 # 1. Einleitung
-Dieses Dokument beschreibt die Verwendung von (Zweiweg-)Weichensymbolen zur Erzeugung eines Gleisstellbildes f&uuml;r RCC5V-GUI-Anwendungen.   
+Dieses Dokument beschreibt die Verwendung von (Zweiweg-)Weichensymbolen zur Erstellung eines Gleisstellbildes f&uuml;r RCC5V-GUI-Anwendungen.   
 _Bild 1_ zeigt verschiedene Weichensymbole mit ihrer Bezeichnung. Die Symbole haben (noch) keine Verbindung zu einer realen Weiche, daher ist keine Schaltstellung eingezeichnet.   
+
 ![Weichensymbole](./images/200_symbol_turnout.png "Weichensymbole")   
 _Bild 1: Weichensymbole_   
 
@@ -60,6 +61,7 @@ Damit die Weichensymbole funktionieren (d.h. MQTT Nachrichten senden und empfang
 Jetzt kann man im Browser kontrollieren, ob die Weichenstellung angezeigt wird.
 
 _Bild 2_ zeigt die Weichen in Weichenstellung "Gerade".   
+
 ![Weichensymbole2](./images/200_symbol_turnout2.png "Weichensymbole2")   
 _Bild 2: Weichensymbole in Weichenstellung "Gerade"_   
 
@@ -67,7 +69,7 @@ Ist auf dem PC/Laptop `mosquitto` installiert, so kann man in einem Terminal-Fen
 `cd C:/programme/mosquitto`   
 `mosquitto_sub -h 10.1.1.1 -t rcc/# -v`   
 
-Klickt man im Browser bei der Weiche "1L" ins obere Feld, wird die Weiche im RCC-Blocktester auf "Abzweig" gestellt und alle Weichensymbole wechseln auf Anzeige "Abzweig" (weil in diesem Beispiel alle Weichen die gleiche Weichen-sid `sid="to1"` haben).   
+Klickt man im Browser bei der Weiche "1L" ins obere Feld, wird die Weiche im RCC-Blocktester auf "Abzweig" gestellt und alle Weichensymbole wechseln auf Anzeige "Abzweig" (weil in diesem Beispiel alle Weichen die gleiche Weichen-Id (`sid="to1"` haben).   
 Im Terminal-Fenster sieht man, dass folgende MQTT-Nachrichten gesendet wurden:   
 ```
 rcc/demo1/set/21 0
@@ -106,7 +108,7 @@ Weichensymbole werden in der Datei `MainView.vue` mit dem Tag `<RccTurnout1 ...>
 * `x` (erforderlich): x-Koordinate des Mittelpunkts des Symbols in Pixel   
 * `y` (erforderlich): y-Koordinate des Mittelpunkts des Symbols in Pixel   
 * `dir` (erforderlich): Richtung des Weichensymbols (siehe [Kapitel 5.2](#x52))   
-* `sid` (optional): ID des Symbols, mit dem Weichen gruppiert und &uuml;ber MQTT angesprochen werden.   
+* `sid` (optional): ID des Symbols. Sie wird ben&ouml;tigt, damit die Weiche &uuml;ber MQTT kommunizieren kann oder mehrere Weichen gleichzeitig schalten k&ouml;nnen.   
 * `border` (optional): Gibt an, ob ein Rahmen um ein Weichensymbol gezeichnet werden soll. (M&ouml;gliche Werte 0 bis 3, Default-Wert `'0'`)   
 * `label` (optional): Gibt an, ob und welche Beschriftung f&uuml;r ein Weichensymbol angezeigt werden soll. (M&ouml;gliche Werte: "0" bis "3", Default-Wert `'0'`)   
 * `color` (optional): Setzen der Farbe f&uuml;r f&uuml;r den Fahrweg. (Default-Wert: "-" bedeutet Standardwert `colorTurnoutClear` nehmen)    
@@ -130,7 +132,7 @@ _Bild 3: Weichenrichtungen_
 <a name="x53"></a>   
 
 ## 5.3 MQTT-Funktionalit&auml;t
-W&auml;hrend die Darstellung eines Weichensymbols in der Datei `RccTurnout1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTurnout1Controller` bestimmt.   
+W&auml;hrend die Darstellung eines Weichensymbols in der Datei `RccTurnout1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTurnout1Controller.ts` bestimmt.   
 Die Eigenschaften einzelner Weichen werden im Array `turnouts1` gespeichert. Ein Eintrag ist zB folgenderma&szlig;en aufgebaut:   
 ```ts
       {
@@ -164,14 +166,14 @@ _Bild 4: Gekoppelte Weichen ohne Invertierung_
 In diesem Fall haben beide Weichen die gleiche `sid` (damit sie gemeinsam schalten), ein empfangener DCC-Befehl '0' (im Normalfall Abzweig) muss bei der oberen Weiche aber als '1' ("Gerade") dargestellt werden, dh. bei dieser Weiche ist `payloadInvert=true`   
 
 #### 2. Ober- und Unterflurantrieb
-Die Weichenantriebe f&uuml;r Fleischmann-Weichen k&ouml;nnen sowohl Ober- als auch Unterflur angesteckt werden. Steckt man einen Antrieb um, so &auml;ndert sich das Schaltverhalten (Antriebschalterstellung Gerade wird ungerade und umgekehrt). In diesem Fall muss man entweder die Verdrahtung der Weiche &auml;ndern oder `payloadInvert=true` verwenden.   
+Die Weichenantriebe f&uuml;r Fleischmann-Weichen k&ouml;nnen sowohl Ober- als auch Unterflur angesteckt werden. Steckt man einen Antrieb um, so &auml;ndert sich das Schaltverhalten (Antriebschalterstellung "Gerade" wird zu "Ungerade" und umgekehrt). In diesem Fall muss man entweder die Verdrahtung der Weiche &auml;ndern oder `payloadInvert=true` verwenden.   
 
 <a name="x54"></a>   
 
 ## 5.4 Vereinbarungen
 ### Positionsangabe
-Die Angabe der Position des Mittelpunktes eines Symbols erfolgt in Pixel. Da Gleise auf einem Stellpult aneinandergereiht werden, muss man die Gr&ouml;&szlig;e der Symbole wissen. Diese ist in der Datei `classes/Geo.ts` festgelegt und wird folgenderma&szlig;en importiert:   
-```
+Die Angabe der Position des Mittelpunktes eines Symbols erfolgt in Pixel. Da Gleissymbole auf einem Stellpult aneinandergereiht werden, muss man die Gr&ouml;&szlig;e der Symbole wissen. Diese ist in der Datei `classes/Geo.ts` festgelegt und wird folgenderma&szlig;en importiert:   
+```ts
 <script setup lang="ts">
 import { Geof } from '../classes/Geo'
 ...
@@ -187,7 +189,7 @@ Der Punkt vor dem x bzw. y bedeutet, dass der Wert dynamisch (zu berechnen) ist.
 Die `sid` stellt die Verbindung zur Funktionalit&auml;t dar. Diese ist in der Datei `RccTurnout1Controller.ts` definiert.   
 
 ### Rahmen
-Die Angabe des Rahmens ist optional. Will man allerdings den Rahmen mehrerer Symbole gleich haben und gemeinsam &auml;ndern k&ouml;nnen, so definiert man im `<script>`-Bereich eine Variable daf&uuml;r:   
+Die Angabe des Rahmens ist optional. Will man allerdings den Rahmen mehrerer Symbole gleichartig haben und gemeinsam &auml;ndern k&ouml;nnen, so definiert man im `<script>`-Bereich eine Variable daf&uuml;r:   
 `const border = 1`   
 Diese Variable verwendet man dann bei der `border`-Angabe:   
 `:border="border"`   
@@ -196,34 +198,188 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 
 ## 5.5 Beispiele
 1. An der Rasterposition 0/0: Weiche "1L" mit Standardrahmen und ohne Beschriftung   
-`<RccTurnout1 :x="0*dx" :y="0*dy" sid="to1" dir="1L" :border="border"></RccTurnout1>`   
+```html
+<RccTurnout1 :x="0*dx" :y="0*dy" sid="to1" dir="1L" :border="border"></RccTurnout1>
+```   
 
 2. An der Rasterposition 1/1: Weiche von links nach rechts mit Abzweig nach rechts unten, mit Standardrahmen und Beschriftung "UNTEN" links unten.   
-`<RccTurnout1 :x="1*dx"  :y="1.2*dy" sid="to1" dir="1R" footer="UNTEN" :border="border"></RccTurnout1>`   
+```html
+<RccTurnout1 :x="1*dx"  :y="1.2*dy" sid="to1" dir="1R" footer="UNTEN" :border="border"></RccTurnout1>
+```   
 
 3. An der Rasterposition 1/2: Weiche von links unten nach rechts oben mit Abzweig nach x+, mit Standardrahmen und Standard-Beschriftung   
-`<RccTurnout1 :x="2*dx"  :y="1*dy" sid="to1" dir="2R" label="3" :border="border"></RccTurnout1>`   
+```html
+<RccTurnout1 :x="2*dx"  :y="1*dy" sid="to1" dir="2R" label="3" :border="border"></RccTurnout1>
+```   
 
 [Zum Seitenanfang](#up)   
 <a name="x60"></a>   
 <a name="x61"></a>   
 
 # 6. Anmerkungen zur Programmierung   
-## 6.1 Klickbereiche f&uuml;r Weichensymbole
-Der Klickbereich f&uuml;r Weichensymbole ist entweder ein Rechteck (1L, 1R, 5L, 5R) oder ein Dreieck (2R, 6R bzw. 4L, 8L).   
+## 6.1 Zeichnen der Weichensymbole
+### 6.1.1 Gleissymbol
+Das Zeichnen der Weichensymbole erfolgt durch Übereinanderzeichnen zweier Gleissymbole im `<template>` von `RccTurnout1.vue`:   
+```html   
+  <!--draw turnout parts (do not change lines!)------------- -->
+  <path :d="drawTurnout2" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
+  <path :d="drawTurnout1" :fill="colorTurnout1" :stroke="colorTurnout1" stroke-width="1" />
+```   
+Das Symbol 2, das zuerst steht, zeigt die "inaktive" Fahrtrichtung an und die zweite Zeile die aktuelle Weichenstellung. Aus diesem Grund dürfen die beiden Zeilen auch __nicht vertauscht__ werden!   
+
+In den Funktionen `drawTurnout1` und `drawTurnout2` wird - je nach Status der Weiche - ausgewählt, ob die gebogene (Parameter `true`) oder gerade Version des Gleises gezeichnet werden soll.   
+
+Die Wahl des aktuellen und "inaktiven" Gleissymbols erfolgt in den Funktionen `drawTurnout1` und `drawTurnout2` (im Bereich `<script> computed:`):   
+```ts   
+    // _______draw the active path of the turnout_______________
+    drawTurnout1: function(): string {
+      if (this.iTurnout1State === 0) return this.pathTurnout(true)
+      return this.pathTurnout(false)
+    },
+    // _______draw the inactive path of the turnout_____________
+    drawTurnout2: function(): string {
+      if (this.iTurnout1State !== 0) return this.pathTurnout(true)
+      return this.pathTurnout(false)
+    },
+```   
+
+In der Funktion `pathTurnout` (im Bereich `methods:`) wird dann, abhängig vom Weichentyp, der richtige Pfad für das Gleissymbol geholt und zurückgegeben.   
+```ts   
+    // _______draw a path of the turnout________________________
+    pathTurnout: function (curve_: boolean): string {
+      const type_ = this.sDir
+      // -----draw path-----------------------------------------
+      if (type_ === '1L') {
+        if (curve_) return this.pathTrack(25) // curve
+        return this.pathTrack(15) // stright
+      }
+      if (type_ === '1R') {
+        if (curve_) return this.pathTrack(58)
+        return this.pathTrack(15)
+      }
+      if (type_ === '2R') {
+        if (curve_) return this.pathTrack(16)
+        return this.pathTrack(26)
+      }
+      if (type_ === '8L') {
+        if (curve_) return this.pathTrack(14)
+        return this.pathTrack(48)
+      }
+      if (type_ === '5R') {
+        if (curve_) return this.pathTrack(14)
+        return this.pathTrack(15)
+      }
+      if (type_ === '5L') {
+        if (curve_) return this.pathTrack(16)
+        return this.pathTrack(15)
+      }
+      if (type_ === '6R') {
+        if (curve_) return this.pathTrack(25)
+        return this.pathTrack(26)
+      }
+      if (type_ === '4L') {
+        if (curve_) return this.pathTrack(58)
+        return this.pathTrack(48)
+      }
+      return ''
+    },
+```   
+Das eigentliche Zusammenstellen der Zeichenbefehle für das Gleissymbol erfolgt - wie bei Gleisen - in der Funktion `pathTrack: function (dir1: number): string {` .
+
+### 6.1.2 Farbe des Weichensymbols
+Die Farbe eines Gleissymbols ist davon abhängig, ob das Symbol die "inaktive" Richtung (`colorTurnout2`) oder die aktuelle Weichenstellung anzeigt (`colorTurnout1`). Nur die aktive Farbe kann durch eine Angabe beim Aufruf des Weichensymbols überschrieben werden.   
+```ts   
+    // _______color 1 of the track (active path)________________
+    colorTurnout1: function (): string {
+      if (this.color.length > 1) return this.color
+      if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
+      return this.geof.colorTurnoutClear
+    },
+    // _______color 2 of the track (inactive path)______________
+    colorTurnout2: function (): string {
+      if (this.iTurnout1State < 0) return this.geof.colorTrackUnknown
+      return this.geof.colorTurnoutBlocked
+    },
+```   
 
 <a name="x62"></a>   
 
-## 6.2 Senden der MQTT-Nachrichten
+## 6.2 Klickbereiche f&uuml;r Weichensymbole
+Der Klickbereich f&uuml;r ein Weichensymbol ist entweder ein Rechteck (1L, 1R, 5L, 5R) oder ein Dreieck (4L, 8L oder 2R, 6R).   
+
+![Klickbereiche Weiche](./images/150_clickarea_turnout1.png "Klickbereiche Weiche")   
+_Bild 5: Klickbereiche bei Weichen_  
+
+Das Klicken auf eine Fläche wird folgendermaßen ermöglicht:   
+
+In der Datei `RccTurnout1.vue` werden die Klickbereiche durch folgende Zeilen im Bereich `<template>` definiert:   
+```html   
+  <!--define click area------------------------------------- -->
+  <path :d="pathTop" @click="onClkTop()" class="ciClick" />
+  <path :d="pathBottom" @click="onClkBottom()" class="ciClick" />
+```   
+Dabei sind die Angaben bei `d:=` die Pfade (Begrenzungen) der Klickbereiche und bei `@click=` die Funktionen, die bei einem Klick aufgerufen werden.   
+Die "Klasse" `ciClick` ist im `<script>`-Bereich von `RccBase.vue` definiert:   
+```html   
+  .ciClick   { fill-opacity: 0.0; stroke-width: 1; }
+```   
+Sie bewirkt, dass die Klickflächen "transparent" sind und die Stiftweite 1 ist.   
+
+Die Pfade für die Top-Klickbereiche sind in `RccTurnout1.vue` folgendermaßen definiert:   
+```ts   
+    // _______click area "top"__________________________________
+    pathTop: function(): string {
+      const dxo = this.geof.dxo()
+      const dyo = this.geof.dyo()
+      const dxo2 = this.geof.dxo2()
+      const dyo2 = this.geof.dyo2()
+      let s1 = ''
+      if (this.sDir === '1R' || this.sDir === '1L' ||
+          this.sDir === '5R' || this.sDir === '5L') 
+      { // --------rectangle as top click area------------------
+        s1 += ' M' + this.x + ',' + this.y
+        s1 += ' m' + (-dxo2) + ',' + (-dyo2)
+        s1 += ' v' + dyo2
+        s1 += ' h' + dxo
+        s1 += ' v' + (-dyo2)
+        s1 += ' z'
+      } 
+      else // -----triangle as top click area-------------------
+      {
+        if (this.sDir === '2R' || this.sDir === '6R') {
+          // ......top left triangle............................
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (dxo2) + ',' + (-dyo2)
+          s1 += ' h' + (-dxo)
+          s1 += ' v' + (dyo)
+          s1 += ' z'
+        } else {
+          // ......top right triangle...........................
+          s1 += ' M' + this.x + ',' + this.y
+          s1 += ' m' + (-dxo2) + ',' + (-dyo2)
+          s1 += ' h' + (dxo)
+          s1 += ' v' + (dyo)
+          s1 += ' z'
+        }
+      }
+      return s1
+    },
+```   
+
+Die Funktion `pathBottom` ist entsprechend aufgebaut.   
+
+<a name="x63"></a>   
+
+## 6.3 Senden der MQTT-Nachrichten
 Das Senden von Nachrichten passiert in der `Klasse RccTurnoutController`. Dort werden zwei Variablen `payloadTurnoutStright` und `payloadTurnoutCurved` definiert, die den "Normalzustand" abbilden.   
-```
+```ts
 export class RccTurnout1Controller extends RccBaseController {
   public payloadTurnoutStright = '1'
   public payloadTurnoutCurved = '0'
 ```
 
 Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` und der Lage der Weiche angepasst und die Nachricht(en) gesendet:   
-```
+```ts
     // _______on click: send a message to turnout_______________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
@@ -253,7 +409,7 @@ Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClk
 ```
 
 Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTurnout1Controller.ts` steht:   
-```
+```ts
   // _________publish a mqtt message____________________________
   public publishRcc (topic: string, payload: string): void {
     // console.log('CiTurnout1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
@@ -263,11 +419,11 @@ Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTurnout1C
 
 F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBottom` gemacht.   
 
-<a name="x63"></a>   
+<a name="x64"></a>   
 
-## 6.3 Empfang von MQTT-Nachrichten
+## 6.4 Empfang von MQTT-Nachrichten
 Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTurnout1Controller.vue` in der Funktion `onMessage`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTurnoutState` gespeichert.   
-```
+```ts
   // _________receive a mqtt message____________________________
   public onMessage (message: Message): void {
     this.turnouts1.forEach(turnout1 => {
