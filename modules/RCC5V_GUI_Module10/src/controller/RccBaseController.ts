@@ -1,4 +1,4 @@
-// ______RccBaseController.ts_____________________khartinger_____
+// ______RccBaseController.ts____________________khartinger_____
 // 2022-01-01: new
 // 2023-09-02: change import Qos
 import { Message, RccMqttClient } from '@/services/RccMqttClient'

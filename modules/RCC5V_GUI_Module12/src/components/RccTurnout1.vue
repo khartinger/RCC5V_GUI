@@ -1,5 +1,5 @@
 <!-- RccTurnout1.vue ------------------------khartinger----- -->
-<!-- 2026-01-09: new                                         -->
+<!-- 2026-01-22: new                                         -->
 
 <template>
   <g>
@@ -44,11 +44,6 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    // type: {
-    //   type: String,
-    //   required: false, // true,
-    //   default: '',
-    // },
     dir: {
       type: String,
       required: true,
@@ -132,16 +127,15 @@ export default defineComponent({
       return ret
     },
     // _______type as string #C_________________________________
-    sType: function(): string {
+    sDir: function(): string {
       // -----Break down direction "dir" into int and char-------
-      //if(this.type.length !== 2) return ''
-if(this.dir.length !== 2) return ''
-      let sType_ = String(this.dir.toUpperCase())
-      if (!['L', 'R'].includes(sType_[1])) {
-        if (!['L', 'R'].includes(sType_[0])) return ''
-        sType_ = String(sType_[0] + sType_[1])
+      if(this.dir.length !== 2) return ''
+      let sDir_ = String(this.dir.toUpperCase())
+      if (!['L', 'R'].includes(sDir_[1])) {
+        if (!['L', 'R'].includes(sDir_[0])) return ''
+        sDir_ = String(sDir_[0] + sDir_[1])
       }
-      return sType_
+      return sDir_
     },
     // _______draw the active path of the turnout_______________
     drawTurnout1: function(): string {
@@ -190,8 +184,8 @@ if(this.dir.length !== 2) return ''
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ''
-      if (this.sType === '1R' || this.sType === '1L' ||
-          this.sType === '5R' || this.sType === '5L') 
+      if (this.sDir === '1R' || this.sDir === '1L' ||
+          this.sDir === '5R' || this.sDir === '5L') 
       { // --------rectangle as top click area------------------
         s1 += ' M' + this.x + ',' + this.y
         s1 += ' m' + (-dxo2) + ',' + (-dyo2)
@@ -202,7 +196,7 @@ if(this.dir.length !== 2) return ''
       } 
       else // -----triangle as top click area-------------------
       {
-        if (this.sType === '2R' || this.sType === '6R') {
+        if (this.sDir === '2R' || this.sDir === '6R') {
           // ......top left triangle............................
           s1 += ' M' + this.x + ',' + this.y
           s1 += ' m' + (dxo2) + ',' + (-dyo2)
@@ -227,8 +221,8 @@ if(this.dir.length !== 2) return ''
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ''
-      if (this.sType === '1R' || this.sType === '1L' ||
-          this.sType === '5R' || this.sType === '5L') 
+      if (this.sDir === '1R' || this.sDir === '1L' ||
+          this.sDir === '5R' || this.sDir === '5L') 
       { // --------rectangle as bottom click area---------------
         s1 += ' M' + this.x + ',' + this.y
         s1 += ' m' + (-dxo2) + ',' + (dyo2)
@@ -239,7 +233,7 @@ if(this.dir.length !== 2) return ''
       } 
       else // -----triangle as bottom click area----------------
       {
-        if (this.sType === '2R' || this.sType === '6R') {
+        if (this.sDir === '2R' || this.sDir === '6R') {
           // ......bottom right triangle.........................
           s1 += ' M' + this.x + ',' + this.y
           s1 += ' m' + (-dxo2) + ',' + (dyo2)
@@ -259,9 +253,9 @@ if(this.dir.length !== 2) return ''
     },
   },
   methods: {
-        // _______draw a path of the turnout________________________
+    // _______draw a path of the turnout________________________
     pathTurnout: function (curve_: boolean): string {
-      const type_ = this.sType
+      const type_ = this.sDir
       // -----draw path-----------------------------------------
       if (type_ === '1L') {
         if (curve_) return this.pathTrack(25) // curve
@@ -299,251 +293,107 @@ if(this.dir.length !== 2) return ''
     },
     // _______path command: draw a track________________________
     pathTrack: function (dir1: number): string {
+      // -----signs for drawing---------------------------------
+      let sgnx = 1
+      let sgny = 1
       // -----(positive) values of line length------------------
+      const tk2 = this.geof.tk2
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
-      const tk0x = -this.geof.tk.value[0].x
-      const tk0y = -this.geof.tk.value[0].y
-      const tk2 = this.geof.tk2
-      const tkax = dxo2 - tk0x
-      const tkbx = dxo2 + tk0x
-      const tkcx = dxo2 - this.geof.tk.value[4].x
-      const tkcy = dyo2 + this.geof.tk.value[5].y
-      const tk59x = this.geof.dxo() - tkbx
-      const tk59y = dyo2 - tkcy + tk0y
-      const tkdy = tk0x + tk0y
-      // -----symbol "Section insulator" || --------------------
-      const tks = tk2 / 2
+      const q1x = dxo2 - this.geof.tkp.value[1].x
+      const q2y = dyo2 - this.geof.tkp.value[2].y
+      const q5x = dxo2 - this.geof.tkp.value[5].x
+      const d25y = this.geof.tkp.value[2].y - this.geof.tkp.value[5].y
       let s1 = ' M' + this.x + ',' + this.y
       switch (dir1) {
-        case 12: // ----- Z - symbol (above)--------------------
-          s1 += ' m' + (+dxo2) + ',' + (-dyo2)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (-tkcx) + ',' + (+tkcy)
-          s1 += ' z'
-          s1 += ' h' + (+tkcx)
-          s1 += ' l' + (-tkcx) + ',' + (+tkcy)
-          s1 += ' z'
-          break
-        case 18: // ----- Z - symbol (below)--------------------
-          s1 += ' m' + (+dxo2) + ',' + (+dyo2)
-          s1 += ' v' + (+tkcy)
-          s1 += ' l' + (-tkcx) + ',' + (-tkcy)
-          s1 += ' z'
-          s1 += ' h' + (+tkcx)
-          s1 += ' l' + (-tkcx) + ',' + (-tkcy)
+        // ===horizontel line===================================
+        case 15:
+          s1 += ' m' + dxo2 + ',' + tk2 // P0 as start
+          s1 += ' v' + (-2 * tk2)
+          s1 += ' h' + (-2) * dxo2
+          s1 += ' v' + (2 * tk2)
           s1 += ' z'
           break
-
-        case 14: // ----- \_ direction--------------------------
-          s1 += ' m' + (tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' h' + (tkax)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (-tkbx) // Tk0´
-          s1 += ' l' + (-tk59x) + ',' + (-tk59y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          // s1 += ' M' + this.x + ',' + (this.y - dyo2)
-          // s1 += ' v' + (2 * dyo2)
-          break
-        case 15: // ----- -- direction--------------------------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + this.geof.dxo()
-          s1 += ' v' + (-2 * tk0y)
+        // ===diagonal straight line============================
+        case 26:
+          sgnx = -1
+          /* falls through */
+        case 48:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + (-q2y) // @ P2
+          s1 += ' l' + sgnx * (-2 * dxo2 + q1x) + ',' + (-2 * dyo2 + q2y)
+          s1 += ' h' + (-sgnx) * q1x
+          s1 += ' v' + q2y
           s1 += ' z'
           break
-        case 16: // ----- /- direction--------------------------
-          s1 += ' m' + (tk0x) + ',' + (tk0y) // Tk0
-          s1 += ' h' + (tkax)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' h' + (-tkbx) // Tk0´
-          s1 += ' l' + (-tk59x) + ',' + (tk59y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          break
-
-        case 24: // ----- \/ direction--------------------------
-          s1 += ' m' + 0 + ',' + (-tkdy) // Tkd
-          s1 += ' l' + (-dxo2 + tkcx) + ',' + (-dyo2 + tkdy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' v' + (tkcy)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (tk59y)
-          s1 += ' h' + (2 * tk0x)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (-tk59y)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 25: // ----- _/ direction--------------------------
-          s1 += ' m' + (-tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' h' + (-tkax)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (tkbx) // Tk0´
-          s1 += ' l' + tk59x + ',' + (-tk59y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 26: // ----- / direction---------------------------
-          s1 += ' m' + (dxo2 - tkcx) + ',' + (-dyo2) // Tk4
-          s1 += ' l' + (-this.geof.dxo() + tkcx) + ',' + (this.geof.dyo() - tkcy)
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' l' + (this.geof.dxo() - tkcx) + ',' + (-this.geof.dyo() + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 28: // ----- < direction---------------------------
-          s1 += ' m' + (-tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' l' + (+dxo2 + tk0x - tkcx) + ',' + (dyo2 - tk0y)
-          s1 += ' h' + (+tkcx)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (-dxo2 + this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' l' + (+dxo2 - this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 46: // ----- > direction---------------------------
-          s1 += ' m' + (tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' l' + (-dxo2 - tk0x + tkcx) + ',' + (dyo2 - tk0y)
-          s1 += ' h' + (-tkcx)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (+dxo2 - this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' l' + (-dxo2 + this.geof.tk.value[2].x) + ',' + (-dyo2 + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (+tkcx)
-          s1 += ' z'
-          break
-        case 48: // ----- \ direction---------------------------
-          s1 += ' m' + (-dxo2 + tkcx) + ',' + (-dyo2) // Tk4
-          s1 += ' l' + (this.geof.dxo() - tkcx) + ',' + (this.geof.dyo() - tkcy)
-          s1 += ' v' + (+tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' l' + (-this.geof.dxo() + tkcx) + ',' + (-this.geof.dyo() + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (+tkcx)
-          s1 += ' z'
-          break
-        case 58: // ----- -\ direction--------------------------
-          s1 += ' m' + (-tk0x) + ',' + (tk0y)
-          s1 += ' h' + (-tkax)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' h' + (tkbx) // Tk0´
-          s1 += ' l' + tk59x + ',' + (tk59y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 68: // ----- /\ direction--------------------------
-          s1 += ' m' + 0 + ',' + (tkdy) // Tkd
-          s1 += ' l' + (-dxo2 + tkcx) + ',' + (dyo2 - tkdy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (-tk59y)
-          s1 += ' h' + (2 * tk0x)
-          s1 += ' l' + (dxo2 - tk0x) + ',' + (tk59y)
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 159: // ----- || - symbol (right side)--------------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (this.geof.dxo() - 3 * tks)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-
-          s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
-          s1 += ' z'
-
-          s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
-          s1 += ' z'
-          break
-
-        case 29: // ----- \\ - symbol (right up corner)---------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (this.geof.dxo() - 3 * tks)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-
-          s1 += ' m' + (this.geof.dxo() - 3 * tks) + ',' + (-tks)
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
-          s1 += ' z'
-
-          s1 += ' m' + (2 * tks) + ',0'
-          s1 += ' v' + (2 * tk2 + 2 * tks)
-          s1 += ' h' + (+tks)
-          s1 += ' v' + (-2 * tk2 - 2 * tks)
+        // ===curved track======================================
+        case 14: case 16: case 25:
+          sgnx = -1
+          sgny = -1
+          if (dir1 === 16) sgny = 1
+          if (dir1 === 25) sgnx = 1
+          /* falls through */
+        case 58:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + sgny * dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + sgny * (-q2y) // @ P2
+          s1 += ' l' + (-sgnx) * q5x + ',' + (-sgny) * d25y // @ P5
+          s1 += ' h' + (-sgnx) * (2 * dxo2 - q5x)
+          s1 += ' v' + sgny * 2 * tk2
+          s1 += ' h' + sgnx * q5x
           s1 += ' z'
           break
         default:
+          s1 = ''
       }
       return s1
     },
-    // _______on click: turn track energy on____________________
+    // _______on click: send a message to turnout_______________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
-      let payload = 'onClkOn: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.turnout1) rccTurnout1Controller.publishRcc(topic, payload)
+      // -----is there a topic for publishing?------------------
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
+        // ---1. prepare payload (invert or not)----------------
         let curved1 = rccTurnout1Controller.payloadTurnoutCurved
         let stright1 = rccTurnout1Controller.payloadTurnoutStright
         if (this.turnout1.payloadInvert) {
           curved1 = rccTurnout1Controller.payloadTurnoutStright
           stright1 = rccTurnout1Controller.payloadTurnoutCurved
         }
-        // payload = rccTurnout1Controller.payloadTurnoutCurved
-        payload = curved1
+        // ---2. prepare payload depending on direction---------
+        let payload = curved1
         if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
-          // payload = rccTurnout1Controller.payloadTurnoutStright
           payload = stright1
         }
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
-          // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
           if (this.turnout1?.pubTopic) {
             rccTurnout1Controller.publishRcc(topic, payload)
           }
         })
       }
     },
-    // _______on click: turn track energy off___________________
+    // _______on click: send a message to turnout_______________
     onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Off')
-      let payload = 'onClkOff: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.turnout1) rccTurnout1Controller.publishRcc(topic, payload)
+      // -----is there a topic for publishing?------------------
       if (this.turnout1?.pubTopic) {
         const aPubTopic = this.turnout1.pubTopic.split(' ')
+        // ---1. prepare payload (invert or not)----------------
         let curved1 = rccTurnout1Controller.payloadTurnoutCurved
         let stright1 = rccTurnout1Controller.payloadTurnoutStright
         if (this.turnout1.payloadInvert) {
           curved1 = rccTurnout1Controller.payloadTurnoutStright
           stright1 = rccTurnout1Controller.payloadTurnoutCurved
         }
-        // payload = rccTurnout1Controller.payloadTurnoutStright
-        payload = stright1
+        // ---2. prepare payload depending on direction---------
+        let payload = stright1
         if(this.dir === '1R' || this.dir === '2R' || this.dir === '4L' || this.dir === '5L') {
-          // payload = rccTurnout1Controller.payloadTurnoutCurved
           payload = curved1
         }
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           // if (this.turnout1?.pubPayload) payload = this.turnout1.pubPayload
           rccTurnout1Controller.publishRcc(topic, payload)

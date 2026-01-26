@@ -18,41 +18,42 @@ export class RccTurnout3Way1Controller extends RccBaseController {
   public sState0 = '0'
   public sState1 = '1'
   
+  // _________Array for all (3way-)turnouts_____________________
   public to3ways1: Array<To3way1> = reactive(
     [
     ],
   )
 
+  // _________receive a mqtt message____________________________
   public onMessage (message: Message): void {
     this.to3ways1.forEach(to3way1 => {
       const aSubTopic = to3way1.subTopic.split(' ')
       if (aSubTopic.includes(message.topic)) {
         // ---to3way1 topic found ---------------------------
         if (message.payload.length > 0) {
+          // ------message received: split JSON-data------------
           try {
             const aPayload = JSON.parse(message.payload)
-            // const sDCC = String(to3way1.pubTopic.split('/').pop())
             let sDCC_ = to3way1.sDCCL
             let sState_ = aPayload[sDCC_]
+            // ----calculate the state number-------------------
             if (sState_ === this.sState0) to3way1.iLState = 0
             if (sState_ === this.sState1) to3way1.iLState = 1
             sDCC_ = to3way1.sDCCR
             sState_ = aPayload[sDCC_]
             if (sState_ === this.sState0) to3way1.iRState = 0
             if (sState_ === this.sState1) to3way1.iRState = 1
-            // console.log('onMessage: sState=', sState)
           } catch (error) {
             to3way1.iLState = -9
             to3way1.iRState = -9
           }
         }
-        // console.log('onMessage: topic=', message.topic + ', payload=' + message.payload)
-        //console.log('onMessage: iLState=', to3way1.iLState + ', iRState=' + to3way1.iRState)
         // ---END: to3way1 topic found --------------------
       }
     })
   }
-
+  
+  // _________publish a mqtt message____________________________
   public publishRcc (topic: string, payload: string): void {
     // console.log('RccTurnout3Way1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
     this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTurnout3Way1Controller: ERROR:', e) })

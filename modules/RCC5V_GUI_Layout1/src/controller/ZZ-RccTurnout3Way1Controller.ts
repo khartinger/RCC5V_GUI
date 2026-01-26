@@ -18,54 +18,89 @@ export class RccTurnout3Way1Controller extends RccBaseController {
   public sState0 = '0'
   public sState1 = '1'
   
-  // _________Array for all (3way-)turnouts_____________________
   public to3ways1: Array<To3way1> = reactive(
     [
       {
-        // ---test track 1--------------------------------------
-        id: 't3w1',
+        // ---turnout station bypass----------------------------
+        id: 'tt101',
         name: 'To3way1',
         iLState: -10,
         iRState: -10,
-        sDCCL: '31',
-        sDCCR: '32',
-        subTopic: 'rcc/demo1/ret/31 rcc/demo1/ret/32 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/31',
-        pubTopicR: 'rcc/demo1/set/32',
+        sDCCL: '101',
+        sDCCR: '102',
+        subTopic: 'rcc/module10/ret/101 rcc/module10/ret/102 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/101',
+        pubTopicR: 'rcc/module10/set/102',
+      },
+      {
+        // ---turnout station-----------------------------------
+        id: 'tt103',
+        name: 'To3way103',
+        iLState: -10,
+        iRState: -10,
+        sDCCL: '103',
+        sDCCR: '104',
+        subTopic: 'rcc/module10/ret/103 rcc/module10/ret/104 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/103',
+        pubTopicR: 'rcc/module10/set/104',
+      },
+      {
+        // ---turnout station bypass----------------------------
+        id: 'tt121',
+        name: 'To3way1',
+        iLState: -10,
+        iRState: -10,
+        sDCCL: '121',
+        sDCCR: '122',
+        subTopic: 'rcc/module12/ret/121 rcc/module12/ret/122 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/121',
+        pubTopicR: 'rcc/module12/set/122',
+      },
+      {
+        // ---turnout station bypass----------------------------
+        id: 'tt132',
+        name: 'To3way1',
+        iLState: -10,
+        iRState: -10,
+        sDCCL: '131',
+        sDCCR: '132',
+        subTopic: 'rcc/module13/ret/131 rcc/module13/ret/132 rcc/module13/ret/status',
+        pubTopic: 'rcc/module13/set/131',
+        pubTopicR: 'rcc/module13/set/132',
       },
     ],
   )
 
-  // _________receive a mqtt message____________________________
   public onMessage (message: Message): void {
     this.to3ways1.forEach(to3way1 => {
       const aSubTopic = to3way1.subTopic.split(' ')
       if (aSubTopic.includes(message.topic)) {
         // ---to3way1 topic found ---------------------------
         if (message.payload.length > 0) {
-          // ------message received: split JSON-data------------
           try {
             const aPayload = JSON.parse(message.payload)
+            // const sDCC = String(to3way1.pubTopic.split('/').pop())
             let sDCC_ = to3way1.sDCCL
             let sState_ = aPayload[sDCC_]
-            // ----calculate the state number-------------------
             if (sState_ === this.sState0) to3way1.iLState = 0
             if (sState_ === this.sState1) to3way1.iLState = 1
             sDCC_ = to3way1.sDCCR
             sState_ = aPayload[sDCC_]
             if (sState_ === this.sState0) to3way1.iRState = 0
             if (sState_ === this.sState1) to3way1.iRState = 1
+            // console.log('onMessage: sState=', sState)
           } catch (error) {
             to3way1.iLState = -9
             to3way1.iRState = -9
           }
         }
+        // console.log('onMessage: topic=', message.topic + ', payload=' + message.payload)
+        //console.log('onMessage: iLState=', to3way1.iLState + ', iRState=' + to3way1.iRState)
         // ---END: to3way1 topic found --------------------
       }
     })
   }
-  
-  // _________publish a mqtt message____________________________
+
   public publishRcc (topic: string, payload: string): void {
     // console.log('RccTurnout3Way1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
     this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTurnout3Way1Controller: ERROR:', e) })

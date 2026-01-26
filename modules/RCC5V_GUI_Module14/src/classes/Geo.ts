@@ -1,7 +1,7 @@
 // ______Geo.ts__________________________________khartinger_____
 // 2025-12-27: new
 // 2026-01-15: add tk_, right(), colors track,...
-
+// 2026-01-25: replace tk -> tkp
 import { ref } from 'vue'
 
 // -----------font data-----------------------------------------
@@ -30,30 +30,24 @@ const tmax_ = Math.floor((dxi_ - 2 * dxt_) / fw_) // max number character per li
 const tk2_ = dyo_ / 10 //                        half track width
 const tkk_ = dyo_ / dxo_ //                      slope dy/dx
 const tkw_ = Math.sqrt(1 + tkk_ * tkk_) //       help value
-const txkyo_ = dxo_ + tkk_ * dyo_
-const tk_ = ref([
-  // .....Tk0.....
-  { x: tk2_ * (1 - tkw_) / tkk_, y: -tk2_ },
-  // .....Tk1.....
-  { x: (-2 * tkk_ / tkw_ - (1 - tkw_) / tkk_) * tk2_, y: (1 - 2 / tkw_) * tk2_ },
-  // .....Tk2.....
-  { x: tk2_ * tkw_ / tkk_, y: 0 },
-  // .....Tk3.....
-  { x: tk2_ * (1 + tkw_) / tkk_, y: -tk2_ },
-  // .....Tk4.....
-  { x: (dyo2_ - tk2_ * tkw_) / tkk_, y: -dyo2_ },
-  // .....Tk5.....
-  { x: dxo2_, y: tk2_ * tkw_ - tkk_ * dxo2_ },
-  // .....Tk6.....
-  { x: (-tkk_ * tk2_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 + tk2_ * tkw_) / (1 + tkk_ * tkk_) },
-  // .....Tk7.....
-  { x: (tkk_ * tk2_ * tkw_ + txkyo_ / 2) / (1 + tkk_ * tkk_), y: -(tkk_ * txkyo_ / 2 - tk2_ * tkw_) / (1 + tkk_ * tkk_) },
-  // .....Tk8.....
-  { x: tkk_ * tk2_ / tkw_, y: tk2_ / tkw_ },
-])
 
-// -----------special dimensions--------------------------------
-const dw2_ = Math.round(dyl_ / 2) //             half wall thickness
+// -----------points for drawing tracks tracks------------------
+const tkp_ = ref([
+  // .....Tk0.....
+  { x: dxo2_, y: tk2_ },
+  // .....Tk1.....
+  { x: (dyo2_ - tk2_ * tkw_) / tkk_, y: dyo2_ },
+  // .....Tk2.....
+  { x: dxo2_, y: tkk_ * dxo2_ - tk2_ * tkw_ },
+  // .....Tk3.....
+  { x: 0, y: tk2_ * tkw_ },
+  // .....Tk4.....
+  { x: tkk_ * tk2_ / tkw_, y: -tk2_ / tkw_ },
+  // .....Tk5.....
+  { x: tk2_ * (tkw_ - 1) / tkk_, y: -tk2_ },
+  // .....Tk6.....
+  { x: tk2_ * tkw_ / tkk_, y: 0 },
+])
 
 // *************************************************************
 // Geometric data for drawing a CI symbol (without stretching)
@@ -86,7 +80,7 @@ export class Geo {
   public colorUncouplerOn = '#90ee90' //  light green
   public colorUncouplerOff = '#808080' // grey
   public colorRoute = '#88BBFF' //        light blue
-  public colorNone ='-'
+  public colorNone = '-'
   public noDate = '--.--.----'
   public noTime = '--:--:--'
   public batteryMin = 15
@@ -109,12 +103,10 @@ export class Geo {
   // ---------x direction---------------------------------------
   public dxm = dxm_ //            left margin
   public dxt = dxt_ //            text start in x direction
-  // ---------other dimensions----------------------------------
-  public dw2 = dw2_ //            half wall thickness
   // ---------track values--------------------------------------
-  public tk = tk_
-  public tk2 = tk2_ //             half track width
-  public tkk = tkk_ //             slope dy/dx
+  public tkp = tkp_ //            points for drawing tracks
+  public tk2 = tk2_ //            half track width
+  public tkk = tkk_ //            slope dy/dx
 
   // =========absolute geometric values=========================
   // ---------center of symbol----------------------------------

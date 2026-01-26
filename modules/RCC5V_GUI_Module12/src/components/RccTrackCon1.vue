@@ -71,26 +71,26 @@ export default defineComponent({
       // -----symbol "Section insulator" || --------------------
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
-      const tkcx = dxo2 - this.geof.tk.value[4].x
-      const tkcy = dyo2 + this.geof.tk.value[5].y
+      const q1x = dxo2 - this.geof.tkp.value[1].x
+      const q2y = dyo2 - this.geof.tkp.value[2].y
       let s1 = ' M' + this.x + ',' + this.y
       const dir_ = Number(this.dir)
       switch (dir_) {
         case 2: case 6:// === track left up /===================
           // s1 += ' m' + (+dxo2) + ',' + (-dyo2)
-          s1 += ' v' + (-tkcy)
-          s1 += ' l' + (-tkcx) + ',' + (+tkcy)
+          s1 += ' v' + (-q2y)
+          s1 += ' l' + (-q1x) + ',' + (+q2y)
           s1 += ' z'
-          s1 += ' h' + (+tkcx)
-          s1 += ' l' + (-tkcx) + ',' + (+tkcy)
+          s1 += ' h' + (+q1x)
+          s1 += ' l' + (-q1x) + ',' + (+q2y)
           s1 += ' z'
           break
         case 4: case 8:// === track left down /=================
-          s1 += ' v' + (+tkcy)
-          s1 += ' l' + (-tkcx) + ',' + (-tkcy)
+          s1 += ' v' + (+q2y)
+          s1 += ' l' + (-q1x) + ',' + (-q2y)
           s1 += ' z'
-          s1 += ' h' + (+tkcx)
-          s1 += ' l' + (-tkcx) + ',' + (-tkcy)
+          s1 += ' h' + (+q1x)
+          s1 += ' l' + (-q1x) + ',' + (-q2y)
           s1 += ' z'
           break
         default:
