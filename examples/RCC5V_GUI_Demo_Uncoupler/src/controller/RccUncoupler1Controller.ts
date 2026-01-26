@@ -1,5 +1,5 @@
 // ______RccUncoupler1Controller.ts______________khartinger_____
-// 2026-01-23: new
+// 2026-01-26: new
 import { reactive } from 'vue'
 import { Message } from '@/services/RccMqttClient'
 import { RccBaseController, IBase } from './RccBaseController'
