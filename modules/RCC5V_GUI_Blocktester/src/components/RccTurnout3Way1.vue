@@ -134,7 +134,6 @@ export default defineComponent({
     // _______draw the active path of the turnout_______________
     drawTurnout1: function(): string {
       const ret_ = this.pathTurnout(1)
-      //console.log('drawTurnout1: ret_=', ret_)
       return ret_
     },
     // _______draw the inactive path of the turnout_____________
@@ -179,21 +178,21 @@ export default defineComponent({
     },
     // _______click area "top"__________________________________
     pathTop: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
       let s1 = ' M' + this.x + ',' + this.y
-      if (dir_ === 1) 
+      if (dir_ === 1)
       { //----------turnout to the right -< --------------------
         s1 += ' l' + dxo2 + ',' + (-dyo2)
         s1 += ' h' + (-dxo)
-        s1 += ' v' + dyo
+        s1 += ' v' + dyo2
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5)
       { //----------turnout to the left >- ---------------------
         s1 += ' h' + dxo2
         s1 += ' v' + (-dyo2)
@@ -205,7 +204,7 @@ export default defineComponent({
 
     // _______click area "middle" (stright)_____________________
     pathMid: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dyo = this.geof.dyo()
       const dxo2 = this.geof.dxo2()
@@ -217,8 +216,8 @@ export default defineComponent({
         s1 += ' v' + (-dyo)
         s1 += ' z'
       }
-      if (dir_ === 4) 
-      { //----turnout to the left >- ------------------------
+      if (dir_ === 5) 
+      { //----turnout to the left >- ---------------------------
         s1 += ' l' + (-dxo2) + ',' + (-dyo2)
         s1 += ' v' + dyo
         s1 += ' z'
@@ -227,7 +226,7 @@ export default defineComponent({
     },
     // _______click area "bottom"_______________________________
     pathBottom: function(): string {
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ''
       const dxo = this.geof.dxo()
       const dyo = this.geof.dyo()
@@ -238,10 +237,10 @@ export default defineComponent({
       { //----------turnout to the right -< ----------------
         s1 += ' l' + dxo2 + ',' + dyo2
         s1 += ' h' + (-dxo)
-        s1 += ' v' + (-dyo)
+        s1 += ' v' + (-dyo2)
         s1 += ' z'
       }
-      if (dir_ === 4) 
+      if (dir_ === 5) 
       { //----------turnout to the left >- -----------------
         s1 += ' h' + dxo2
         s1 += ' v' + dyo2
@@ -255,108 +254,157 @@ export default defineComponent({
   methods: {
 
     // _______draw a path of the turnout________________________
-    pathTurnout: function (pathNr_: number): string {
+    pathTurnout: function (drawNr_: number): string {
       // =====prepare input=====================================
-      // pathNr_: track number to draw (1 | 2 | 3)
+      // drawNr_: track number to draw (1 | 2 | 3)
       let ret_=''
       let state_ = this.iTo3way1State // 1=right, 2=left, 3=stright
+      if(state_ > 3) return ret_ //      not possible
       if(state_ < 0) state_ = 1
-      const dir_ = Number(this.dir) // turnout 1 -< or 4 >-
+      const dir_ = Number(this.dir) // turnout 1 -< or 5 >-
       if(Number.isNaN(dir_)) return ret_
-      if(dir_!==1 && dir_!==4) return ret_
+      if(dir_ !== 1 && dir_ !== 5) return ret_
       // .....number of used path tracks........................
       let aTrack = Array(25, 15, 58, 25, 15)
-      if (dir_ === 4) aTrack = Array(16, 15, 14, 16, 15)
+      if (dir_ === 5) aTrack = Array(16, 15, 14, 16, 15)
       // =====select path track number to draw==================
-      const i_ = Number(pathNr_ + state_ - 2)
+      const i_ = Number(drawNr_ + state_ - 2)
       if (i_ < 0  || i_ > 4) return ret_
       const dirTrack_=aTrack[i_]
       // =====return path of track to draw======================
       ret_ = this.pathTrack(dirTrack_)
-      // console.log('pathTurnout: pathNr_', pathNr_ + ', state_=' + state_ + ', iTrack_=' + iTrack_+ ', ret_=' + ret_)
+      // console.log('pathTurnout: drawNr_', drawNr_ + ', state_=' + state_ + ', iTrack_=' + iTrack_+ ', ret_=' + ret_)
       return ret_
     },
     // _______path command: draw a track________________________
-    pathTrack: function (dirTrack_: number): string {
+    pathTrack: function (dir1: number): string {
+      // -----signs for drawing---------------------------------
+      let sgnx = 1
+      let sgny = 1
       // -----(positive) values of line length------------------
+      const tk2 = this.geof.tk2
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
-      const tk0x = -this.geof.tk.value[0].x
-      const tk0y = -this.geof.tk.value[0].y
-      const tk2 = this.geof.tk2
-      const tkax = dxo2 - tk0x
-      const tkbx = dxo2 + tk0x
-      const tkcx = dxo2 - this.geof.tk.value[4].x
-      const tkcy = dyo2 + this.geof.tk.value[5].y
-      const tk59x = this.geof.dxo() - tkbx
-      const tk59y = dyo2 - tkcy + tk0y
-      // -----symbol "Section insulator" || --------------------
-      const tks = tk2 / 2
+      const q1x = dxo2 - this.geof.tkp.value[1].x
+      const q2y = dyo2 - this.geof.tkp.value[2].y
+      const q5x = dxo2 - this.geof.tkp.value[5].x
+      const d25y = this.geof.tkp.value[2].y - this.geof.tkp.value[5].y
       let s1 = ' M' + this.x + ',' + this.y
-      switch (dirTrack_) {
-        case 14: // ----- \_ direction--------------------------
-          s1 += ' m' + (tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' h' + (tkax)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (-tkbx) // Tk0´
-          s1 += ' l' + (-tk59x) + ',' + (-tk59y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (tkcx)
+      switch (dir1) {
+        // ===horizontel line===================================
+        case 15:
+          s1 += ' m' + dxo2 + ',' + tk2 // P0 as start
+          s1 += ' v' + (-2 * tk2)
+          s1 += ' h' + (-2) * dxo2
+          s1 += ' v' + (2 * tk2)
           s1 += ' z'
           break
-        case 15: // ----- -- direction--------------------------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + this.geof.dxo()
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' z'
-          break
-        case 16: // ----- /- direction--------------------------
-          s1 += ' m' + (tk0x) + ',' + (tk0y) // Tk0
-          s1 += ' h' + (tkax)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' h' + (-tkbx) // Tk0´
-          s1 += ' l' + (-tk59x) + ',' + (tk59y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' z'
-          break
-        case 25: // ----- _/ direction--------------------------
-          s1 += ' m' + (-tk0x) + ',' + (-tk0y) // Tk0
-          s1 += ' h' + (-tkax)
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + (tkbx) // Tk0´
-          s1 += ' l' + tk59x + ',' + (-tk59y) // Tk5
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 58: // ----- -\ direction--------------------------
-          s1 += ' m' + (-tk0x) + ',' + (tk0y)
-          s1 += ' h' + (-tkax)
-          s1 += ' v' + (-2 * tk0y)
-          s1 += ' h' + (tkbx) // Tk0´
-          s1 += ' l' + tk59x + ',' + (tk59y) // Tk5
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (-tkcx)
+        // ===curved track======================================
+        case 14: case 16: case 25:
+          sgnx = -1
+          sgny = -1
+          if (dir1 === 16) sgny = 1
+          if (dir1 === 25) sgnx = 1
+          /* falls through */
+        case 58:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + sgny * dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + sgny * (-q2y) // @ P2
+          s1 += ' l' + (-sgnx) * q5x + ',' + (-sgny) * d25y // @ P5
+          s1 += ' h' + (-sgnx) * (2 * dxo2 - q5x)
+          s1 += ' v' + sgny * 2 * tk2
+          s1 += ' h' + sgnx * q5x
           s1 += ' z'
           break
         default:
+          s1 = ''
       }
       return s1
     },
-    // _______on click: turn track energy on____________________
+
+    // // _______path command: draw a track________________________
+    // pathTrack: function (dirTrack_: number): string {
+    //   // -----(positive) values of line length------------------
+    //   const dxo2 = this.geof.dxo2()
+    //   const dyo2 = this.geof.dyo2()
+    //   const tk0x = -this.geof.tk.value[0].x
+    //   const tk0y = -this.geof.tk.value[0].y
+    //   const tk2 = this.geof.tk2
+    //   const tkax = dxo2 - tk0x
+    //   const tkbx = dxo2 + tk0x
+    //   const tkcx = dxo2 - this.geof.tk.value[4].x
+    //   const tkcy = dyo2 + this.geof.tk.value[5].y
+    //   const tk59x = this.geof.dxo() - tkbx
+    //   const tk59y = dyo2 - tkcy + tk0y
+    //   // -----symbol "Section insulator" || --------------------
+    //   const tks = tk2 / 2
+    //   let s1 = ' M' + this.x + ',' + this.y
+    //   switch (dirTrack_) {
+    //     case 14: // ----- \_ direction--------------------------
+    //       s1 += ' m' + (tk0x) + ',' + (-tk0y) // Tk0
+    //       s1 += ' h' + (tkax)
+    //       s1 += ' v' + (2 * tk0y)
+    //       s1 += ' h' + (-tkbx) // Tk0´
+    //       s1 += ' l' + (-tk59x) + ',' + (-tk59y) // Tk5
+    //       s1 += ' v' + (-tkcy)
+    //       s1 += ' h' + (tkcx)
+    //       s1 += ' z'
+    //       break
+    //     case 15: // ----- -- direction--------------------------
+    //       s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
+    //       s1 += ' v' + (2 * tk0y)
+    //       s1 += ' h' + this.geof.dxo()
+    //       s1 += ' v' + (-2 * tk0y)
+    //       s1 += ' z'
+    //       break
+    //     case 16: // ----- /- direction--------------------------
+    //       s1 += ' m' + (tk0x) + ',' + (tk0y) // Tk0
+    //       s1 += ' h' + (tkax)
+    //       s1 += ' v' + (-2 * tk0y)
+    //       s1 += ' h' + (-tkbx) // Tk0´
+    //       s1 += ' l' + (-tk59x) + ',' + (tk59y) // Tk5
+    //       s1 += ' v' + (tkcy)
+    //       s1 += ' h' + (tkcx)
+    //       s1 += ' z'
+    //       break
+    //     case 25: // ----- _/ direction--------------------------
+    //       s1 += ' m' + (-tk0x) + ',' + (-tk0y) // Tk0
+    //       s1 += ' h' + (-tkax)
+    //       s1 += ' v' + (2 * tk0y)
+    //       s1 += ' h' + (tkbx) // Tk0´
+    //       s1 += ' l' + tk59x + ',' + (-tk59y) // Tk5
+    //       s1 += ' v' + (-tkcy)
+    //       s1 += ' h' + (-tkcx)
+    //       s1 += ' z'
+    //       break
+    //     case 58: // ----- -\ direction--------------------------
+    //       s1 += ' m' + (-tk0x) + ',' + (tk0y)
+    //       s1 += ' h' + (-tkax)
+    //       s1 += ' v' + (-2 * tk0y)
+    //       s1 += ' h' + (tkbx) // Tk0´
+    //       s1 += ' l' + tk59x + ',' + (tk59y) // Tk5
+    //       s1 += ' v' + (tkcy)
+    //       s1 += ' h' + (-tkcx)
+    //       s1 += ' z'
+    //       break
+    //     default:
+    //   }
+    //   return s1
+    // },
+    // _______on click: set turnout branch curve left/right_____
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click Top')
-      let payload = 'onClkTop: sid=' + this.sid
+      // -----prepare send topics-------------------------------
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.dir === '4') { // turnout 1 -< or 4 >-)
+        if(this.dir === '5') { // turnout 1 -< or 5 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
         }
-        payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---set payload to "curved"---------------------------
+        const payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
             rccTurnout3Way1Controller.publishRcc(topic, payload)
@@ -364,15 +412,15 @@ export default defineComponent({
         })
       }
     },
-    // _______on click: turn track energy on____________________
+    // _______on click: set turnout to stright__________________
     onClkMid: function (): void {
       console.log(this.sid, 'Button-Click Mid')
-      let payload = 'onClkMid: sid=' + this.sid
-      // const topic = 'rcc/error'
-      // if (!this.to3way1) rccTo3way1Controller.publishRcc(topic, payload)
+      // -----prepare send topics-------------------------------
       if (this.to3way1?.pubTopic) {
         const aPubTopic = this.to3way1.pubTopic.split(' ')
-        payload = rccTurnout3Way1Controller.payloadTurnoutStright
+        // ---set payload to "stright"--------------------------
+        const payload = rccTurnout3Way1Controller.payloadTurnoutStright
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
             rccTurnout3Way1Controller.publishRcc(topic, payload)
@@ -380,18 +428,20 @@ export default defineComponent({
         })
       }
     },
-    // _______on click: turn track energy off___________________
+    // _______on click: set turnout branch curve left/right_____
     onClkBottom: function (): void {
       console.log(this.sid, 'Button-Click Bottom')
-      let payload = 'onClkBottom: sid=' + this.sid
+      // -----prepare send topics-------------------------------
       let aPubTopic = Array()
       if (this.to3way1?.pubTopic) {
-        if(this.dir === '1') { // turnout 1 -< or 4 >-)
+        if(this.dir === '1') { // turnout 1 -< or 5 >-)
           aPubTopic = this.to3way1.pubTopicR.split(' ')
         } else {
           aPubTopic = this.to3way1.pubTopic.split(' ') 
         }
-        payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---set payload to "curved"---------------------------
+        const payload = rccTurnout3Way1Controller.payloadTurnoutCurved
+        // ---publish message(s)--------------------------------
         aPubTopic.forEach(topic => {
           if (this.to3way1?.pubTopic) {
             rccTurnout3Way1Controller.publishRcc(topic, payload)

@@ -74,7 +74,7 @@ export const bt1 = {
     // ..row 1..................................................
     { type: 'uc', row: 1, col: 0, sid: 'uc1', dir: '15', f: ' DCC 11' },
     { type: 'tk', row: 1, col: 1, sid: 'm00b2', dir: '15' },
-    { type: 'tt', row: 1, col: 2, sid: 'tt031', dir: '4', h: 'DCC 32 ', ha: 'R', f: 'DCC 31 ', fa: 'R' },
+    { type: 'tt', row: 1, col: 2, sid: 'tt031', dir: '5', h: 'DCC 32 ', ha: 'R', f: 'DCC 31 ', fa: 'R' },
     // ..row 2..................................................
     { type: 'tk', row: 2, col: 0, sid: 'm00a3', dir: '15' },
     { type: 'to', row: 2, col: 1, sid: 'to021', dir: '1L', f: ' DCC 21' },
