@@ -8,7 +8,7 @@
     <RccTurnout3Way1 :x="0*dx"  :y="0*dy" sid="t3w1" dir="1" :border="border"></RccTurnout3Way1>
     <RccTurnout3Way1 :x="1.2*dx"  :y="0*dy" sid="t3w1" dir="5" :border="border"></RccTurnout3Way1>
     <RccTurnout3Way1 :x="2.8*dx"  :y="0*dy" sid="t3w1" dir="1" footer="UNTEN" :border="border"></RccTurnout3Way1>
-    <RccTurnout3Way1 :x="4*dx"  :y="0*dy" sid="t3w1" dir="5" header="OBEN" headeralign="R" :border="border"></RccTurnout3Way1>
+    <RccTurnout3Way1 :x="4*dx"  :y="0*dy" sid="t3w1" dir="5" header="color red" headeralign="R" :border="border" color="red"></RccTurnout3Way1>
     <RccTurnout3Way1 :x="5.2*dx"  :y="0*dy" sid="t3w1" dir="5" label="3" :border="3"></RccTurnout3Way1>
   </svg>
 </template>

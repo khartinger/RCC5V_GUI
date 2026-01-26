@@ -291,9 +291,9 @@ export default defineComponent({
       }
       return ''
     },
-        // _______path command: draw a track________________________
+    // _______path command: draw a track________________________
     pathTrack: function (dir1: number): string {
-           // -----signs for drawing---------------------------------
+      // -----signs for drawing---------------------------------
       let sgnx = 1
       let sgny = 1
       // -----(positive) values of line length------------------
@@ -312,22 +312,6 @@ export default defineComponent({
           s1 += ' v' + (-2 * tk2)
           s1 += ' h' + (-2) * dxo2
           s1 += ' v' + (2 * tk2)
-          s1 += ' z'
-          break
-        // ===horizontal, rectangular angle=====================
-        case 13: case 35: case 57:
-          sgnx = -1
-          sgny = -1
-          if (dir1 === 13) sgnx = 1
-          if (dir1 === 57) sgny = 1
-          /* falls through */
-        case 17:
-          s1 += ' m' + sgnx * dxo2 + ',' + sgny * tk2 // P0 as start
-          s1 += ' v' + sgny * (-2) * tk2 // @ P0'
-          s1 += ' h' + (-sgnx) * (dxo2 + tk2)
-          s1 += ' v' + sgny * (dyo2 + tk2)
-          s1 += ' h' + sgnx * 2 * tk2
-          s1 += ' v' + (-sgny) * (dyo2 - tk2)
           s1 += ' z'
           break
         // ===diagonal straight line============================

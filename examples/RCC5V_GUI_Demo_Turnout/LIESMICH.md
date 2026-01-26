@@ -219,15 +219,15 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 # 6. Anmerkungen zur Programmierung   
 ## 6.1 Zeichnen der Weichensymbole
 ### 6.1.1 Weichensymbol
-Das Zeichnen der Weichensymbole erfolgt durch Übereinanderzeichnen zweier Gleissymbole im `<template>` von `RccTurnout1.vue`:   
+Das Zeichnen der Weichensymbole erfolgt durch &Uuml;bereinanderzeichnen zweier Gleissymbole im `<template>` von `RccTurnout1.vue`:   
 ```html   
   <!--draw turnout parts (do not change lines!)------------- -->
   <path :d="drawTurnout2" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
   <path :d="drawTurnout1" :fill="colorTurnout1" :stroke="colorTurnout1" stroke-width="1" />
 ```   
-Das Symbol 2, das zuerst steht, zeigt die "inaktive" Fahrtrichtung an und die zweite Zeile die aktuelle Weichenstellung. Aus diesem Grund dürfen die beiden Zeilen auch __nicht vertauscht__ werden!   
+Das Symbol 2, das zuerst steht, zeigt die "inaktive" Fahrtrichtung an und die zweite Zeile die aktuelle Weichenstellung. Aus diesem Grund d&uuml;rfen die beiden Zeilen auch __nicht vertauscht__ werden!   
 
-In den Funktionen `drawTurnout1` und `drawTurnout2` wird - je nach Status der Weiche - ausgewählt, ob die gebogene (Parameter `true`) oder gerade Version des Gleises gezeichnet werden soll.   
+In den Funktionen `drawTurnout1` und `drawTurnout2` wird - je nach Status der Weiche - ausgew&auml;hlt, ob die gebogene (Parameter `true`) oder gerade Version des Gleises gezeichnet werden soll.   
 
 Die Wahl des aktuellen und "inaktiven" Gleissymbols erfolgt in den Funktionen `drawTurnout1` und `drawTurnout2` (im Bereich `<script> computed:`):   
 ```ts   
@@ -243,7 +243,7 @@ Die Wahl des aktuellen und "inaktiven" Gleissymbols erfolgt in den Funktionen `d
     },
 ```   
 
-In der Funktion `pathTurnout` (im Bereich `methods:`) wird dann, abhängig vom Weichentyp, der richtige Pfad für das Gleissymbol geholt und zurückgegeben.   
+In der Funktion `pathTurnout` (im Bereich `methods:`) wird dann, abh&auml;ngig vom Weichentyp, der richtige Pfad f&uuml;r das Gleissymbol geholt und zur&uuml;ckgegeben.   
 ```ts   
     // _______draw a path of the turnout________________________
     pathTurnout: function (curve_: boolean): string {
@@ -284,10 +284,10 @@ In der Funktion `pathTurnout` (im Bereich `methods:`) wird dann, abhängig vom W
       return ''
     },
 ```   
-Das eigentliche Zusammenstellen der Zeichenbefehle für das Gleissymbol erfolgt - wie bei Gleisen - in der Funktion `pathTrack: function (dir1: number): string {` .
+Das eigentliche Zusammenstellen der Zeichenbefehle f&uuml;r das Gleissymbol erfolgt - wie bei Gleisen - in der Funktion `pathTrack: function (dir1: number): string {` .
 
 ### 6.1.2 Farbe des Weichensymbols
-Die Farbe eines Gleissymbols ist davon abhängig, ob das Symbol die "inaktive" Richtung (`colorTurnout2`) oder die aktuelle Weichenstellung anzeigt (`colorTurnout1`). Nur die aktive Farbe kann durch eine Angabe beim Aufruf des Weichensymbols überschrieben werden.   
+Die Farbe eines Gleissymbols ist davon abh&auml;ngig, ob das Symbol die "inaktive" Richtung (`colorTurnout2`) oder die aktuelle Weichenstellung anzeigt (`colorTurnout1`). Nur die aktive Farbe kann durch eine Angabe beim Aufruf des Weichensymbols &uuml;berschrieben werden.   
 ```ts   
     // _______color 1 of the track (active path)________________
     colorTurnout1: function (): string {
@@ -310,7 +310,7 @@ Der Klickbereich f&uuml;r ein Weichensymbol ist entweder ein Rechteck (1L, 1R, 5
 ![Klickbereiche Weiche](./images/150_clickarea_turnout1.png "Klickbereiche Weiche")   
 _Bild 5: Klickbereiche bei Weichen_  
 
-Das Klicken auf eine Fläche wird folgendermaßen ermöglicht:   
+Das Klicken auf eine Fl&auml;che wird folgenderma&szlig;en erm&ouml;glicht:   
 
 In der Datei `RccTurnout1.vue` werden die Klickbereiche durch folgende Zeilen im Bereich `<template>` definiert:   
 ```html   
@@ -323,9 +323,9 @@ Die "Klasse" `ciClick` ist im `<script>`-Bereich von `RccBase.vue` definiert:
 ```html   
   .ciClick   { fill-opacity: 0.0; stroke-width: 1; }
 ```   
-Sie bewirkt, dass die Klickflächen "transparent" sind und die Stiftweite 1 ist.   
+Sie bewirkt, dass die Klickfl&auml;chen "transparent" sind und die Stiftweite 1 ist.   
 
-Die Pfade für die Top-Klickbereiche sind in `RccTurnout1.vue` folgendermaßen definiert:   
+Die Pfade f&uuml;r die Top-Klickbereiche sind in `RccTurnout1.vue` folgenderma&szlig;en definiert:   
 ```ts   
     // _______click area "top"__________________________________
     pathTop: function(): string {

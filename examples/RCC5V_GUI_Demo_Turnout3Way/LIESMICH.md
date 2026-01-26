@@ -5,8 +5,9 @@ Letzte &Auml;nderung: 22.1.2026 <a name="up"></a><br>
 </td></tr></table>   
 
 # 1. Einleitung
-Dieses Dokument beschreibt die Verwendung von Dreiweg-Weichensymbolen zur Erzeugung eines Gleisstellbildes f&uuml;r RCC5V-GUI-Anwendungen.   
+Dieses Dokument beschreibt die Verwendung von Dreiweg-Weichensymbolen zur Erstellung eines Gleisstellbildes f&uuml;r RCC5V-GUI-Anwendungen.   
 _Bild 1_ zeigt verschiedene Weichensymbole mit ihrer Bezeichnung. Die Symbole haben (noch) keine Verbindung zu einer realen Weiche, daher ist keine Schaltstellung eingezeichnet.   
+
 ![Dreiweg-Weichensymbole](./images/200_symbol_turnout3way.png "Dreiweg-Weichensymbole")   
 _Bild 1: Dreiweg-Weichensymbole_   
 
@@ -60,6 +61,7 @@ Damit die Weichensymbole funktionieren (d.h. MQTT Nachrichten senden und empfang
 Jetzt kann man im Browser kontrollieren, ob die Weichenstellung angezeigt wird.
 
 _Bild 2_ zeigt die Weichen in Weichenstellung "Gerade".   
+
 ![Weichensymbole2](./images/200_symbol_turnout3way2.png "Weichensymbole2")   
 _Bild 2: Dreiweg-Weichensymbole in Weichenstellung "Gerade"_   
 
@@ -109,7 +111,7 @@ Weichensymbole werden in der Datei `MainView.vue` mit dem Tag `<RccTurnout3Way1 
 * `x` (erforderlich): x-Koordinate des Mittelpunkts des Symbols in Pixel   
 * `y` (erforderlich): y-Koordinate des Mittelpunkts des Symbols in Pixel   
 * `dir` (erforderlich): Richtung des Weichensymbols (siehe [Kapitel 5.2](#x52))   
-* `sid` (optional): ID des Symbols, mit dem Weichen gruppiert und &uuml;ber MQTT angesprochen werden.   
+* `sid` (optional): ID des Symbols. Sie wird ben&ouml;tigt, damit die Weiche &uuml;ber MQTT kommunizieren kann oder mehrere Weichen gleichzeitig schalten k&ouml;nnen.   
 * `border` (optional): Gibt an, ob ein Rahmen um ein Weichensymbol gezeichnet werden soll. (M&ouml;gliche Werte 0 bis 3, Default-Wert `'0'`)   
 * `label` (optional): Gibt an, ob und welche Beschriftung f&uuml;r ein Weichensymbol angezeigt werden soll. (M&ouml;gliche Werte: "0" bis "3", Default-Wert `'0'`)   
 * `color` (optional): Setzen der Farbe f&uuml;r f&uuml;r den Fahrweg. (Default-Wert: "-" bedeutet Standardwert `colorTurnoutClear` nehmen)    
@@ -128,9 +130,9 @@ Da senkrechte Gleise nicht unterst&uuml;tzt werden, gibt es nur zwei m&ouml;glic
 <a name="x53"></a>   
 
 ## 5.3 MQTT-Funktionalit&auml;t
-W&auml;hrend die Darstellung eines Dreiweg-Weichensymbols in der Datei `RccTurnout3Way1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTurnout3Way1Controller` bestimmt.   
+W&auml;hrend die Darstellung eines Dreiweg-Weichensymbols in der Datei `RccTurnout3Way1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTurnout3Way1Controller.ts` bestimmt.   
 Die Eigenschaften einzelner Weichen werden im Array `to3ways` gespeichert. Ein Eintrag ist zB folgenderma&szlig;en aufgebaut:   
-```
+```ts
       {
         // ---test track 1--------------------------------------
         id: 't3w1',
@@ -164,7 +166,7 @@ Bedeutung der einzelnen Parameter:
 ## 5.4 Vereinbarungen
 ### Positionsangabe
 Die Angabe der Position des Mittelpunktes eines Symbols erfolgt in Pixel. Da Gleise auf einem Stellpult aneinandergereiht werden, muss man die Gr&ouml;&szlig;e der Symbole wissen. Diese ist in der Datei `classes/Geo.ts` festgelegt und wird folgenderma&szlig;en importiert:   
-```
+```ts
 <script setup lang="ts">
 import { Geof } from '../classes/Geo'
 ...
@@ -189,17 +191,78 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 
 ## 5.5 Beispiele
 1. An der Rasterposition 0/0: Weiche nach rechts (x+) mit Standardrahmen und ohne Beschriftung   
-`<RccTurnout3Way1 :x="0*dx" :y="0*dy" sid="t3w1" dir="1" :border="border"></RccTurnout3Way1>`   
+```html
+<RccTurnout3Way1 :x="0*dx" :y="0*dy" sid="t3w1" dir="1" :border="border"></RccTurnout3Way1>
+```   
 
-2. An der Rasterposition 4/0: Weiche nach links mit Standardrahmen und Beschriftung "OBEN" rechts oben.   
-`<RccTurnout3Way1 :x="4*dx" :y="0*dy" sid="t3w1" dir="5" header="OBEN" headeralign="R" :border="border"></RccTurnout3Way1>`   
+2. An der Rasterposition 4/0: Weiche nach links mit Standardrahmen und Beschriftung "color red" rechts oben.   
+```html
+<RccTurnout3Way1 :x="4*dx"  :y="0*dy" sid="t3w1" dir="5" header="color red" headeralign="R" :border="border" color="red"></RccTurnout3Way1>
+```   
 
 [Zum Seitenanfang](#up)   
 <a name="x60"></a>   
 <a name="x61"></a>   
 
 # 6. Anmerkungen zur Programmierung   
-## 6.1 Klickbereiche f&uuml;r Weichensymbole
+## 6.1 Zeichnen der Weichensymbole
+### 6.1.1 Pfade für das Weichensymbol
+Das Zeichnen der Weichensymbole erfolgt durch &Uuml;bereinanderzeichnen dreier Gleissymbole im `<template>` von `RccTurnout1.vue`:   
+```html   
+  <!--draw turnout parts (do not change lines!)------------- -->
+  <path :d="drawTurnout1" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
+  <path :d="drawTurnout2" :fill="colorTurnout2" :stroke="colorTurnout2" stroke-width="1" />
+  <path :d="drawTurnout3" :fill="colorTurnout1" :stroke="colorTurnout1" stroke-width="1" />
+```   
+Die Symbole 1 und 2, die zuerst stehen, zeigen die "inaktiven" Fahrtrichtungen an und die dritte Zeile die aktuelle Weichenstellung. Aus diesem Grund d&uuml;rfen die Zeilen auch __nicht vertauscht__ werden!   
+
+In den Funktionen `drawTurnout1`, `drawTurnout2` und `drawTurnout3` wird das Zeichnen des Pfades einer Weiche mittels `pathTurnout(drawNr_)` aufgerufen und der String zurückgegeben.   
+
+In der Funktion `pathTurnout(drawNr_)` wird zuerst kontrolliert, ob der Weichenstatus richtig ist (1=rechts, 2=links, 3=gerade) und ob die Weichenrichtung passt (1 oder 5).    
+Danach wird die Reihenfolge der Gleisbilder festgelegt, abgängig davon, ob es die 1. 2. oder 3. Zeichnung ist. Dies ist wichtig, weil als dritte Zeichnung die aktive Richtung gezeichnet werden muss.   
+Die Auswahl der Gleispfadnummer (25, 15, 58 oder 16, 15, 14) erfolgt mit Hilfe eines Arrays, dessen Index aus der Pfadnummer und dem Weichenstatus gebildet wird:   
+`Index = Status + Pfad_Nummer - 2`   
+
+| Status <br> Weiche | Pfad Nummer <br> (Zeichnen #) | Index | Weichenrichtung 1 <br> dir_=1 (nach rechts) | Weichenrichtung 5 <br> dir_=5 (nach links) |   
+|:----------:|:-----:|:-----:|:--------------------:|:-----:|   
+| 1 (rechts) |   1   |   0   | `--` 15 oder `_/` 25 | `--` 15 oder `/-` 16 |   
+| 1 (rechts) |   2   |   1   | `--` 15 oder `_/` 25 | `--` 15 oder `/-` 16 |   
+| 1 (rechts) | __3__ | __2__ |      __`-\` 58__     | __`\_` 14__ |   
+| 2 (links)  |   1   |   1   | `--` 15 oder `-\` 58 | `--` 15 oder `\_` 14 |   
+| 2 (links)  |   2   |   2   | `--` 15 oder `-\` 58 | `--` 15 oder `\_` 14 |   
+| 2 (links)  | __3__ | __3__ |      __'_/' 25__     | __`/-` 16__ |   
+| 3 (gerade) |   1   |   2   | `_/` 25 oder `-\` 58 | `/-` 16 oder `\_` 14 |   
+| 3 (gerade) |   2   |   3   | `_/` 25 oder `-\` 58 | `/-` 16 oder `\_` 14 |   
+| 3 (gerade) | __3__ | __4__ |      __'--' 15__     | __`--` 15__ |   
+
+Man erkennt, dass das Array für `dir_=1` so aufgebaut sein muss: [x, x, 58, 25, 15], wobei die Reihenfolge der ersten beiden Werte x (die 25 und 15 sein müssen) egal ist. Wahl: 
+```ts   
+      // .....number of used path tracks........................
+      let aTrack = Array(25, 15, 58, 25, 15)
+      if (dir_ === 5) aTrack = Array(16, 15, 14, 16, 15)
+```   
+
+Mit der Pfadnummer wird schließlich durch Aufruf der Funktion `pathTrack(dir1)` der Zeichenstring erstellt.   
+
+### 6.1.2 Farbe für das Weichensymbol
+Für das Zeichnen der Fahrwege werden zwei Farben benötigt: eine für die beiden inaktiven Richtungen und eine für die echte Weichenrichtung. Die Zuordnung erfolgt in den beiden Funktionen `colorTurnout1` und `colorTurnout1`: 
+```ts   
+    // _______color 1 of the track (active path)________________
+    colorTurnout1: function (): string {
+      if (this.color.length > 1) return this.color
+      if (this.iTo3way1State < 0) return this.geof.colorTrackUnknown
+      return this.geof.colorTurnoutClear
+    },
+    // _______color 2 of the track (inactive path)______________
+    colorTurnout2: function (): string {
+      if (this.iTo3way1State < 0) return this.geof.colorTrackUnknown
+      return this.geof.colorTurnoutBlocked
+    },
+```   
+
+<a name="x62"></a>   
+
+## 6.2 Klickbereiche f&uuml;r Weichensymbole
 Beim Dreiweg-Weichensymbol gibt es drei Klickbereiche: "Top", "Mid" und "Bottom".   
 
 ![Klickbereiche](./images/200_clickarea_turnout3way2.png "Klickbereiche")   
@@ -209,18 +272,18 @@ Bei einer Weiche nach
 * links (`dir="1"`)  bedeutet Top = Linksbogen, Mid = Gerade und Bottom = Rechtsbogen,
 * rechts (`dir="5"`) bedeutet Top = Rechtsbogen, Mid = Gerade und Bottom = Linksbogen.
 
-<a name="x62"></a>   
+<a name="x63"></a>   
 
-## 6.2 Senden der MQTT-Nachrichten
+## 6.3 Senden der MQTT-Nachrichten
 Das Senden von Nachrichten passiert in der `Klasse RccTurnout3Way1Controller`. Dort werden zwei Variablen `payloadTurnoutStright` und `payloadTurnoutCurved` definiert, die den "Normalzustand" abbilden.   
-```
+```ts
 export class RccTurnout3Way1Controller extends RccBaseController {
   public payloadTurnoutStright = '1'
   public payloadTurnoutCurved = '0'
 ```
 
 Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` von `RccTurnout3Wway1.vue` aufgerufen. In dieser werden die richtigen Topics (je nach Weichenrichtung) ausgew&auml;hlt, die Payload auf "Abzweig" gesetzt und die Nachricht(en) gesendet:   
-```
+```ts
     // _______on click: set turnout branch curve left/right_____
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click Top')
@@ -245,7 +308,7 @@ Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClk
 ```
 
 Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTurnout3Way1Controller.ts` steht:   
-```
+```ts
   // _________publish a mqtt message____________________________
   public publishRcc (topic: string, payload: string): void {
     // console.log('RccTurnout3Way1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
@@ -255,11 +318,11 @@ Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTurnout3W
 
 F&uuml;r die mittlere und untere Schaltfl&auml;che wird das gleiche in den Funktionen `onClkMid` bzw. `onClkBottom` gemacht.   
 
-<a name="x63"></a>   
+<a name="x64"></a>   
 
-## 6.3 Empfang von MQTT-Nachrichten
+## 6.4 Empfang von MQTT-Nachrichten
 Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTurnout3Way1Controller.vue` in der Funktion `onMessage`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und der DCC-Adresse - festgelegt und in `iLState` und `iLState` gespeichert.   
-```
+```ts
   // _________receive a mqtt message____________________________
   public onMessage (message: Message): void {
     this.to3ways1.forEach(to3way1 => {
