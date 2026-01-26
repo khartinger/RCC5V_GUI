@@ -203,29 +203,39 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 
 ## 5.5 Beispiele
 1. An der Rasterposition 0/5: Gerades, waagrechtes Gleis ohne Rahmenangabe, Beschriftung und Funktion   
-```ts
+```html
 <RccTrack1 :x="0*dx" :y="5*dy" sid="tk0" dir="15"></RccTrack1>
 ```   
 
 2. An der Rasterposition 1/5: Gleis waagrecht von links nach rechts unten. Kein Rahmen, keine Beschriftung und Funktion   
-```ts
+```html
 <RccTrack1 :x="1*dx" :y="5*dy" sid="tk0" dir="58" :border="0"></RccTrack1>
 ```   
 
 3. An der Rasterposition 2/6: Gleis von links oben nach rechts (waagrecht) mit Funktion "tk1", Standardbeschriftung und Standardrahmen   
-`<RccTrack1 :x="2*dx" :y="6*dy" sid="tk1" dir="14" label="3" :border="border"></RccTrack1>`   
+```html
+<RccTrack1 :x="2*dx" :y="6*dy" sid="tk1" dir="14" label="3" :border="border"></RccTrack1>
+```   
 
 4. An der Rasterposition 3/6: Gleis von links nach rechts oben mit Funktion "tk1" und Standardrahmen. Beschriftung: Unten Mitte "DCC 41", das Gleis-Ende rechts oben soll mitgezeichnet werden.   
-`<RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25" con="2" footer="DCC 41" footeralign="C" :border="border"></RccTrack1>`   
+```html
+<RccTrack1 :x="3*dx" :y="6*dy" sid="tk1" dir="25" con="2" footer="DCC 41" footeralign="C" :border="border"></RccTrack1>
+```   
 
 5. An der Rasterposition 4/5: Gleis von links unten nach rechts oben mit Funktion "tk1" und Standardrahmen. Beschriftung: Unten Rechts "[OFF]", Oben Links "[ON]"   
-`<RccTrack1 :x="4*dx" :y="5*dy" sid="tk1" dir="26" header="[ON]" headeralign="L" footer="[OFF]" footeralign="R" :border="border"></RccTrack1>`   
+```html
+<RccTrack1 :x="4*dx" :y="5*dy" sid="tk1" dir="26" header="[ON]" headeralign="L" footer="[OFF]" footeralign="R" :border="border"></RccTrack1>
+```   
 
 6. An der Rasterposition 5/4: Gleis von links unten nach rechts unten, ohne Funktion und Beschriftung, mit Rahmen Nummer 3.   
-`<RccTrack1 :x="5*dx" :y="4*dy" sid="tk0" dir="68" :border="3"></RccTrack1>`   
+```html
+<RccTrack1 :x="5*dx" :y="4*dy" sid="tk0" dir="68" :border="3"></RccTrack1>
+```   
 
 7. An der Rasterposition 6/5: Gleis von links oben nach rechts unten ohne Funktion und Beschriftung, mit Standardrahmen.   
-`<RccTrack1 :x="6*dx" :y="5*dy" sid="tk0" dir="48" :border="border"></RccTrack1>`   
+```html
+<RccTrack1 :x="6*dx" :y="5*dy" sid="tk0" dir="48" :border="border"></RccTrack1>
+```   
 
 [Zum Seitenanfang](#up)   
 <a name="x60"></a>   
@@ -253,7 +263,9 @@ Die Isoliersymbole werden &uuml;blicherweise nach den Gleissymbolen gezeichnet.
 
 ### Beispiel
 Isoliersymbol an der Stelle 4,5/4,5 in Richtung links oben.   
-`<RccTrackIso1 :x="4.5*dx" :y="4.5*dy" sid="iso1" dir="2"></RccTrackIso1>`   
+```html
+<RccTrackIso1 :x="4.5*dx" :y="4.5*dy" sid="iso1" dir="2"></RccTrackIso1>
+```   
 
 <a name="x62"></a>   
 
@@ -261,7 +273,6 @@ Isoliersymbol an der Stelle 4,5/4,5 in Richtung links oben.
 Schr&auml;ge Gleissymbole enden in der Ecke an den waagrechten und senkrechten Symbolgrenzen. Bei der Aneinanderreihung kommt es an den Ecken zu Fehlstellen, die durch Elemente des Typs `RccTrackCon1` ausgeglichen werden k&ouml;nnen.   
 Es gibt zwei Arten f&uuml;r die beiden schr&auml;gen Richtungen "2" und "4".   
 Soll das Verbindungselement seine Farbe __gemeinsam__ mit dem Gleis mit &auml;ndern, so muss man die Option "`con`" des `RccTrack1`-Tags verwenden!   
-
 
 F&uuml;r die Parameter gilt das gleiche wie f&uuml;r `RccTrack1Iso`:   
 * `x` (erforderlich): x-Koordinate des Zentrums des Symbols in Pixel   
@@ -272,11 +283,15 @@ F&uuml;r die Parameter gilt das gleiche wie f&uuml;r `RccTrack1Iso`:
 
 ### Beispiele
 1. Verbindungselement an der Position 1,5/5,5 in Richtung rechts unten (4) mit der Farbe `geof.colorTrackOff`.   
-` <RccTrackCon1 :x="1.5*dx" :y="5.5*dy" sid="con0" dir="4" :color="geof.colorTrackOff"></RccTrackCon1>`   
+```html
+<RccTrackCon1 :x="1.5*dx" :y="5.5*dy" sid="con0" dir="4" :color="geof.colorTrackOff"></RccTrackCon1>
+```   
 Hier ist die Farbe des Verbindungselements fest vorgegeben (rot). &Auml;ndert sich der Fahrstrom-Zustand des Gleises auf "ein", werden die Gleise gr&uuml;n gef&auml;rbt, aber das Verbindungselement bleibt rot.   
 
 2. Verbindungselement an der Position 5,5/4,5 in Richtung rechts unten (4).   
-`<RccTrackCon1 :x="5.5*dx" :y="4.5*dy" sid="con0" dir="4"></RccTrackCon1>`   
+```html
+<RccTrackCon1 :x="5.5*dx" :y="4.5*dy" sid="con0" dir="4"></RccTrackCon1>
+```   
 
 [Zum Seitenanfang](#up)   
 <a name="x70"></a>   

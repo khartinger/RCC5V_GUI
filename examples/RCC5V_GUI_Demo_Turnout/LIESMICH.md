@@ -132,7 +132,7 @@ _Bild 3: Weichenrichtungen_
 ## 5.3 MQTT-Funktionalit&auml;t
 W&auml;hrend die Darstellung eines Weichensymbols in der Datei `RccTurnout1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTurnout1Controller` bestimmt.   
 Die Eigenschaften einzelner Weichen werden im Array `turnouts1` gespeichert. Ein Eintrag ist zB folgenderma&szlig;en aufgebaut:   
-```
+```ts
       {
         // ---turnout 1-----------------------------------------
         id: 'to1',
