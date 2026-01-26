@@ -342,15 +342,15 @@ $\ \Large P_0 \left( \displaystyle ~ dxo2 ~ \Big/ ~ tk2 ~ \right) $
 
 $\ \Large P_1 \left( \displaystyle \frac{1}{k} \cdot \Big[ dyo2 - tk2 \cdot \sqrt{1+k^2} \Big] ~ \Big/ ~ dyo2 \right) $
 
-$\ \Large P_2 \left( \displaystyle dxo2 \; \Big/ \; k \cdot dxo2 - tk2 \cdot \sqrt{1+k^2} \right) $
+$\ \Large P_2 \left( \displaystyle dxo2 ~ \Big/ ~ k \cdot dxo2 - tk2 \cdot \sqrt{1+k^2} \right) $
 
-$\ \Large P_3 \left( \displaystyle 0 \; \Big/ \; tk2 \cdot \sqrt{1+k^2} \right) $
+$\ \Large P_3 \left( \displaystyle 0 ~ \Big/ ~ tk2 \cdot \sqrt{1+k^2} \right) $
 
-$\ \Large P_4 \left( \displaystyle \frac{k \cdot tk2}{\sqrt{1+k^2}}  \; / \; \frac{-tk2}{\sqrt{1+k^2}} \right) $
+$\ \Large P_4 \left( \displaystyle \frac{k \cdot tk2}{\sqrt{1+k^2}} ~ \Big/ ~ \frac{-tk2}{\sqrt{1+k^2}} \right) $
 
-$\ \Large P_5 \left( \displaystyle \frac{tk2}{k} \cdot \Big[\sqrt{1+k^2} \; - \; 1 \Big] \; \Big/ \; -tk2 \right) $
+$\ \Large P_5 \left( \displaystyle \frac{tk2}{k} \cdot \Big[\sqrt{1+k^2} ~ - ~ 1 \Big] ~ \Big/ ~ -tk2 \right) $
 
-$\ \Large P_6 \left( \displaystyle \frac{tk2}{k} \cdot \sqrt{1+k^2} \; \Big/ \; 0 \right) $
+$\ \Large P_6 \left( \displaystyle \frac{tk2}{k} \cdot \sqrt{1+k^2} ~ \Big/ ~ 0 \right) $
 
 
 ### 7.1.2 Zus&auml;tzliche Verl&auml;ngerung
