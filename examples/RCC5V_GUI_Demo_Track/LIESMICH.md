@@ -301,7 +301,7 @@ Hier ist die Farbe des Verbindungselements fest vorgegeben (rot). &Auml;ndert si
 ## 7.1 Zeichnen der Gleissymbole
 Gleissymbole bestehen aus bis zu drei Teilen:   
 * das Gleissymbol selbst   
-* eventuell eine zusätzliche Verlängerung eines schrägen Gleises   
+* eventuell eine zus&auml;tzliche Verl&auml;ngerung eines schr&auml;gen Gleises   
 * eventuell ein Prellbock   
 
 ### 7.1.1 Gleissymbol
@@ -324,21 +324,21 @@ Folgende Symbole werden mit Zeichenbefehlen (wie `M`, `m`, `h`, `v`, `l`) gezeic
 ![Trackbasesymbols6](./images/200_track_basesymbol_6.png "Trackbasesymbols6") 
 ![Trackbasesymbols7](./images/200_track_basesymbol_7.png "Trackbasesymbols7") 
 ![Trackbasesymbols8](./images/200_track_basesymbol_8.png "Trackbasesymbols8")   
-_Bild 4: Basissymbole für Gleise_   
+_Bild 4: Basissymbole f&uuml;r Gleise_   
 
-Die Koordinaten der Punkte P0 bis P7 werden im Ordner `classes` in der Datei `Geo.ts` berechnet, wobei die positive y-Achse nach __unten__ gerichtet ist.   
-#### Vorgegebene Größen   
+Die Koordinaten der Punkte P0 bis P6 werden im Ordner `classes` in der Datei `Geo.ts` berechnet, wobei die positive y-Achse nach __unten__ gerichtet ist.   
+#### Gegebene Gr&ouml;&szlig;en   
 * `tk2 ....` Halbe Gleisbreite   
 * `txo2 ...` Halbe Breite des Symbolfeldes   
-* `tyo2 ...` Halbe Höhe des Symbolfeldes   
+* `tyo2 ...` Halbe H&ouml;he des Symbolfeldes   
 
-#### Hilfsgrößen   
+#### Hilfsgr&ouml;&szlig;en   
 $\ \text{Steigung} ~ k = \displaystyle{{dyo2} \over {dxo2}} $   
 
 $\ \text{Wurzel} ~ w = \sqrt {1 + k^2 ~} $   
 
 #### Koordinaten   
-$\ \Large P_0 \left( \displaystyle ~ dxo2 ~\Big/~ tk2 ~ \right) $   
+$\ \Large P_0 \left( \displaystyle ~ dxo2 \; \Big/ \; tk2 ~ \right) $   
 
 $\ \Large P_1 \left( \displaystyle \frac{1}{k} \cdot \Big[ dyo2 - tk2 \cdot \sqrt{1+k^2} \Big] \; \Big/ \; dyo2 \right) $
 
@@ -353,12 +353,14 @@ $\ \Large P_5 \left( \displaystyle \frac{tk2}{k} \cdot \Big[\sqrt{1+k^2} \; - \;
 $\ \Large P_6 \left( \displaystyle \frac{tk2}{k} \cdot \sqrt{1+k^2} \; \Big/ \; 0 \right) $
 
 
-### 7.1.2 Zusätzliche Verlängerung
-Die Verlängerung eines schrägen Gleises dient zur Verbindung mit dem Nachbargleis und durch die Verwendung des Parameters `con` bewirkt.   
+### 7.1.2 Zus&auml;tzliche Verl&auml;ngerung
+Die Verl&auml;ngerung eines schr&auml;gen Gleises dient zur Verbindung mit dem Nachbargleis und wird durch die Verwendung des Parameters `con` bewirkt.   
 Im `<template>` steht die Anweisung   
-`<RccTrackCon1 v-if="conB" :x="conX" :y="conY" sid="con0" :dir="con" :color="colorTrack"></RccTrackCon1>`   
+```html
+<RccTrackCon1 v-if="conB" :x="conX" :y="conY" sid="con0" :dir="con" :color="colorTrack"></RccTrackCon1>
+```   
 
-Das bedeutet, zum Zeichnen wird ein Objekt `RccTrackCon1` verwendet, dass in der Datei `RccTrackCon1.vue` erzeugt wird. Damit man es verwenden kann, muss es im `<script>`-Bereich eingebunden werden:   
+Das bedeutet, zum Zeichnen wird ein Objekt `RccTrackCon1` verwendet, dass in der Datei `RccTrackCon1.vue` definiert wird. Damit man es verwenden kann, muss es im `<script>`-Bereich eingebunden werden:   
 ```ts
 import RccTrackCon1 from './RccTrackCon1.vue'
 
@@ -370,7 +372,19 @@ export default defineComponent({
   },
 ```   
 
-`colorTrack` die Farbe des Symbols und die übrigen Parameter werden im Bereich `computed: {` erzeugt:   
+Die Farbe des Symbols (`colorTrack`) und die &uuml;brigen Parameter werden im Bereich `computed: {` erzeugt:   
+```ts
+    // _______color of the track________________________________
+    colorTrack: function (): string {
+      if (this.color.length > 2) return this.color
+      if (this.iTrack1State === 0) return this.geof.colorTrackOff
+      if (this.iTrack1State === 1) return this.geof.colorTrackOn
+      if (this.iTrack1State === 2) return this.geof.colorTrackUsed
+      if (this.iTrack1State === -99) return this.geof.colorTrackUnknown
+      return this.geof.colorTrack
+    },
+```   
+bzw.   
 ```ts   
     // =======connector specific functions======================
     // _______draw a connector?_________________________________
@@ -395,9 +409,11 @@ export default defineComponent({
 ```   
 
 ### 7.1.3 Prellbock (buffer stop)
-Gleise, die in der Mitte des Symbols enden (Pfad Nummer 1 bis 8), erhalten ein Rechteck als "Prellbock". Dieses wird im `<template>` durch   
-`<path :d="drawBufferStop" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />`   
-gezeichnet, wobei der Pfad in der Funktion `drawBufferStop` zusammengestellt wird(`<script`-Bereich `computed`).   
+Gleise, die in der Mitte des Symbols enden (Pfad Nummer 1 bis 8 bzw. 10 bis 80), erhalten ein Rechteck als "Prellbock". Dieses wird im `<template>` durch   
+```html
+<path :d="drawBufferStop" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
+```   
+gezeichnet, wobei der Pfad in der Funktion `drawBufferStop` zusammengestellt wird (im `<script`-Bereich `computed`).   
 ```ts   
     // _______draw a buffer stop ("end of track")_______________
     // size of the rectangle: length = 3*tk2, width = tk2 (=tk/2)
@@ -453,7 +469,7 @@ gezeichnet, wobei der Pfad in der Funktion `drawBufferStop` zusammengestellt wir
 Zu Beginn der Entwicklung wurden die beiden rechteckigen Klickbereiche "Ein" = obere H&auml;lfte des Symbol-Rechtecks und "Aus" = untere H&auml;lfte definiert:   
 ![Rechteckige Klickbereiche](./images/150_clickarea_rect1.png "Rechteckige Klickbereiche")   
 _Bild 5: Rechteckige Klickbereiche_   
-In Versuchen zeigt sich, dass es praktischer ist, wenn die Klickbereiche besser an den Gleisverlauf angepasst sind. Daher werden die rechteckigen Klickbereiche durch Pfade ersetzt (Funktionen `pathTop` und `pathBottom`).   
+In der Praxis zeigte sich, dass es besser ist, wenn die Klickbereiche an den Gleisverlauf angepasst sind. Daher werden die rechteckigen Klickbereiche durch Pfade ersetzt (Funktionen `pathTop` und `pathBottom`).   
 
 Insgesamt werden f&uuml;r den oberen Bereich neun Klickfl&auml;chen f&uuml;r folgende Gleisrichtungen definiert:   
 14, 4 und 46 | 25, 2 und 28 | 16 und 6 | 58 und 8 | 26 | 48 | 24 | 68   
