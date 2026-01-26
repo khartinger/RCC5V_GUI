@@ -1,5 +1,5 @@
 <!-- RccTrack1.vue --------------------------khartinger----- -->
-<!-- 2026-01-22: new                                         -->
+<!-- 2026-01-26: new                                         -->
 
 <template>
   <g>
@@ -10,19 +10,13 @@
   <!--write text-------------------------------------------- -->
   <text v-if="(drawLabel & 1) > 0 && (iLines>0)" :x="geof.xt()" :y="geof.ytHeader()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineHeader}}</text>
   <text v-if="(drawLabel &16) > 0 && (iLines>1)" :x="geof.xt()" :y="geof.ytFooter()" class="ciFont0" :font-size="geof.fh" :fill="geof.colorTrackInfo">{{lineFooter}}</text>
-
   <!--draw track1------------------------------------------- -->
-  <path :d="trackPath" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
+  <path :d="pathTrack" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
   <path :d="drawBufferStop" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
   <RccTrackCon1 v-if="conB" :x="conX" :y="conY" sid="con0" :dir="con" :color="colorTrack"></RccTrackCon1>
-
   <!--define click area------------------------------------- -->
   <path :d="pathTop" @click="onClkTop()" class="ciClick"/>
   <path :d="pathBottom" @click="onClkBottom()" class="ciClick"/>
-<!--
-  <rect @click="onClkTop()" class="ciClick" :x="geof.x0()" :y="geof.y0()" :width="geof.dxo()" :height="geof.dyo2()" />
-  <rect @click="onClkBottom()" class="ciClick" :x="geof.x0()" :y="geof.y" :width="geof.dxo()" :height="geof.dyo2()" />
-  -->
 </g>
 </template>
 
@@ -231,7 +225,7 @@ export default defineComponent({
     },
     // =======track=============================================
     // _______path of a track with the path number dirNum_______
-    trackPath: function (): string {
+    pathTrack: function (): string {
       const dir1 = this.dirNum
       // -----signs for drawing---------------------------------
       let sgnx = 1
@@ -250,7 +244,7 @@ export default defineComponent({
         case 15:
           s1 += ' m' + dxo2 + ',' + tk2 // P0 as start
           s1 += ' v' + (-2 * tk2)
-          s1 += ' h' + sgnx * (-2) * dxo2
+          s1 += ' h' + (-2) * dxo2
           s1 += ' v' + (2 * tk2)
           s1 += ' z'
           break
@@ -310,12 +304,12 @@ export default defineComponent({
           sgnx = -1
           /* falls through */
         case 48:
-          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + sgny * dyo2 // P1 as start
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + dyo2 // P1 as start
           s1 += ' h' + sgnx * q1x
-          s1 += ' v' + sgny * (-q2y) // @ P2
-          s1 += ' l' + sgnx * (-2 * dxo2 + q1x) + ',' + sgny * (-2 * dyo2 + q2y)
+          s1 += ' v' + (-q2y) // @ P2
+          s1 += ' l' + sgnx * (-2 * dxo2 + q1x) + ',' + (-2 * dyo2 + q2y)
           s1 += ' h' + (-sgnx) * q1x
-          s1 += ' v' + sgny * q2y
+          s1 += ' v' + q2y
           s1 += ' z'
           break
         // ===curved track======================================

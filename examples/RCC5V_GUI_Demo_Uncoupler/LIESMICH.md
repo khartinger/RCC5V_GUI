@@ -126,7 +126,7 @@ Statt der einstelligen Bezeichnungen können auch die Bezeichnungen für normale
 ## 5.3 MQTT-Funktionalit&auml;t
 W&auml;hrend die Darstellung eines Entkupplersymbols in der Datei `RccUncoupler1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccUncoupler1Controller` bestimmt.   
 Die Eigenschaften einzelner Entkuppler werden im Array `uncouplers1` gespeichert. Ein Eintrag ist zB folgenderma&szlig;en aufgebaut:   
-```
+```ts
       {
         // ---test uncoupler 1----------------------------------
         id: 'uc1',
@@ -153,7 +153,7 @@ Bedeutung der einzelnen Parameter:
 ## 5.4 Vereinbarungen
 ### Positionsangabe
 Die Angabe der Position des Mittelpunktes eines Symbols erfolgt in Pixel. Da Gleise auf einem Stellpult aneinandergereiht werden, muss man die Gr&ouml;&szlig;e der Symbole wissen. Diese ist in der Datei `classes/Geo.ts` festgelegt und wird folgenderma&szlig;en importiert:   
-```
+```ts
 <script setup lang="ts">
 import { Geof } from '../classes/Geo'
 ...
@@ -178,11 +178,14 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 
 ## 5.5 Beispiele
 1. An der Rasterposition 0/0: Entkuppler von links nach rechts mit Standardrahmen und ohne Beschriftung   
-`<RccUncoupler1 :x="0*dx"  :y="0*dy" sid="uc1" dir="1" :border="border"></RccUncoupler1>`   
+```ts
+<RccUncoupler1 :x="0*dx"  :y="0*dy" sid="uc1" dir="1" :border="border"></RccUncoupler1>
+```   
 
 2. An der Rasterposition 1/0: Entkuppler von links unten nach rechts oben mit Standardrahmen und Beschriftung "HEADER" links oben   
-`<RccUncoupler1 :x="1*dx"  :y="0*dy" sid="uc1" dir="2" header="HEADER" :border="border"></RccUncoupler1>
-`   
+```ts
+<RccUncoupler1 :x="1*dx"  :y="0*dy" sid="uc1" dir="2" header="HEADER" :border="border"></RccUncoupler1>
+```   
 
 [Zum Seitenanfang](#up)   
 <a name="x60"></a>   
@@ -196,7 +199,7 @@ Der Klickbereich f&uuml;r Entkupplersymbole ist entweder ein Rechteck (`dir="1"`
 _Bild 2: Klickbereiche beim Entkupplersymbol_   
 
 Der Pfad für den Klickbereich wird in den Funktionen `pathTop` und `pathBottom` (in `RccUncoupler1.vue`) festgelegt. Als Beispiel die Codierung von `pathTop`:   
-```
+```ts
     // _______click area "top"__________________________________
     pathTop: function(): string {
       const dxo = this.geof.dxo()
@@ -243,14 +246,14 @@ Einige Hinweise dazu:
 
 ## 6.2 Senden der MQTT-Nachrichten
 Das Senden von Nachrichten passiert in der `Klasse RccTurnoutController`. Dort werden zwei Variablen `payloadOn` und `payloadOff` definiert, die den "Normalzustand" abbilden.   
-```
+```ts
 export class RccUncoupler1Controller extends RccBaseController {
   public payloadOn = '1'
   public payloadOff = '0'
 ```
 
 Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload auf `payloadOn` gesetzt und die Nachricht(en) gesendet:   
-```
+```ts
     // _______on click: turn uncoupler on_______________________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
@@ -274,7 +277,7 @@ Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClk
 ```
 
 Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccUncoupler1Controller.ts` steht:   
-```
+```ts
   // _________publish a mqtt message____________________________
   public publishRcc (topic: string, payload: string): void {
     // console.log('RccUncoupler1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
@@ -288,7 +291,7 @@ F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBot
 
 ## 6.3 Empfang von MQTT-Nachrichten
 Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccUncoupler1Controller.vue` in der Funktion `onMessage`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert - festgelegt und in `iUncouplerState` gespeichert.   
-```
+```ts
   // _________receive a mqtt message____________________________
   public onMessage (message: Message): void {
     this.uncouplers1.forEach(uncoupler1 => {

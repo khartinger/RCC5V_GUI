@@ -1,5 +1,5 @@
 <!-- RccUncoupler1.vue ----------------------khartinger----- -->
-<!-- 2026-01-23: new                                         -->
+<!-- 2026-01-26: new                                         -->
 
 <template>
   <g>
@@ -129,9 +129,9 @@ export default defineComponent({
     // _______direction of the track____________________________
     // return 15=horizontal, 26=right up, 48=right down, 0=error
     iDir: function(): number {
-      if(this.dir === '1' || this.dir === '15'|| this.dir === '51') return 15
-      if(this.dir === '2' || this.dir === '6' || this.dir === '26' || this.dir === '62') return 26
-      if(this.dir === '4' || this.dir === '8' || this.dir === '48' || this.dir === '84') return 48
+      if (['1','15','51'].includes(this.dir)) return 15
+      if (['2','6','26','62'].includes(this.dir)) return 26
+      if (['4','8','48','84'].includes(this.dir)) return 48
       return 0;
     },
     // _______draw the active path of the turnout_______________
@@ -269,21 +269,14 @@ export default defineComponent({
         s1 += ' z'
         return s1
       }
-      if(iDir_ === 26) {
-        // ---track to the upper right--------------------------
-        s1 += ' m' + (-(ucw3 + ucl4) / 2) + ',' + ((ucl3 - ucw4) / 2)
-        s1 += ' l' + (ucw3) + ',' + (ucw4)
-        s1 += ' l' + (ucl4) + ',' + (-ucl3)
-        s1 += ' l' + (-ucw3) + ',' + (-ucw4)
-        s1 += ' z'
-        return s1
-      }
-      if(iDir_ === 48) {
+      let sgnx = 1
+      if(iDir_ === 26) sgnx = -1
+      if(iDir_ === 26 || iDir_ === 48) {
         // ---track to the lower right--------------------------
-        s1 += ' m' + ((ucw3 + ucl4) / 2) + ',' + ((ucl3 - ucw4) / 2)
-        s1 += ' l' + (-ucw3) + ',' + (ucw4)
-        s1 += ' l' + (-ucl4) + ',' + (-ucl3)
-        s1 += ' l' + (+ucw3) + ',' + (-ucw4)
+        s1 += ' m' + sgnx * ((ucw3 + ucl4) / 2) + ',' + ((ucl3 - ucw4) / 2)
+        s1 += ' l' + sgnx * (-ucw3) + ',' + (ucw4)
+        s1 += ' l' + sgnx * (-ucl4) + ',' + (-ucl3)
+        s1 += ' l' + sgnx * (+ucw3) + ',' + (-ucw4)
         s1 += ' z'
         return s1
       }
@@ -292,45 +285,44 @@ export default defineComponent({
     // _______draw the path of the track________________________
     pathUncouplerTrack: function (): string {
       return this.pathTrack(this.iDir)
+    
     },
     // _______path command: draw a track________________________
+    // pathTrack: function (trackNr_: Number): string {
     pathTrack: function (trackNr_: Number): string {
+      // -----signs for drawing---------------------------------
+      let sgnx = 1
       // -----(positive) values of line length------------------
+      const tk2 = this.geof.tk2
       const dxo2 = this.geof.dxo2()
       const dyo2 = this.geof.dyo2()
-      const tk0y = -this.geof.tk.value[0].y
-      const tkcx = dxo2 - this.geof.tk.value[4].x
-      const tkcy = dyo2 + this.geof.tk.value[5].y
+      const q1x = dxo2 - this.geof.tkp.value[1].x
+      const q2y = dyo2 - this.geof.tkp.value[2].y
       let s1 = ' M' + this.x + ',' + this.y
       switch (trackNr_) {
-        case 15: // ----- -- direction--------------------------
-          s1 += ' m' + (-dxo2) + ',' + (-tk0y) // Tk0
-          s1 += ' v' + (2 * tk0y)
-          s1 += ' h' + this.geof.dxo()
-          s1 += ' v' + (-2 * tk0y)
+        // ===horizontel line===================================
+        case 15:
+          s1 += ' m' + dxo2 + ',' + tk2 // P0 as start
+          s1 += ' v' + (-2 * tk2)
+          s1 += ' h' + (-2) * dxo2
+          s1 += ' v' + (2 * tk2)
           s1 += ' z'
           break
-        case 26: // ----- / direction---------------------------
-          s1 += ' m' + (dxo2 - tkcx) + ',' + (-dyo2) // Tk4
-          s1 += ' l' + (-this.geof.dxo() + tkcx) + ',' + (this.geof.dyo() - tkcy)
-          s1 += ' v' + (tkcy)
-          s1 += ' h' + (tkcx)
-          s1 += ' l' + (this.geof.dxo() - tkcx) + ',' + (-this.geof.dyo() + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' z'
-          break
-        case 48: // ----- \ direction---------------------------
-          s1 += ' m' + (-dxo2 + tkcx) + ',' + (-dyo2) // Tk4
-          s1 += ' l' + (this.geof.dxo() - tkcx) + ',' + (this.geof.dyo() - tkcy)
-          s1 += ' v' + (+tkcy)
-          s1 += ' h' + (-tkcx)
-          s1 += ' l' + (-this.geof.dxo() + tkcx) + ',' + (-this.geof.dyo() + tkcy)
-          s1 += ' v' + (-tkcy)
-          s1 += ' h' + (+tkcx)
+        // ===diagonal straight line============================
+        case 26:
+          sgnx = -1
+          /* falls through */
+        case 48:
+          s1 += ' m' + sgnx * (dxo2 - q1x) + ',' + dyo2 // P1 as start
+          s1 += ' h' + sgnx * q1x
+          s1 += ' v' + (-q2y) // @ P2
+          s1 += ' l' + sgnx * (-2 * dxo2 + q1x) + ',' + (-2 * dyo2 + q2y)
+          s1 += ' h' + (-sgnx) * q1x
+          s1 += ' v' + q2y
           s1 += ' z'
           break
         default:
+          s1 = ''
       }
       return s1
     },

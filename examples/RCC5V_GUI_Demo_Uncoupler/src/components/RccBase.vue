@@ -5,6 +5,7 @@
 <!-- 2023-01-25 new rectangle drawing (area no filled)       -->
 <!-- 2023-01-31 update drawBorderFill                        -->
 <!-- 2023-02-25 add .ciFont1_5, .ciFont3, .ciFont4, .ciFont5 -->
+<!-- 2025-01-25 add .my-button                               -->
 <template>
   <!-- filled border between out and in line---------------- -->
   <path v-if="borderFill" :d="drawBorderFill" class="ciOut"/>
@@ -119,4 +120,5 @@ export default defineComponent({
   .ciFillIt  { stroke: blue; stroke-width: 1; }
   .ciClick   { fill-opacity: 0.0; stroke-width: 1; }
   .ciBorder  { fill-opacity: 0.0; stroke: blue; stroke-width: 1; }
+  .my-button { display: block; margin-bottom: 8px; }
 </style>

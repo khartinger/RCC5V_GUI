@@ -149,7 +149,7 @@ Im _Bild 1_ (oben) sind alle M&ouml;glichkeiten mit ihren Zahlenwerten dargestel
 ## 5.3 MQTT-Funktionalit&auml;t
 W&auml;hrend die Darstellung eines Gleissymbols in der Datei `RccTrack1.vue` festgelegt ist, wird die Funktionalit&auml;t durch die Datei `RccTrack1Controller` bestimmt.   
 Die Eigenschaften einzelner Gleise werden im Array `tracks1` gespeichert. Ein Eintrag ist zB folgenderma&szlig;en aufgebaut:   
-```
+```ts
       {
         // ---test track 1--------------------------------------
         id: 'tk1',
@@ -178,7 +178,7 @@ Bedeutung der einzelnen Parameter:
 ## 5.4 Vereinbarungen
 ### Positionsangabe
 Die Angabe der Position des Mittelpunktes eines Symbols erfolgt in Pixel. Da Gleise auf einem Stellpult aneinandergereiht werden, muss man die Gr&ouml;&szlig;e der Symbole wissen. Diese ist in der Datei `classes/Geo.ts` festgelegt und wird folgenderma&szlig;en importiert:   
-```
+```ts
 <script setup lang="ts">
 import { Geof } from '../classes/Geo'
 ...
@@ -203,10 +203,14 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 
 ## 5.5 Beispiele
 1. An der Rasterposition 0/5: Gerades, waagrechtes Gleis ohne Rahmenangabe, Beschriftung und Funktion   
-`<RccTrack1 :x="0*dx" :y="5*dy" sid="tk0" dir="15"></RccTrack1>`   
+```ts
+<RccTrack1 :x="0*dx" :y="5*dy" sid="tk0" dir="15"></RccTrack1>
+```   
 
 2. An der Rasterposition 1/5: Gleis waagrecht von links nach rechts unten. Kein Rahmen, keine Beschriftung und Funktion   
-`<RccTrack1 :x="1*dx" :y="5*dy" sid="tk0" dir="58" :border="0"></RccTrack1>`   
+```ts
+<RccTrack1 :x="1*dx" :y="5*dy" sid="tk0" dir="58" :border="0"></RccTrack1>
+```   
 
 3. An der Rasterposition 2/6: Gleis von links oben nach rechts (waagrecht) mit Funktion "tk1", Standardbeschriftung und Standardrahmen   
 `<RccTrack1 :x="2*dx" :y="6*dy" sid="tk1" dir="14" label="3" :border="border"></RccTrack1>`   
@@ -272,7 +276,7 @@ F&uuml;r die Parameter gilt das gleiche wie f&uuml;r `RccTrack1Iso`:
 Hier ist die Farbe des Verbindungselements fest vorgegeben (rot). &Auml;ndert sich der Fahrstrom-Zustand des Gleises auf "ein", werden die Gleise gr&uuml;n gef&auml;rbt, aber das Verbindungselement bleibt rot.   
 
 2. Verbindungselement an der Position 5,5/4,5 in Richtung rechts unten (4).   
-` <RccTrackCon1 :x="5.5*dx" :y="4.5*dy" sid="con0" dir="4"></RccTrackCon1>`   
+`<RccTrackCon1 :x="5.5*dx" :y="4.5*dy" sid="con0" dir="4"></RccTrackCon1>`   
 
 [Zum Seitenanfang](#up)   
 <a name="x70"></a>   
@@ -289,10 +293,12 @@ Gleissymbole bestehen aus bis zu drei Teilen:
 Die Art des Gleissymbols wird durch die Angabe der Richtung (Parameter `dir`) festgelegt (siehe [Kapitel 5.2](#x52)). Das Zeichnen des Symbols erfolgt so:   
 
 Im `<template>` steht die Anweisung   
-`<path :d="trackPath" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />`   
-Darin ist `trackPath` der Pfad (die Geometrie) der Zeichnung und `colorTrack` die Farbe des Symbols.   
+```html
+<path :d="pathTrack" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />
+```   
+Darin ist `pathTrack` der Pfad (die Geometrie) der Zeichnung und `colorTrack` die Farbe des Symbols.   
 
-Im `<script>` Bereich wird in der Funktion `trackPath` der Pfad zusammengestellt. Mit Hilfe der Funktion `dirNum` wird zuerst der eingegebene `dir=`-Parameter in eine Zahl `dir1` umgewandelt, bei der die Zehnerziffer immer kleiner als die Einerziffer ist.   
+Im `<script>` Bereich wird in der Funktion `pathTrack` der Pfad zusammengestellt. Mit Hilfe der Funktion `dirNum` wird zuerst der eingegebene `dir=`-Parameter in eine Zahl `dir1` umgewandelt, bei der die Zehnerziffer immer kleiner als die Einerziffer ist.   
 Viele Symbole sind spiegelbildlich, daher wird ein Grundsymbol gezeichnet und dieses bei Bedarf gespiegelt. Das Spiegeln wird durch die Variablen `sgnx` und `sgny` bewirkt (Wert 1 = ungespiegelt, -1 = spiegeln).   
 Folgende Symbole werden mit Zeichenbefehlen (wie `M`, `m`, `h`, `v`, `l`) gezeichnet:   
 ![Trackbasesymbols1](./images/200_track_basesymbol_1.png "Trackbasesymbols1") 
@@ -338,7 +344,7 @@ Im `<template>` steht die Anweisung
 `<RccTrackCon1 v-if="conB" :x="conX" :y="conY" sid="con0" :dir="con" :color="colorTrack"></RccTrackCon1>`   
 
 Das bedeutet, zum Zeichnen wird ein Objekt `RccTrackCon1` verwendet, dass in der Datei `RccTrackCon1.vue` erzeugt wird. Damit man es verwenden kann, muss es im `<script>`-Bereich eingebunden werden:   
-```   
+```ts
 import RccTrackCon1 from './RccTrackCon1.vue'
 
 export default defineComponent({
@@ -350,7 +356,7 @@ export default defineComponent({
 ```   
 
 `colorTrack` die Farbe des Symbols und die übrigen Parameter werden im Bereich `computed: {` erzeugt:   
-```   
+```ts   
     // =======connector specific functions======================
     // _______draw a connector?_________________________________
     conB: function (): boolean {
@@ -377,7 +383,7 @@ export default defineComponent({
 Gleise, die in der Mitte des Symbols enden (Pfad Nummer 1 bis 8), erhalten ein Rechteck als "Prellbock". Dieses wird im `<template>` durch   
 `<path :d="drawBufferStop" :fill="colorTrack" :stroke="colorTrack" stroke-width="1" />`   
 gezeichnet, wobei der Pfad in der Funktion `drawBufferStop` zusammengestellt wird(`<script`-Bereich `computed`).   
-```   
+```ts   
     // _______draw a buffer stop ("end of track")_______________
     // size of the rectangle: length = 3*tk2, width = tk2 (=tk/2)
     drawBufferStop: function (): string {
@@ -455,7 +461,7 @@ export class RccTrack1Controller extends RccBaseController {
 ```
 
 Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClkTop` aufgerufen. In dieser wird die Payload entsprechend dem Wert von `payloadInvert` angepasst und die Nachricht(en) gesendet:   
-```
+```ts
     // _______on click: turn track energy on____________________
     onClkTop: function (): void {
       console.log(this.sid, 'Button-Click On')
@@ -477,7 +483,7 @@ Beim Klicken in die obere Schaltfl&auml;che des Symbols wird die Funktion `onClk
 ```
 
 Das Senden erfolgt mit der Funktion `publishRcc`, die in der Datei `RccTrack1Controller.ts` steht:   
-```
+```ts
   // _________publish a mqtt message____________________________
   public publishRcc (topic: string, payload: string): void {
     // console.log('RccTrack1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
@@ -491,7 +497,7 @@ F&uuml;r die untere Schaltfl&auml;che wird das gleiche in der Funktion `onClkBot
 
 ## 7.4 Empfang von MQTT-Nachrichten
 Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTrack1Controller.vue` in der Funktion `onMessage`. Dort wird die Statusnummer - abh&auml;ngig vom empfangenen Wert und dem Wert von `payloadInvert` - festgelegt und in `iTrack1State` gespeichert.   
-```
+```ts
   // _________receive messages__________________________________
   public onMessage (message: Message): void {
     this.tracks1.forEach(track1 => {
