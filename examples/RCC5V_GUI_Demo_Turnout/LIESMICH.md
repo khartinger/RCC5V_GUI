@@ -218,7 +218,7 @@ Diese Variable verwendet man dann bei der `border`-Angabe:
 
 # 6. Anmerkungen zur Programmierung   
 ## 6.1 Zeichnen der Weichensymbole
-### 6.1.1 Gleissymbol
+### 6.1.1 Weichensymbol
 Das Zeichnen der Weichensymbole erfolgt durch Übereinanderzeichnen zweier Gleissymbole im `<template>` von `RccTurnout1.vue`:   
 ```html   
   <!--draw turnout parts (do not change lines!)------------- -->
