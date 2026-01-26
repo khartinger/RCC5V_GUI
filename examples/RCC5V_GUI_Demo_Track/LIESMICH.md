@@ -338,9 +338,9 @@ $\ \text{Steigung} ~ k = \displaystyle{{dyo2} \over {dxo2}} $
 $\ \text{Wurzel} ~ w = \sqrt {1 + k^2 ~} $   
 
 #### Koordinaten   
-$\ \Large P_0 \left( \displaystyle ~ dxo2 \; \Big/ \; tk2 ~ \right) $   
+$\ \Large P_0 \left( \displaystyle ~ dxo2 ~ \Big/ ~ tk2 ~ \right) $   
 
-$\ \Large P_1 \left( \displaystyle \frac{1}{k} \cdot \Big[ dyo2 - tk2 \cdot \sqrt{1+k^2} \Big] \; \Big/ \; dyo2 \right) $
+$\ \Large P_1 \left( \displaystyle \frac{1}{k} \cdot \Big[ dyo2 - tk2 \cdot \sqrt{1+k^2} \Big] ~ \Big/ ~ dyo2 \right) $
 
 $\ \Large P_2 \left( \displaystyle dxo2 \; \Big/ \; k \cdot dxo2 - tk2 \cdot \sqrt{1+k^2} \right) $
 
