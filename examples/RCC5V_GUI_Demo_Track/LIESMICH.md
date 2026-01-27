@@ -563,4 +563,51 @@ Der Empfang von MQTT-Nachrichten erfolgt in der Datei `RccTrack1Controller.vue` 
   }
 ```
 
+
+<a name="x75"></a>   
+
+## 7.5 Gleichzeitiges Schalten aller Gleise durch MQTT-Nachrichten
+Manchmal ist es von Vorteil, dass man den Fahrstrom aller schaltbaren Gleise gemeinsam ein- oder ausschalten kann. Da in `RccTrack1Controller.ts` im Array `tracks1` die Daten aller schaltbaren Gleise gespeichert sind, werden dort die Funktionen `sendAllTracksOn` und `sendAllTracksOff` zum Schalten aller Gleise definiert. Das Schalten erfolgt dadurch, dass an alle Gleise eine Nachricht mit dem unter `pubTopic` angegebenen Topic gesendet wird. Die Payload wird entsprechend dem Wert von `payloadInvert` angepasst.   
+Damit nicht alle Gleise gleichzeitig schalten, ist eine Verzögerung von `WAIT_BETWEEN_MQTT_MSG_MS` Millisekunden (50 ms) zwischen zwei Sendevorgängen eingebaut.   
+
+```ts   
+  // ____publish message: "All tracks on"_______________________
+  public async sendAllTracksOn (): Promise<void> {
+    for (const track of this.tracks1) {
+      try {
+        // ---prepare payload-----------------------------------
+        let payload = this.payloadTrackOn
+        if (track.payloadInvert) payload = this.payloadTrackOff
+        // ---send message--------------------------------------
+        await this.publish(track.pubTopic, payload, false, 0)
+        await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
+      } catch (e) {
+        console.error('RccTrack1Controller:', e)
+      }
+    }
+  }
+
+  // ____publish message: "All tracks off"______________________
+  public async sendAllTracksOff (): Promise<void> {
+    for (const track of this.tracks1) {
+      try {
+        // ---prepare payload-----------------------------------
+        let payload = this.payloadTrackOff
+        if (track.payloadInvert) payload = this.payloadTrackOn
+        // ---send message--------------------------------------
+        await this.publish(track.pubTopic, payload, false, 0)
+        await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
+      } catch (e) {
+        console.error('RccTrack1Controller:', e)
+      }
+    }
+  }
+} // END OF export class RccTrack1Controller
+
+// ______sleep given milliseconds_______________________________
+function sleep (ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+```   
+
 [Zum Seitenanfang](#up)
