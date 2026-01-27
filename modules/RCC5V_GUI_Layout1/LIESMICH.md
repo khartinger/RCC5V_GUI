@@ -1,5 +1,5 @@
 <table><tr><td><img src="../images/RCC5V_Logo_96.png"></img></td><td>
-Letzte &Auml;nderung: 121.1.2026 <a name="up"></a><br>   
+Letzte &Auml;nderung: 12.1.2026 <a name="up"></a><br>   
 <h1>RCC5V_GUI_Layout1: GUI zum Steuern mehrerer RCC5V-Modelleisenbahnmodule</h1>
 <a href="README.md">==> English version</a>&nbsp; &nbsp; &nbsp; 
 </td></tr></table>   
@@ -15,13 +15,9 @@ Mit Hilfe dieser Oberfläche ist es möglich, einzelne Weichen und Gleise zu sch
 Wie diese VUE-Anwendung erstellt wird in folgenden Kapiteln beschrieben.   
 1. [die erforderliche Hardware](#x20)   
 2. [Vu3-Tipps](#x30)   
-3. [das grafische Zusammenfügen
- mehrerer RCC5V-Modelleisenbahn-Module zu 
-einer Gesamtanlage](#x40)   
-4. [das gemeinsame Ansteuern von 
-RCC5V-Komponenten auf den Modulen](#x50)   
-5. [das Erstellen von Fahrstraßen (routes) 
-über mehrere Module hinweg.](#x60)   
+3. [das grafische Zusammenfügen  mehrerer RCC5V-Modelleisenbahn-Module zu einer Gesamtanlage](#x40)   
+4. [das gemeinsame Ansteuern von RCC5V-Komponenten auf den Modulen](#x50)   
+5. [das Erstellen von Fahrstraßen (routes) über mehrere Module hinweg.](#x60)   
 
 Bildet man eine Release-Ausgabe von GUI-Layout1 und kopiert diese auf ein Raspberry Pi, so kann die Anlage zB mit einem Tablett oder Smartphone gesteuert werden. Wie man das macht wird im [Kapitel 3: Vue-Tipps](#x30) beschrieben.   
 
@@ -42,11 +38,7 @@ Als Hardware werden für die Anlage 1 (layout1) folgende Module zusammengesteckt
 <a name="x22"></a>   
 
 ## 2.2 Verbindungshardware
-Die Kommunikation mit den Modulen bzw. Komponenten erfolgt über WLAN und MQTT-Nachrichten, daher ist ein 
-Access-Point erforderlich. Wie bereits in 
-anderen Teilen des Projektes verwendet, kann 
-der Access-Point z.B. ein Raspberry Pi mit 
-folgenden Daten sein:   
+Die Kommunikation mit den Modulen bzw. Komponenten erfolgt über WLAN und MQTT-Nachrichten, daher ist ein Access-Point erforderlich. Wie bereits in anderen Teilen des Projektes verwendet, kann der Access-Point z.B. ein Raspberry Pi mit folgenden Daten sein:   
 * WLAN-Name: Raspi11   
 * WLAN-Passwort: 12345678   
 * IP-Adresse des MQTT-Servers: 10.1.1.1   
@@ -54,8 +46,7 @@ folgenden Daten sein:
 <a name="x23"></a>   
 
 ## 2.3 Hardware zur Steuerung der Komponenten
-Die Steuerung der Komponenten kann mittels 
-PC, Laptop oder Tablet erfolgen. Die Geräte müssen mit dem WLAN des Access-Points verbunden werden.   
+Die Steuerung der Komponenten kann mittels PC, Laptop oder Tablet erfolgen. Die Geräte müssen mit dem WLAN des Access-Points verbunden werden.   
 Nach Starten des Browsers und Eingabe der Adresse   
 `http://10.1.1.1/mqtt/layout1/#/`   
 wird `GUI_Layout1` angezeigt.   

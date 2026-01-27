@@ -1,8 +1,10 @@
-// ______RccTrack1Controller.ts___________________khartinger_____
-// 2026-01-21: new
+// ______RccTrack1Controller.ts__________________khartinger_____
+// 2026-01-22 new
+// 2026-01-27 add sendAllTracksOn, sendAllTracksOff, sleep
 import { reactive } from 'vue'
 import { Message } from '@/services/RccMqttClient'
 import { RccBaseController, IBase } from './RccBaseController'
+const WAIT_BETWEEN_MQTT_MSG_MS = 50
 
 export interface Track1 extends IBase {
   iTrack1State: number;
@@ -16,6 +18,7 @@ export class RccTrack1Controller extends RccBaseController {
   public sState0 = '0'
   public sState1 = '1'
 
+  // _________Array for all tracks with special function________
   public tracks1: Array<Track1> = reactive(
     [
       {
@@ -31,16 +34,19 @@ export class RccTrack1Controller extends RccBaseController {
     ],
   )
 
+  // _________receive a mqtt message____________________________
   public onMessage (message: Message): void {
     this.tracks1.forEach(track1 => {
       const aSubTopic = track1.subTopic.split(' ')
       if (aSubTopic.includes(message.topic)) {
-      // ---track1 topic found -------------------------------
+      // -----track1 topic found -------------------------------
         if (message.payload.length > 0) {
+          // ------message received: split JSON-data------------
           try {
             const aPayload = JSON.parse(message.payload)
             const sDCC_ = track1.sDCC
             const sState_ = aPayload[sDCC_]
+            // ----calculate the state number-------------------
             if (sState_ === this.sState0) {
               track1.iTrack1State = 0
               if (track1.payloadInvert) track1.iTrack1State = 1
@@ -60,10 +66,48 @@ export class RccTrack1Controller extends RccBaseController {
     })
   }
 
+  // _________publish a mqtt message____________________________
   public publishRcc (topic: string, payload: string): void {
     // console.log('RccTrack1Controller:publishRcc:', '-t ' + topic + ' -m ' + payload)
     this.publish(topic, payload, false, 0).catch((e) => { console.error('RccTrack1Controller: ERROR:', e) })
   }
+
+  // ____publish message: "All tracks on"_______________________
+  public async sendAllTracksOn (): Promise<void> {
+    for (const track of this.tracks1) {
+      try {
+        // ---prepare payload-----------------------------------
+        let payload = this.payloadTrackOn
+        if (track.payloadInvert) payload = this.payloadTrackOff
+        // ---send message--------------------------------------
+        await this.publish(track.pubTopic, payload, false, 0)
+        await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
+      } catch (e) {
+        console.error('RccTrack1Controller:', e)
+      }
+    }
+  }
+
+  // ____publish message: "All tracks off"______________________
+  public async sendAllTracksOff (): Promise<void> {
+    for (const track of this.tracks1) {
+      try {
+        // ---prepare payload-----------------------------------
+        let payload = this.payloadTrackOff
+        if (track.payloadInvert) payload = this.payloadTrackOn
+        // ---send message--------------------------------------
+        await this.publish(track.pubTopic, payload, false, 0)
+        await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
+      } catch (e) {
+        console.error('RccTrack1Controller:', e)
+      }
+    }
+  }
+} // END OF export class RccTrack1Controller
+
+// ______sleep given milliseconds_______________________________
+function sleep (ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export const rccTrack1Controller = new RccTrack1Controller()

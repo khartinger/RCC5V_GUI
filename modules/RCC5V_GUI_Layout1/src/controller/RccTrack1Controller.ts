@@ -1,9 +1,10 @@
 // ______RccTrack1Controller.ts__________________khartinger_____
-// 2026-01-22: new
+// 2026-01-22 new
+// 2026-01-27 add sendAllTracksOn, sendAllTracksOff, sleep
 import { reactive } from 'vue'
 import { Message } from '@/services/RccMqttClient'
 import { RccBaseController, IBase } from './RccBaseController'
-const WAIT_BETWEEN_MQTT_MSG_MS = 100
+const WAIT_BETWEEN_MQTT_MSG_MS = 50
 
 export interface Track1 extends IBase {
   iTrack1State: number;
@@ -30,7 +31,7 @@ export class RccTrack1Controller extends RccBaseController {
         pubTopic: 'rcc/module01/set/11',
         payloadInvert: false,
       },
-            {
+      {
         // ---track platform 2----------------------------------
         id: 'tk106',
         name: 'platform2',
@@ -152,10 +153,14 @@ export class RccTrack1Controller extends RccBaseController {
   }
 
   // ____publish message: "All tracks on"_______________________
-  public async sendAllTracksOn(): Promise<void> {
+  public async sendAllTracksOn (): Promise<void> {
     for (const track of this.tracks1) {
       try {
-        await this.publish(track.pubTopic, this.payloadTrackOn, false, 0)
+        // ---prepare payload-----------------------------------
+        let payload = this.payloadTrackOn
+        if (track.payloadInvert) payload = this.payloadTrackOff
+        // ---send message--------------------------------------
+        await this.publish(track.pubTopic, payload, false, 0)
         await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
       } catch (e) {
         console.error('RccTrack1Controller:', e)
@@ -164,21 +169,24 @@ export class RccTrack1Controller extends RccBaseController {
   }
 
   // ____publish message: "All tracks off"______________________
-  public async sendAllTracksOff(): Promise<void> {
+  public async sendAllTracksOff (): Promise<void> {
     for (const track of this.tracks1) {
       try {
-        await this.publish(track.pubTopic, this.payloadTrackOff, false, 0)
+        // ---prepare payload-----------------------------------
+        let payload = this.payloadTrackOff
+        if (track.payloadInvert) payload = this.payloadTrackOn
+        // ---send message--------------------------------------
+        await this.publish(track.pubTopic, payload, false, 0)
         await sleep(WAIT_BETWEEN_MQTT_MSG_MS) // 0,1s delay
       } catch (e) {
         console.error('RccTrack1Controller:', e)
       }
     }
   }
-
 } // END OF export class RccTrack1Controller
 
 // ______sleep given milliseconds_______________________________
-function sleep(ms: number): Promise<void> {
+function sleep (ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
