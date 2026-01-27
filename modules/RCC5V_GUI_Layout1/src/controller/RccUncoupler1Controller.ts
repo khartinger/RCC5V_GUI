@@ -19,13 +19,40 @@ export class RccUncoupler1Controller extends RccBaseController {
   public uncouplers1: Array<Uncoupler1> = reactive(
     [
       {
-        // ---test uncoupler 1----------------------------------
-        id: 'uc1',
+        // ---uncoupler platform 1------------------------------
+        id: 'uc108',
+        name: 'Uncoupler_108',
+        iUncoupler1State: 0,
+        sDCC: '108',
+        subTopic: 'rcc/module10/ret/108 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/108',
+      },
+      {
+        // ---uncoupler platform 1------------------------------
+        id: 'uc113',
         name: 'Uncoupler1',
         iUncoupler1State: 0,
-        sDCC: '11',
-        subTopic: 'rcc/demo1/ret/11 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/11',
+        sDCC: '113',
+        subTopic: 'rcc/module11/ret/113 rcc/module11/ret/status',
+        pubTopic: 'rcc/module11/set/113',
+      },
+      {
+        // ---uncoupler platform 1------------------------------
+        id: 'uc124',
+        name: 'Uncoupler1',
+        iUncoupler1State: 0,
+        sDCC: '124',
+        subTopic: 'rcc/module12/ret/124 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/124',
+      },
+      {
+        // ---uncoupler platform 1------------------------------
+        id: 'uc134',
+        name: 'Uncoupler1',
+        iUncoupler1State: 0,
+        sDCC: '134',
+        subTopic: 'rcc/module13/ret/134 rcc/module13/ret/status',
+        pubTopic: 'rcc/module13/set/134',
       },
     ],
   )

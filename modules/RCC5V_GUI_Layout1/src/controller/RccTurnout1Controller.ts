@@ -20,13 +20,73 @@ export class RccTurnout1Controller extends RccBaseController {
   public turnouts1: Array<Turnout1> = reactive(
     [
       {
-        // ---turnout 1-----------------------------------------
-        id: 'to1',
-        name: 'Turnout1',
+        // ---turnout 1a----------------------------------------
+        id: 'to012a',
+        name: 'Turnout_012a',
         iTurnout1State: -1,
-        sDCC: '21',
-        subTopic: 'rcc/demo1/ret/21 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/21',
+        sDCC: '12',
+        subTopic: 'rcc/module01/ret/12 rcc/module01/ret/status',
+        pubTopic: 'rcc/module01/set/12',
+        payloadInvert: false,
+      },
+      {
+        // ---turnout 1b----------------------------------------
+        id: 'to012b',
+        name: 'Turnout_012b',
+        iTurnout1State: -1,
+        sDCC: '12',
+        subTopic: 'rcc/module01/ret/12 rcc/module01/ret/status',
+        pubTopic: 'rcc/module01/set/12',
+        payloadInvert: false,
+      },
+      {
+        // ---turnout platform 1--------------------------------
+        id: 'to105',
+        name: 'Turnout105',
+        iTurnout1State: -1,
+        sDCC: '105',
+        subTopic: 'rcc/module10/ret/105 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/105',
+        payloadInvert: false,
+      },
+      {
+        // ---turnout 1-----------------------------------------
+        id: 'to111',
+        name: 'Turnout11-1',
+        iTurnout1State: -1,
+        sDCC: '111',
+        subTopic: 'rcc/module11/ret/111 rcc/module11/ret/status',
+        pubTopic: 'rcc/module11/set/111',
+        payloadInvert: false,
+      },
+      {
+        // ---turnout 1 north-----------------------------------
+        id: 'to123',
+        name: 'Turnout12-1',
+        iTurnout1State: -1,
+        sDCC: '123',
+        subTopic: 'rcc/module12/ret/123 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/123',
+        payloadInvert: false,
+      },
+      {
+        // ---turnout 2 east------------------------------------
+        id: 'to128',
+        name: 'Turnout2',
+        iTurnout1State: -1,
+        sDCC: '128',
+        subTopic: 'rcc/module12/ret/128 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/128',
+        payloadInvert: false,
+      },
+      {
+      // ---turnout 1-----------------------------------------
+        id: 'to141',
+        name: 'Turnout_141',
+        iTurnout1State: -1,
+        sDCC: '141',
+        subTopic: 'rcc/module14/ret/141 rcc/module14/ret/status',
+        pubTopic: 'rcc/module14/set/141',
         payloadInvert: false,
       },
     ],

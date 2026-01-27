@@ -21,13 +21,93 @@ export class RccTrack1Controller extends RccBaseController {
   public tracks1: Array<Track1> = reactive(
     [
       {
-        // ---test track 1--------------------------------------
-        id: 'tk1',
-        name: 'Track1',
+        // ---track 1-------------------------------------------
+        id: 'tk011',
+        name: 'track_011',
         iTrack1State: -99,
-        sDCC: '41',
-        subTopic: 'rcc/demo1/ret/41 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/41',
+        sDCC: '11',
+        subTopic: 'rcc/module01/ret/11 rcc/module01/ret/status',
+        pubTopic: 'rcc/module01/set/11',
+        payloadInvert: false,
+      },
+            {
+        // ---track platform 2----------------------------------
+        id: 'tk106',
+        name: 'platform2',
+        iTrack1State: -99,
+        sDCC: '106',
+        subTopic: 'rcc/module10/ret/106 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/106',
+        payloadInvert: false,
+      },
+      {
+        // ---track platform 3----------------------------------
+        id: 'tk107',
+        name: 'platform3',
+        iTrack1State: -99,
+        sDCC: '107',
+        subTopic: 'rcc/module10/ret/107 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/107',
+        payloadInvert: false,
+      },
+      {
+        // ---track 2-------------------------------------------
+        id: 'tk112',
+        name: 'track1',
+        iTrack1State: -99,
+        sDCC: '112',
+        subTopic: 'rcc/module11/ret/112 rcc/module11/ret/status',
+        pubTopic: 'rcc/module11/set/112',
+        payloadInvert: false,
+      },
+      {
+        // ---track 1-------------------------------------------
+        id: 'tk125',
+        name: 'track1',
+        iTrack1State: -99,
+        sDCC: '125',
+        subTopic: 'rcc/module12/ret/125 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/125',
+        payloadInvert: false,
+      },
+      {
+        // ---track 1a------------------------------------------
+        id: 'tk129',
+        name: 'track1a',
+        iTrack1State: -99,
+        sDCC: '129',
+        subTopic: 'rcc/module12/ret/129 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/129',
+        payloadInvert: false,
+      },
+      {
+        // ---track 2-------------------------------------------
+        id: 'tk126',
+        name: 'track2',
+        iTrack1State: -99,
+        sDCC: '126',
+        subTopic: 'rcc/module12/ret/126 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/126',
+        payloadInvert: false,
+      },
+      {
+        // ---track 3-------------------------------------------
+        id: 'tk127',
+        name: 'track3',
+        iTrack1State: -99,
+        sDCC: '127',
+        subTopic: 'rcc/module12/ret/127 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/127',
+        payloadInvert: false,
+      },
+      {
+        // ---track 2-------------------------------------------
+        id: 'tk133',
+        name: 'track2',
+        iTrack1State: -99,
+        sDCC: '133',
+        subTopic: 'rcc/module13/ret/133 rcc/module13/ret/status',
+        pubTopic: 'rcc/module13/set/133',
         payloadInvert: false,
       },
     ],
@@ -101,8 +181,5 @@ export class RccTrack1Controller extends RccBaseController {
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-
-
-
 
 export const rccTrack1Controller = new RccTrack1Controller()

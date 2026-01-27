@@ -22,16 +22,52 @@ export class RccTurnout3Way1Controller extends RccBaseController {
   public to3ways1: Array<To3way1> = reactive(
     [
       {
-        // ---test track 1--------------------------------------
-        id: 't3w1',
+        // ---turnout station bypass----------------------------
+        id: 'tt101',
         name: 'To3way1',
         iLState: -10,
         iRState: -10,
-        sDCCL: '31',
-        sDCCR: '32',
-        subTopic: 'rcc/demo1/ret/31 rcc/demo1/ret/32 rcc/demo1/ret/status',
-        pubTopic: 'rcc/demo1/set/31',
-        pubTopicR: 'rcc/demo1/set/32',
+        sDCCL: '101',
+        sDCCR: '102',
+        subTopic: 'rcc/module10/ret/101 rcc/module10/ret/102 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/101',
+        pubTopicR: 'rcc/module10/set/102',
+      },
+      {
+        // ---turnout station-----------------------------------
+        id: 'tt103',
+        name: 'To3way103',
+        iLState: -10,
+        iRState: -10,
+        sDCCL: '103',
+        sDCCR: '104',
+        subTopic: 'rcc/module10/ret/103 rcc/module10/ret/104 rcc/module10/ret/status',
+        pubTopic: 'rcc/module10/set/103',
+        pubTopicR: 'rcc/module10/set/104',
+      },
+      {
+        // ---turnout station bypass----------------------------
+        id: 'tt121',
+        name: 'To3way1',
+        iLState: -10,
+        iRState: -10,
+        sDCCL: '121',
+        sDCCR: '122',
+        subTopic: 'rcc/module12/ret/121 rcc/module12/ret/122 rcc/module12/ret/status',
+        pubTopic: 'rcc/module12/set/121',
+        pubTopicR: 'rcc/module12/set/122',
+      },
+      {
+        // ---turnout station bypass----------------------------
+        id: 'tt132',
+        name: 'To3way1',
+        iLState: -10,
+        iRState: -10,
+        sDCCL: '131',
+        sDCCR: '132',
+        subTopic: 'rcc/module13/ret/131 rcc/module13/ret/132 rcc/module13/ret/status',
+        pubTopic: 'rcc/module13/set/131',
+        pubTopicR: 'rcc/module13/set/132',
       },
     ],
   )

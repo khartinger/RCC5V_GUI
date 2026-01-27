@@ -16,8 +16,10 @@
     <button @click="onClkTracksOn()">Alle abschaltbaren Gleise EINschalten</button><br>
     <br>
     <button @click="onClkTracksOff()">Alle abschaltbaren Gleise AUSschalten</button><br>
+<!--
     <br>
     <button @click="onClkTrackRoute1()">Weichenstraße 1 setzen</button><br>
+-->
   </div>
   <div class="about">
     <hr>
@@ -42,12 +44,12 @@ const onClkTracksOff = async (): Promise<void> => {
   await rccTrack1Controller.sendAllTracksOff()
 }
 
-
+/*
 // ______on click: turn ALL track energy OFF____________________
 const onClkTrackRoute1 = async (): Promise<void> => {
   console.log('Button-Click onClkTrackRoute1')
   
   // await rccTrack1Controller.sendAllTracksOff()
 }
-
+*/
 </script>
