@@ -1,47 +1,40 @@
-<table><tr><td><img src="../images/RCC5V_Logo_96.png"></img></td><td>
-Letzte &Auml;nderung: 2.1.2026 <a name="up"></a><br>   
-<h1>RCC5V_GUI_Module11_Uncoupler: Entkupplergleissymbole für die RCC5V-GUI</h1>
+<table><tr><td><img src="./images/RCC5V_Logo_96.png"></img></td><td>
+Letzte &Auml;nderung: 28.1.2026 <a name="up"></a><br>   
+<h1>GUI Abzweigung Tankstelle</h1><h3>RCC5V_GUI_Module11</h3>
 <a href="README.md">==> English version</a>&nbsp; &nbsp; &nbsp; 
 </td></tr></table>   
 
+<a name="x10"></a>   
+
 # Einleitung
-## Voraussetzung
-Diese VUE-Anwendung zeigt, welche Symbole es zum Zeichnen von Entkupplergleisen gibt und wie diese angewendet werden. Da die Steuerung über MQTT-Befehle erfolgt, ist folgende Hardware erforderlich:   
-* (Mindestens) ein Entkuppler mit Ansteuerung über einen RCC-Mikrocontroller und RCC-Block
-  Beispiel: Verwendung des RCC-Module 11s, der auf [https://github.com/khartinger/RCC5V/tree/main/examples/blocktester](https://github.com/khartinger/RCC5V/tree/main/examples/blocktester) beschrieben wird   
-* Ein laufender MQTT-Server (zB `mosquitto`), der über die IP `10.1.1.1` erreichbar ist   
-* Ein PC, Laptop oder Tablet, das mit dem MQTT-Server verbunden ist (zB über WLAN)   
+Dieses Dokument beschreibt die Erstellung einer grafische Benutzeroberfläche (GUI, Graphical User Interface) zur Steuerung von "Modul 11: Abzweigung Tankstelle".   
+![GUI_Module11](./images/300_GUI_module11.png "GUI_Module11")   
+_Bild 1: GUI des Moduls 11_   
 
-# ...ToDo...
+## Inhaltsverzeichnis
+1. [Einleitung](#x10)   
+2. [Erforderliche Hardware und Software](#x20)   
 
-## Verfügbare Symbole
-![Weichensymbole](./images/300_symbol_uncoupler1.png "Weichensymbole")   
-_Bild 1: Weichensymbole_   
+<a name="x20"></a>   
+<a name="x21"></a>   
 
-## Anzeige und Test der Symbole
+# 2. Erforderliche Hardware und Software
+## 2.1 Hardware
+* Modul 11   
+* Access-Point mit installiertem MQTT-Server (zB `mosquitto`)   
+* Ein PC, Laptop oder Tablet   
 
-Visual Studio Code (VSC) starten, Projekt `RCC5V_GUI_Module11_Turnout` laden, Terminalfenster `npm run serve` eingeben
-PC mit WLAN verbinden (zB `Raspi11`)
+<a name="x21"></a>   
 
+## 2.2 Software
+1. Visual Studio Code   
+2. die Dateien aus diesem Verzeichnis   
+3. ein Browser   
+4. ein installierter MQTT-Client   
+  _Beispiel_: `mosquitto` mit `mosquitto_sub` und `mosquitto_pub`   
+5. ein (oder zwei) Windows Eingabe-Fenster (cmd)   
+6. `WinSCP` oder ein anderes FTP/SFTP-Client-Programm   
 
-MQTT Server starten,
-Voraussetzungen: IP `10.1.1.1`, Basis-Topic `rcc/module11`
-1. Terminalfenster: `mosquitto_sub -h 10.1.1.1 -t rcc/# -v`   
-2. Terminalfenster: `mosquitto_pub -h 10.1.1.1 -t rcc/module11/get -m bydcc`   
-
-
-# Aufruf eines Symbols
-## Syntax   
-Gleissymbole werden mit dem Tag `<RccTurnout ...>` aufgerufen, wobei folgende Parameter erforderlich bzw. möglich sind:   
-* `x` (erforderlich): x-Koordinate des Zentrums des Symbols   
-* `y` (erforderlich): y-Koordinate des Zentrums des Symbols   
-* `dir` (erforderlich): Art (und damit Richtung) des Weichensymbols   
-* `sid` (optional): ID des Symbols, mit dem die Weiche über MQTT angesprochen werden.   
-* `border` (optional): Gibt an, ob ein Rahmen um ein Weichensymbol gezeichnet werden soll   
-* `label` (optional): Gibt an, ob und welche Beschriftung des Weichensymbols angezeigt werden soll   
-* `color` (optional): Setzen einer Farbe für das Weichensymbol    
-
-## Beispiele
 
 # ...ToDo...
 
